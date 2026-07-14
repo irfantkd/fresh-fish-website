@@ -1,0 +1,800 @@
+# CLAUDE.md
+
+# Fresh Fish Dubai - Customer Website Development Guide
+
+## Project Overview
+
+You are an expert Senior Full Stack Engineer and UI/UX Designer responsible for developing a premium seafood eCommerce website for a Dubai-based seafood business.
+
+The objective is to build one of the highest-quality seafood websites in the UAE with exceptional UI, smooth animations, outstanding SEO, fast performance, and an excellent customer experience.
+
+This document defines all development rules, architecture, coding standards, and implementation guidelines.
+
+---
+
+# Tech Stack
+
+## Framework
+
+- Next.js (Latest App Router)
+- React 19+
+- TypeScript
+
+## Styling
+
+- Tailwind CSS
+- Material Tailwind (where appropriate)
+- Shadcn UI (preferred)
+- CSS Variables
+- Responsive Design
+- Mobile First
+
+## Animation
+
+- GSAP
+- Framer Motion
+- Three.js
+- React Three Fiber
+- Drei
+
+## Icons
+
+Use Lucide React as the primary icon library.
+
+If needed, use React Icons only for missing icons.
+
+Never mix icon styles unnecessarily.
+
+---
+
+# Project Goals
+
+Build a premium seafood shopping experience.
+
+The website should feel luxurious, modern, elegant, and trustworthy.
+
+The design should compete with premium food brands and high-end grocery websites.
+
+Users should immediately feel that the seafood is:
+
+- Fresh
+- Premium
+- Hygienic
+- High Quality
+- Delivered Quickly
+
+---
+
+# Design Style
+
+Theme:
+
+Premium Luxury + Ocean + Fresh Seafood
+
+Primary Colors
+
+Deep Ocean Blue
+
+Fresh Aqua
+
+White
+
+Dark Navy
+
+Soft Gray
+
+Accent Colors
+
+Fresh Green
+
+Orange (Offers only)
+
+Use gradients carefully.
+
+Avoid overly colorful designs.
+
+Maintain premium aesthetics.
+
+---
+
+# Typography
+
+Use modern fonts.
+
+Primary
+
+Inter
+
+Secondary
+
+Manrope
+
+Headings should be bold.
+
+Body text should remain highly readable.
+
+---
+
+# UI Principles
+
+Minimal
+
+Modern
+
+Premium
+
+High Contrast
+
+Clean Spacing
+
+Rounded Corners
+
+Large Product Images
+
+Soft Shadows
+
+Glassmorphism where appropriate
+
+Never overcrowd the UI.
+
+Whitespace is important.
+
+---
+
+# SEO Requirements
+
+The website must be fully SEO optimized.
+
+Implement:
+
+Dynamic Metadata
+
+Open Graph
+
+Twitter Cards
+
+Canonical URLs
+
+Schema.org Structured Data
+
+JSON-LD
+
+Robots.txt
+
+Sitemap.xml
+
+Breadcrumb Schema
+
+Organization Schema
+
+Product Schema
+
+FAQ Schema
+
+Image SEO
+
+Alt Tags
+
+Lazy Loading
+
+Metadata API
+
+Dynamic Page Titles
+
+Dynamic Descriptions
+
+Clean URLs
+
+SEO Friendly Slugs
+
+Internal Linking
+
+Heading Hierarchy
+
+Performance Optimization
+
+Core Web Vitals
+
+No duplicate content.
+
+Every page must be SEO optimized.
+
+---
+
+# Performance
+
+Target Lighthouse Score
+
+Performance: 95+
+
+Accessibility: 100
+
+SEO: 100
+
+Best Practices: 100
+
+Optimize:
+
+Images
+
+Fonts
+
+Bundle Size
+
+Animations
+
+Server Components
+
+Streaming
+
+Code Splitting
+
+Lazy Loading
+
+Dynamic Imports
+
+---
+
+# Folder Structure
+
+Follow scalable architecture.
+
+Use App Router.
+
+Separate:
+
+components
+
+sections
+
+features
+
+hooks
+
+lib
+
+utils
+
+services
+
+constants
+
+types
+
+animations
+
+providers
+
+contexts
+
+styles
+
+assets
+
+Never place everything in one folder.
+
+---
+
+# Coding Standards
+
+Use TypeScript everywhere.
+
+Never use "any".
+
+Use reusable components.
+
+Keep components small.
+
+Prefer composition.
+
+Follow SOLID principles.
+
+Write clean code.
+
+No duplicated logic.
+
+Create reusable hooks.
+
+Create reusable utility functions.
+
+---
+
+# Responsive Design
+
+Support:
+
+Mobile
+
+Tablet
+
+Laptop
+
+Desktop
+
+Large Desktop
+
+Use Tailwind responsive breakpoints.
+
+Never break layouts.
+
+---
+
+# Home Page Structure
+
+Hero Section
+
+Categories
+
+Featured Products
+
+Best Sellers
+
+Fresh Today
+
+Seasonal Collection
+
+Premium Seafood
+
+How It Works
+
+Why Choose Us
+
+Customer Reviews
+
+Recipe Inspiration
+
+Delivery Areas
+
+FAQ
+
+Newsletter
+
+Footer
+
+---
+
+# Hero Section
+
+The hero section must be visually stunning.
+
+Requirements
+
+Large seafood video background.
+
+Overlay gradient.
+
+Clear CTA.
+
+Search bar.
+
+Category shortcuts.
+
+Smooth GSAP entrance animations.
+
+Three.js floating water particles.
+
+Fish swimming animation.
+
+Subtle ocean movement.
+
+Call To Action
+
+Shop Now
+
+Explore Seafood
+
+Contact on WhatsApp
+
+---
+
+# Three.js Requirements
+
+Use Three.js carefully.
+
+Possible scenes
+
+Swimming Fish
+
+Floating Water Particles
+
+Ocean Waves
+
+Bubble Effects
+
+Light Rays
+
+Never reduce website performance.
+
+Keep animations lightweight.
+
+---
+
+# GSAP Usage
+
+Use GSAP for
+
+Page transitions
+
+Scroll animations
+
+Text reveal
+
+Parallax
+
+Image reveal
+
+Horizontal scrolling
+
+Pinned sections
+
+Never animate everything.
+
+Animations should enhance UX.
+
+---
+
+# Framer Motion Usage
+
+Use Framer Motion for
+
+Cards
+
+Buttons
+
+Hover animations
+
+Product cards
+
+Menus
+
+Modal animations
+
+Page transitions
+
+Loading states
+
+---
+
+# Product Cards
+
+Every product card should contain
+
+Large Image
+
+Fresh Badge
+
+Price
+
+Weight
+
+Origin
+
+Short Description
+
+WhatsApp Button
+
+View Details
+
+Hover Animation
+
+Quick View
+
+Wishlist Placeholder
+
+---
+
+# Product Page
+
+Display
+
+Large Gallery
+
+Zoom Images
+
+Description
+
+Benefits
+
+Origin
+
+Fresh/Frozen
+
+Available Sizes
+
+Storage Instructions
+
+Delivery Information
+
+Related Products
+
+Frequently Bought Together
+
+FAQ
+
+WhatsApp Order Button
+
+---
+
+# Search
+
+Implement
+
+Instant Search
+
+Debounced Search
+
+Category Search
+
+Product Search
+
+Suggestions
+
+Empty States
+
+No Results UI
+
+---
+
+# Filters
+
+Category
+
+Fresh
+
+Frozen
+
+Origin
+
+Price
+
+Availability
+
+Popular
+
+Newest
+
+---
+
+# WhatsApp Ordering
+
+No online payment.
+
+Users can
+
+Add products to cart.
+
+Select quantities.
+
+Submit order.
+
+Generate formatted WhatsApp message.
+
+Redirect to WhatsApp.
+
+Order details should include
+
+Product Names
+
+Quantity
+
+Notes
+
+Customer Information
+
+Delivery Address
+
+Preferred Delivery Time
+
+---
+
+# Cart
+
+Guest Cart
+
+Persistent Cart
+
+Local Storage
+
+Responsive Drawer
+
+Quantity Controls
+
+Order Summary
+
+WhatsApp Checkout
+
+---
+
+# Animations
+
+Create premium scrolling experiences.
+
+Ideas
+
+Ocean wave separator
+
+Fish swimming while scrolling
+
+Parallax seafood images
+
+Fade animations
+
+Text reveal
+
+Floating product cards
+
+Bubble particles
+
+Section transitions
+
+---
+
+# Images
+
+Use modern image optimization.
+
+Next Image component.
+
+WebP where possible.
+
+Lazy Loading.
+
+Blur Placeholder.
+
+Responsive Images.
+
+---
+
+# Accessibility
+
+Keyboard navigation.
+
+Screen readers.
+
+Proper ARIA labels.
+
+Accessible forms.
+
+Color contrast.
+
+Focus states.
+
+Semantic HTML.
+
+---
+
+# Error Handling
+
+404 Page
+
+Empty Categories
+
+No Products
+
+Offline State
+
+Loading Skeletons
+
+Fallback Images
+
+Graceful Errors
+
+---
+
+# Components
+
+Build reusable components.
+
+Examples
+
+Navbar
+
+Footer
+
+Buttons
+
+Cards
+
+Sections
+
+Product Card
+
+Search
+
+Filters
+
+Badges
+
+Breadcrumb
+
+Category Grid
+
+FAQ
+
+Testimonials
+
+Gallery
+
+Recipe Cards
+
+---
+
+# State Management
+
+Use React Context only where needed.
+
+Prefer local state.
+
+Server Components where possible.
+
+Keep client components minimal.
+
+---
+
+# Code Quality
+
+Reusable
+
+Modular
+
+Scalable
+
+Maintainable
+
+Readable
+
+Typed
+
+Documented
+
+---
+
+# Future Ready
+
+Structure the frontend so future integration with
+
+Node.js API
+
+MongoDB
+
+Dashboard
+
+Authentication
+
+Notifications
+
+Inventory
+
+can be added without refactoring.
+
+---
+
+# Development Rules
+
+Never hardcode repeated values.
+
+Use constants.
+
+Use reusable hooks.
+
+Separate UI and business logic.
+
+Keep animations isolated.
+
+Maintain naming consistency.
+
+Avoid unnecessary dependencies.
+
+Follow Next.js best practices.
+
+Optimize for SEO and performance first.
+
+Write production-ready code only.
+
+---
+
+# Final Objective
+
+The final website should feel like a premium seafood brand rather than a simple online fish shop.
+
+Every page should be elegant, fast, SEO-friendly, highly animated where appropriate, fully responsive, accessible, and easy to extend with backend integration in the future.
