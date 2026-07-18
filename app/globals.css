@@ -2,25 +2,152 @@
 
 :root {
   --background: #ffffff;
-  --foreground: #171717;
+  --foreground: #0a2233;
+
+  /* Deep Ocean Blue */
+  --color-ocean-50: #eef6fa;
+  --color-ocean-100: #d6eaf3;
+  --color-ocean-200: #aed5e7;
+  --color-ocean-300: #78b6d2;
+  --color-ocean-400: #4390b6;
+  --color-ocean-500: #24729b;
+  --color-ocean-600: #175a80;
+  --color-ocean-700: #14486a;
+  --color-ocean-800: #103a56;
+  --color-ocean-900: #0d2e45;
+  --color-ocean-950: #06192a;
+
+  /* Fresh Aqua */
+  --color-aqua-50: #eafffe;
+  --color-aqua-100: #cbfdfb;
+  --color-aqua-200: #9bf9f7;
+  --color-aqua-300: #5eeeef;
+  --color-aqua-400: #2cd9de;
+  --color-aqua-500: #14b9c2;
+  --color-aqua-600: #0f94a0;
+  --color-aqua-700: #127683;
+  --color-aqua-800: #165f6a;
+  --color-aqua-900: #164f59;
+
+  /* Dark Navy */
+  --color-navy-900: #071a2b;
+  --color-navy-950: #040f1c;
+
+  /* Soft Gray */
+  --color-gray-50: #f7f9fa;
+  --color-gray-100: #eef1f3;
+  --color-gray-200: #e2e7ea;
+  --color-gray-300: #cbd3d8;
+
+  /* Accents */
+  --color-fresh-green-500: #17a869;
+  --color-fresh-green-600: #128a56;
+  --color-offer-500: #f4762a;
+  --color-offer-600: #dd5f14;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+
+  --color-ocean-50: var(--color-ocean-50);
+  --color-ocean-100: var(--color-ocean-100);
+  --color-ocean-200: var(--color-ocean-200);
+  --color-ocean-300: var(--color-ocean-300);
+  --color-ocean-400: var(--color-ocean-400);
+  --color-ocean-500: var(--color-ocean-500);
+  --color-ocean-600: var(--color-ocean-600);
+  --color-ocean-700: var(--color-ocean-700);
+  --color-ocean-800: var(--color-ocean-800);
+  --color-ocean-900: var(--color-ocean-900);
+  --color-ocean-950: var(--color-ocean-950);
+
+  --color-aqua-50: var(--color-aqua-50);
+  --color-aqua-100: var(--color-aqua-100);
+  --color-aqua-200: var(--color-aqua-200);
+  --color-aqua-300: var(--color-aqua-300);
+  --color-aqua-400: var(--color-aqua-400);
+  --color-aqua-500: var(--color-aqua-500);
+  --color-aqua-600: var(--color-aqua-600);
+  --color-aqua-700: var(--color-aqua-700);
+  --color-aqua-800: var(--color-aqua-800);
+  --color-aqua-900: var(--color-aqua-900);
+
+  --color-navy-900: var(--color-navy-900);
+  --color-navy-950: var(--color-navy-950);
+
+  --color-gray-50: var(--color-gray-50);
+  --color-gray-100: var(--color-gray-100);
+  --color-gray-200: var(--color-gray-200);
+  --color-gray-300: var(--color-gray-300);
+
+  --color-fresh-green-500: var(--color-fresh-green-500);
+  --color-fresh-green-600: var(--color-fresh-green-600);
+  --color-offer-500: var(--color-offer-500);
+  --color-offer-600: var(--color-offer-600);
+
+  --font-sans: var(--font-inter);
+  --font-heading: var(--font-manrope);
+
+  --animate-float: float 6s ease-in-out infinite;
+  --animate-wave: wave 12s linear infinite;
+  --animate-shimmer: shimmer 2.5s linear infinite;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-14px);
+  }
+}
+
+@keyframes wave {
+  0% {
+    background-position-x: 0;
+  }
+  100% {
+    background-position-x: 1000px;
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
   }
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-sans), Arial, Helvetica, sans-serif;
+}
+
+::selection {
+  background: var(--color-aqua-300);
+  color: var(--color-navy-950);
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.text-balance {
+  text-wrap: balance;
+}
+
+.glass {
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
 }
