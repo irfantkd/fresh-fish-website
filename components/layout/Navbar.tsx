@@ -1,22 +1,27 @@
 "use client";
 
 import { AnimatePresence, motion } from "framer-motion";
-import { Menu, MessageCircle, ShoppingBag, X } from "lucide-react";
+import { ChevronDown, Menu, MessageCircle, ShoppingBag, X } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/Button";
+import { SeafoodImage } from "@/components/ui/SeafoodImage";
 import { SearchBar } from "@/components/layout/SearchBar";
 import { ScrollProgressBar } from "@/components/layout/ScrollProgressBar";
 import { NAV_LINKS, SITE_CONFIG } from "@/constants/site";
 import { useCart } from "@/hooks/useCart";
 import { cn } from "@/lib/utils/cn";
+import type { Category } from "@/types";
 
-export function Navbar() {
+export function Navbar({ categories }: { categories: Category[] }) {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileOpen, setIsMobileOpen] = useState(false);
+  const [isCategoriesOpen, setIsCategoriesOpen] = useState(false);
+  const [isMobileCategoriesOpen, setIsMobileCategoriesOpen] = useState(false);
   const { totalCount, openDrawer } = useCart();
   const pathname = usePathname();
+  const categoriesRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     function handleScroll() {
@@ -29,7 +34,25 @@ export function Navbar() {
 
   useEffect(() => {
     setIsMobileOpen(false);
+    setIsCategoriesOpen(false);
   }, [pathname]);
+
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (categoriesRef.current && !categoriesRef.current.contains(event.target as Node)) {
+        setIsCategoriesOpen(false);
+      }
+    }
+    function handleEscape(event: KeyboardEvent) {
+      if (event.key === "Escape") setIsCategoriesOpen(false);
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    document.addEventListener("keydown", handleEscape);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener("keydown", handleEscape);
+    };
+  }, []);
 
   return (
     <header
@@ -60,7 +83,98 @@ export function Navbar() {
         </Link>
 
         <nav className="ml-4 hidden items-center gap-1 lg:flex">
-          {NAV_LINKS.map((link) => {
+          <Link
+            href="/"
+            className={cn(
+              "relative rounded-full px-4 py-2 text-sm font-medium transition-colors",
+              pathname === "/" ? "text-ocean-900" : "text-gray-600 hover:text-ocean-900"
+            )}
+          >
+            {pathname === "/" && (
+              <motion.span
+                layoutId="nav-active-pill"
+                className="absolute inset-0 rounded-full bg-ocean-50"
+                transition={{ type: "spring", stiffness: 380, damping: 32 }}
+              />
+            )}
+            <span className="relative">Home</span>
+          </Link>
+
+          <div ref={categoriesRef} className="relative">
+            <button
+              type="button"
+              onClick={() => setIsCategoriesOpen((open) => !open)}
+              aria-expanded={isCategoriesOpen}
+              aria-haspopup="true"
+              className={cn(
+                "relative flex items-center gap-1 rounded-full px-4 py-2 text-sm font-medium transition-colors",
+                pathname.startsWith("/categor")
+                  ? "text-ocean-900"
+                  : "text-gray-600 hover:text-ocean-900"
+              )}
+            >
+              {pathname.startsWith("/categor") && (
+                <motion.span
+                  layoutId="nav-active-pill"
+                  className="absolute inset-0 rounded-full bg-ocean-50"
+                  transition={{ type: "spring", stiffness: 380, damping: 32 }}
+                />
+              )}
+              <span className="relative">Categories</span>
+              <ChevronDown
+                className={cn(
+                  "relative h-3.5 w-3.5 transition-transform",
+                  isCategoriesOpen && "rotate-180"
+                )}
+              />
+            </button>
+
+            <AnimatePresence>
+              {isCategoriesOpen && (
+                <motion.div
+                  initial={{ opacity: 0, y: -8 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -8 }}
+                  transition={{ duration: 0.15 }}
+                  className="absolute left-0 top-full z-40 mt-2 w-80 rounded-2xl border border-gray-100 bg-white p-3 shadow-xl"
+                >
+                  <div className="grid grid-cols-2 gap-1">
+                    {categories.map((category) => (
+                      <Link
+                        key={category.id}
+                        href={`/category/${category.slug}`}
+                        className="flex items-center gap-3 rounded-xl p-2 hover:bg-ocean-50"
+                      >
+                        <div className="relative h-10 w-10 shrink-0 overflow-hidden rounded-lg bg-gray-100">
+                          <SeafoodImage
+                            src={category.image}
+                            alt={category.name}
+                            fill
+                            sizes="40px"
+                            className="object-cover"
+                          />
+                        </div>
+                        <div className="min-w-0">
+                          <p className="truncate text-sm font-semibold text-ocean-950">
+                            {category.name}
+                          </p>
+                          <p className="text-xs text-gray-400">{category.productCount} items</p>
+                        </div>
+                      </Link>
+                    ))}
+                  </div>
+                  <Link
+                    href="/categories"
+                    className="mt-2 flex items-center justify-center rounded-xl border-t border-gray-100 pt-3 text-sm font-semibold text-aqua-600 hover:text-aqua-700"
+                  >
+                    View All Categories
+                  </Link>
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
+
+          {NAV_LINKS.filter((link) => link.href !== "/").map((link) => {
             const isActive = pathname === link.href;
             return (
               <Link
@@ -138,7 +252,7 @@ export function Navbar() {
               animate={{ x: 0 }}
               exit={{ x: "100%" }}
               transition={{ type: "spring", damping: 30, stiffness: 300 }}
-              className="fixed right-0 top-0 z-50 flex h-full w-full max-w-xs flex-col gap-6 bg-white p-6 shadow-2xl lg:hidden"
+              className="fixed right-0 top-0 z-50 flex h-full w-full max-w-xs flex-col gap-6 overflow-y-auto bg-white p-6 shadow-2xl lg:hidden"
             >
               <div className="flex items-center justify-between">
                 <span className="font-heading text-lg font-bold text-ocean-950">Menu</span>
@@ -154,7 +268,64 @@ export function Navbar() {
               <SearchBar className="relative" />
 
               <nav className="flex flex-col gap-1">
-                {NAV_LINKS.map((link) => (
+                <Link
+                  href="/"
+                  className={cn(
+                    "rounded-xl px-4 py-3 text-sm font-medium text-gray-600 hover:bg-ocean-50 hover:text-ocean-900",
+                    pathname === "/" && "bg-ocean-50 text-ocean-900"
+                  )}
+                >
+                  Home
+                </Link>
+
+                <button
+                  type="button"
+                  onClick={() => setIsMobileCategoriesOpen((open) => !open)}
+                  aria-expanded={isMobileCategoriesOpen}
+                  className={cn(
+                    "flex items-center justify-between rounded-xl px-4 py-3 text-sm font-medium text-gray-600 hover:bg-ocean-50 hover:text-ocean-900",
+                    pathname.startsWith("/categor") && "bg-ocean-50 text-ocean-900"
+                  )}
+                >
+                  Categories
+                  <ChevronDown
+                    className={cn(
+                      "h-4 w-4 transition-transform",
+                      isMobileCategoriesOpen && "rotate-180"
+                    )}
+                  />
+                </button>
+                <AnimatePresence>
+                  {isMobileCategoriesOpen && (
+                    <motion.div
+                      initial={{ height: 0, opacity: 0 }}
+                      animate={{ height: "auto", opacity: 1 }}
+                      exit={{ height: 0, opacity: 0 }}
+                      transition={{ duration: 0.2 }}
+                      className="overflow-hidden pl-2"
+                    >
+                      <div className="flex flex-col gap-1 py-1">
+                        {categories.map((category) => (
+                          <Link
+                            key={category.id}
+                            href={`/category/${category.slug}`}
+                            className="rounded-xl px-4 py-2 text-sm text-gray-500 hover:bg-ocean-50 hover:text-ocean-900"
+                          >
+                            {category.name}
+                          </Link>
+                        ))}
+                        <Link
+                          href="/categories"
+                          className="rounded-xl px-4 py-2 text-sm font-semibold text-aqua-600 hover:text-aqua-700"
+                        >
+                          View All Categories
+                        </Link>
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+
+                {NAV_LINKS.filter((link) => link.href !== "/").map((link) => (
                   <Link
                     key={link.href}
                     href={link.href}
