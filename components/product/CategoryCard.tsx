@@ -17,8 +17,8 @@ export function CategoryCard({ category }: { category: Category }) {
       >
         <ParallaxScroll speed={0.18} className="absolute -inset-y-8 inset-x-0">
           <SeafoodImage
-            src={category.image}
-            alt={category.name}
+            src={category.featuredImage.url}
+            alt={category.featuredImage.alt || category.name}
             fill
             sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
             className="object-cover opacity-85 transition-transform duration-700 ease-out group-hover:scale-110"

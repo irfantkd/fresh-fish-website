@@ -86,8 +86,8 @@ export function SearchBar({ className }: { className?: string }) {
                 >
                   <div className="relative h-12 w-12 shrink-0 overflow-hidden rounded-lg bg-gray-100">
                     <SeafoodImage
-                      src={product.images[0]}
-                      alt={product.name}
+                      src={product.featuredImage.url}
+                      alt={product.featuredImage.alt || product.name}
                       fill
                       sizes="48px"
                       className="object-cover"

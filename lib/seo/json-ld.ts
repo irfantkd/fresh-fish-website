@@ -1,6 +1,6 @@
 import { SITE_CONFIG } from "@/constants/site";
 import { getLowestSize } from "@/lib/utils/product";
-import type { FaqItem, Product } from "@/types";
+import type { BlogPost, FaqItem, Product } from "@/types";
 
 export function organizationJsonLd() {
   return {
@@ -41,7 +41,7 @@ export function productJsonLd(product: Product) {
     "@type": "Product",
     name: product.name,
     description: product.description,
-    image: product.images,
+    image: [product.featuredImage.url, ...product.gallery.map((g) => g.url)],
     brand: { "@type": "Brand", name: SITE_CONFIG.name },
     offers: {
       "@type": "Offer",
@@ -72,5 +72,26 @@ export function faqJsonLd(faqs: FaqItem[]) {
         text: faq.answer,
       },
     })),
+  };
+}
+
+export function blogPostingJsonLd(post: BlogPost) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    headline: post.title,
+    description: post.seo?.metaDescription || "",
+    image: post.featuredImage?.url ? [post.featuredImage.url] : undefined,
+    datePublished: post.publishDate,
+    dateModified: post.publishDate,
+    author: post.author?.name
+      ? { "@type": "Person", name: post.author.name }
+      : { "@type": "Organization", name: SITE_CONFIG.name },
+    publisher: {
+      "@type": "Organization",
+      name: SITE_CONFIG.name,
+      logo: { "@type": "ImageObject", url: `${SITE_CONFIG.url}/logo.png` },
+    },
+    mainEntityOfPage: { "@type": "WebPage", "@id": `${SITE_CONFIG.url}/blog/${post.slug}` },
   };
 }

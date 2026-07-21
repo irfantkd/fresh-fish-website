@@ -13,3 +13,11 @@ export function formatWeight(grams: number): string {
   }
   return `${grams} g`;
 }
+
+export function formatDate(value: string): string {
+  return new Date(value).toLocaleDateString("en-AE", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  });
+}

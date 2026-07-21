@@ -147,8 +147,8 @@ export function Navbar({ categories }: { categories: Category[] }) {
                       >
                         <div className="relative h-10 w-10 shrink-0 overflow-hidden rounded-lg bg-gray-100">
                           <SeafoodImage
-                            src={category.image}
-                            alt={category.name}
+                            src={category.featuredImage.url}
+                            alt={category.featuredImage.alt || category.name}
                             fill
                             sizes="40px"
                             className="object-cover"

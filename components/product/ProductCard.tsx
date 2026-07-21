@@ -25,8 +25,8 @@ export function ProductCard({ product }: { product: Product }) {
       <div className="relative aspect-square w-full overflow-hidden bg-gray-100">
         <Link href={`/product/${product.slug}`} className="relative block h-full w-full">
           <SeafoodImage
-            src={product.images[0]}
-            alt={product.name}
+            src={product.featuredImage.url}
+            alt={product.featuredImage.alt || product.name}
             fill
             sizes="(min-width: 1024px) 25vw, (min-width: 640px) 33vw, 50vw"
             className="object-cover transition-transform duration-700 ease-out group-hover:scale-110"

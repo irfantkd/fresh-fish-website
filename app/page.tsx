@@ -7,6 +7,7 @@ import { WhyChooseUs } from "@/components/sections/WhyChooseUs";
 import { CustomerReviews } from "@/components/sections/CustomerReviews";
 import { DeliveryAreasSection } from "@/components/sections/DeliveryAreasSection";
 import { FaqSection } from "@/components/sections/FaqSection";
+import { LatestBlogSection } from "@/components/sections/LatestBlogSection";
 import { SITE_CONFIG } from "@/constants/site";
 
 export const metadata: Metadata = {
@@ -24,6 +25,7 @@ export default function HomePage() {
       <HowItWorks />
       <WhyChooseUs />
       <CustomerReviews />
+      <LatestBlogSection />
       <DeliveryAreasSection />
       <FaqSection />
     </>

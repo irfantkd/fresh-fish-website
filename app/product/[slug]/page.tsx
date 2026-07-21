@@ -45,14 +45,19 @@ export async function generateMetadata({
   const product = await getProductBySlug(slug);
   if (!product) return {};
 
+  const title = product.seo?.metaTitle || product.name;
+  const description = product.seo?.metaDescription || product.shortDescription;
+  const images = [product.featuredImage, ...product.gallery].filter((img) => img?.url);
+
   return {
-    title: product.name,
-    description: product.shortDescription,
+    title,
+    description,
+    keywords: product.seo?.keywords,
     alternates: { canonical: `/product/${product.slug}` },
     openGraph: {
-      title: product.name,
-      description: product.shortDescription,
-      images: product.images.map((url) => ({ url })),
+      title,
+      description,
+      images: images.map((img) => ({ url: img.url, alt: img.alt || product.name })),
       url: `${SITE_CONFIG.url}/product/${product.slug}`,
     },
   };
@@ -71,6 +76,15 @@ export default async function ProductPage({
     getRelatedProducts(product, 4),
     getCategoryBySlug(product.categorySlug),
   ]);
+
+  const galleryImages = [product.featuredImage, ...product.gallery]
+    .filter((img) => img?.url)
+    .map((img) => img.url);
+
+  const faqs =
+    product.faqs.length > 0
+      ? product.faqs.map((faq, index) => ({ id: `product-faq-${index}`, ...faq }))
+      : PRODUCT_FAQS;
 
   return (
     <div className="py-12">
@@ -92,9 +106,24 @@ export default async function ProductPage({
         />
 
         <div className="mt-8 grid gap-10 lg:grid-cols-2 lg:gap-16">
-          <ProductGallery images={product.images} name={product.name} />
+          <ProductGallery images={galleryImages} name={product.name} />
           <ProductPurchasePanel product={product} />
         </div>
+
+        {product.tabs.length > 0 && (
+          <div className="mt-20 flex flex-col gap-14">
+            {product.tabs.map((tab, index) => (
+              <div key={index}>
+                <h2 className="font-heading text-xl font-bold text-ocean-950">{tab.title}</h2>
+                <div
+                  className="cms-content mt-4"
+                  // eslint-disable-next-line react/no-danger
+                  dangerouslySetInnerHTML={{ __html: tab.content }}
+                />
+              </div>
+            ))}
+          </div>
+        )}
 
         <div className="mt-20 grid gap-10 lg:grid-cols-[2fr_1fr]">
           <div>
@@ -102,7 +131,7 @@ export default async function ProductPage({
               Frequently Asked Questions
             </h2>
             <div className="mt-4">
-              <FaqAccordion faqs={PRODUCT_FAQS} />
+              <FaqAccordion faqs={faqs} />
             </div>
           </div>
           <div className="rounded-3xl border border-gray-100 bg-gray-50/60 p-6">

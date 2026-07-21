@@ -22,7 +22,7 @@ export function ProductPurchasePanel({ product }: { product: Product }) {
       productId: product.id,
       productName: product.name,
       productSlug: product.slug,
-      image: product.images[0],
+      image: product.featuredImage.url,
       sizeLabel: size.label,
       price: size.price,
       quantity,
