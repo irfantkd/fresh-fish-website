@@ -1,6 +1,10 @@
 // NEXT_PUBLIC_ (not a server-only var) because SearchBar.tsx calls
 // searchProducts() from client-side code — this must resolve in the browser too.
-const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:4300/api";
+// Falls back to the deployed backend (not localhost) since generateStaticParams/
+// generateMetadata run this fetch during `next build` on Vercel, where
+// localhost doesn't exist — an unset NEXT_PUBLIC_API_URL would otherwise
+// fail the build with ECONNREFUSED.
+const API_URL = process.env.NEXT_PUBLIC_API_URL || "https://fresh-fish-backend.vercel.app/api";
 
 export class ApiFetchError extends Error {
   status: number;

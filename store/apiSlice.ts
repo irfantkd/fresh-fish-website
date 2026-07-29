@@ -4,7 +4,9 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 // slice with path-based get/post/put/patch/delete endpoints, so every page
 // that needs live data calls the same backend the dashboard writes to.
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:4300/api";
+// Falls back to the deployed backend (not localhost) so a missing
+// NEXT_PUBLIC_API_URL on Vercel doesn't break client-side data fetching.
+const API_URL = process.env.NEXT_PUBLIC_API_URL || "https://fresh-fish-backend.vercel.app/api";
 export const API_BASE_URL = API_URL;
 
 export const apiSlice = createApi({
