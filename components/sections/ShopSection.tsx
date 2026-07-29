@@ -1,29 +1,34 @@
+"use client";
+
 import { ArrowRight } from "lucide-react";
 import { Container } from "@/components/ui/Container";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { Button } from "@/components/ui/Button";
+import { GridSkeleton } from "@/components/ui/GridSkeleton";
 import { FadeIn } from "@/components/animations/FadeIn";
 import { ProductTabs } from "@/components/sections/ProductTabs";
-import {
-  getBestSellers,
-  getFreshTodayProducts,
-  getPremiumProducts,
-  getSeasonalProducts,
-} from "@/lib/services/products.service";
+import { useGetQuery } from "@/store/apiSlice";
+import type { Product } from "@/types";
 
-export async function ShopSection() {
-  const [freshToday, bestSellers, premium, seasonal] = await Promise.all([
-    getFreshTodayProducts(8),
-    getBestSellers(8),
-    getPremiumProducts(8),
-    getSeasonalProducts(8),
-  ]);
+interface ProductsResponse {
+  items: Product[];
+  total: number;
+  page: number;
+  limit: number;
+}
+
+export function ShopSection() {
+  const { data, isLoading } = useGetQuery({
+    path: "/products",
+    params: { status: "published" },
+  });
+  const products = (data as ProductsResponse | undefined)?.items ?? [];
 
   const tabs = [
-    { label: "Fresh Today", products: freshToday },
-    { label: "Best Sellers", products: bestSellers },
-    { label: "Premium Selection", products: premium },
-    { label: "Seasonal Picks", products: seasonal },
+    { label: "Fresh Today", products: products.filter((p) => p.isFreshToday).slice(0, 8) },
+    { label: "Best Sellers", products: products.filter((p) => p.isBestSeller).slice(0, 8) },
+    { label: "Premium Selection", products: products.filter((p) => p.isPremium).slice(0, 8) },
+    { label: "Seasonal Picks", products: products.filter((p) => p.isSeasonal).slice(0, 8) },
   ];
 
   return (
@@ -44,7 +49,7 @@ export async function ShopSection() {
         </FadeIn>
 
         <div className="mt-10">
-          <ProductTabs tabs={tabs} />
+          {isLoading ? <GridSkeleton count={8} /> : <ProductTabs tabs={tabs} />}
         </div>
       </Container>
     </section>

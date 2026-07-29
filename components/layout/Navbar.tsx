@@ -12,9 +12,12 @@ import { ScrollProgressBar } from "@/components/layout/ScrollProgressBar";
 import { NAV_LINKS, SITE_CONFIG } from "@/constants/site";
 import { useCart } from "@/hooks/useCart";
 import { cn } from "@/lib/utils/cn";
+import { useGetQuery } from "@/store/apiSlice";
 import type { Category } from "@/types";
 
-export function Navbar({ categories }: { categories: Category[] }) {
+export function Navbar() {
+  const { data: categories } = useGetQuery({ path: "/categories" });
+  const categoryList = (categories as Category[]) ?? [];
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileOpen, setIsMobileOpen] = useState(false);
   const [isCategoriesOpen, setIsCategoriesOpen] = useState(false);
@@ -139,7 +142,7 @@ export function Navbar({ categories }: { categories: Category[] }) {
                   className="absolute left-0 top-full z-40 mt-2 w-80 rounded-2xl border border-gray-100 bg-white p-3 shadow-xl"
                 >
                   <div className="grid grid-cols-2 gap-1">
-                    {categories.map((category) => (
+                    {categoryList.map((category) => (
                       <Link
                         key={category.id}
                         href={`/category/${category.slug}`}
@@ -305,7 +308,7 @@ export function Navbar({ categories }: { categories: Category[] }) {
                       className="overflow-hidden pl-2"
                     >
                       <div className="flex flex-col gap-1 py-1">
-                        {categories.map((category) => (
+                        {categoryList.map((category) => (
                           <Link
                             key={category.id}
                             href={`/category/${category.slug}`}

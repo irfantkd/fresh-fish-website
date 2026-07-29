@@ -1,6 +1,6 @@
 // NEXT_PUBLIC_ (not a server-only var) because SearchBar.tsx calls
 // searchProducts() from client-side code — this must resolve in the browser too.
-const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000/api";
+const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:4300/api";
 
 export class ApiFetchError extends Error {
   status: number;
@@ -39,6 +39,19 @@ export async function apiGetOrUndefined<T>(
     if (error instanceof ApiFetchError && error.status === 404) return undefined;
     throw error;
   }
+}
+
+export async function apiPost<T>(path: string, body: unknown): Promise<T> {
+  const res = await fetch(`${API_URL}${path}`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(body),
+  });
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok) {
+    throw new Error(data?.message || `Request to ${path} failed with status ${res.status}`);
+  }
+  return data;
 }
 
 export { API_URL };

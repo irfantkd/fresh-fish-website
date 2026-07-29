@@ -10,7 +10,7 @@ interface ProductsResponse {
 
 /**
  * Service layer for product data. Every export is async and backed by
- * fresh-fish-api — the same REST API the dashboard writes to — so content
+ * fresh-fish-backend — the same REST API the dashboard writes to — so content
  * authored in the dashboard shows up here without any caller changes.
  */
 

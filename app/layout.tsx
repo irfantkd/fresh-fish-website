@@ -5,9 +5,9 @@ import { Footer } from "@/components/layout/Footer";
 import { CartDrawer } from "@/components/cart/CartDrawer";
 import { WhatsAppFloatingButton } from "@/components/layout/WhatsAppFloatingButton";
 import { CartProvider } from "@/providers/CartProvider";
+import { StoreProvider } from "@/providers/StoreProvider";
 import { SITE_CONFIG } from "@/constants/site";
 import { organizationJsonLd } from "@/lib/seo/json-ld";
-import { getAllCategories } from "@/lib/services/categories.service";
 import "./globals.css";
 
 const inter = Inter({
@@ -59,13 +59,11 @@ export const metadata: Metadata = {
   },
 };
 
-export default async function RootLayout({
+export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const categories = await getAllCategories();
-
   return (
     <html
       lang="en"
@@ -78,13 +76,15 @@ export default async function RootLayout({
           // eslint-disable-next-line react/no-danger
           dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd()) }}
         />
-        <CartProvider>
-          <Navbar categories={categories} />
-          <main className="flex-1">{children}</main>
-          <Footer />
-          <CartDrawer />
-          <WhatsAppFloatingButton />
-        </CartProvider>
+        <StoreProvider>
+          <CartProvider>
+            <Navbar />
+            <main className="flex-1">{children}</main>
+            <Footer />
+            <CartDrawer />
+            <WhatsAppFloatingButton />
+          </CartProvider>
+        </StoreProvider>
       </body>
     </html>
   );
