@@ -53,34 +53,32 @@ export function CategoryPageClient({ slug }: { slug: string }) {
           ]}
         />
 
-        <div className="mt-6 grid gap-8 lg:grid-cols-[1fr_1.2fr] lg:items-start lg:gap-12">
-          <div className="flex flex-col gap-3 lg:pt-2 lg:sticky lg:top-24">
+        <div className="mt-6 grid gap-8 lg:grid-cols-[65fr_35fr] lg:items-start lg:gap-12">
+          <div className="flex flex-col gap-3">
             <span className="text-xs font-semibold uppercase tracking-[0.2em] text-aqua-600">
               Category
             </span>
             <h1 className="text-balance font-heading text-3xl font-bold tracking-tight text-ocean-950 sm:text-4xl lg:text-5xl">
               {category.name}
             </h1>
-          </div>
-
-          <div className="flex flex-col gap-6">
-            <div className="relative aspect-4/3 w-full overflow-hidden rounded-3xl bg-gray-100">
-              <SeafoodImage
-                src={category.featuredImage.url}
-                alt={category.featuredImage.alt || category.name}
-                fill
-                priority
-                sizes="(min-width: 1024px) 55vw, 90vw"
-                className="object-cover"
-              />
-            </div>
             {category.topContent && (
               <div
-                className="cms-content"
+                className="cms-content mt-2"
                 // eslint-disable-next-line react/no-danger
                 dangerouslySetInnerHTML={{ __html: category.topContent }}
               />
             )}
+          </div>
+
+          <div className="relative aspect-4/3 w-full overflow-hidden rounded-3xl bg-gray-100 lg:sticky lg:top-24">
+            <SeafoodImage
+              src={category.featuredImage.url}
+              alt={category.featuredImage.alt || category.name}
+              fill
+              priority
+              sizes="(min-width: 1024px) 35vw, 90vw"
+              className="object-cover"
+            />
           </div>
         </div>
 
