@@ -2,13 +2,15 @@
 
 import { useState, type FormEvent } from "react";
 import { useDispatch } from "react-redux";
+import { Eye, EyeOff, Lock, Mail, Phone, User } from "lucide-react";
 import type { AppDispatch } from "@/store/store";
 import { usePostMutation } from "@/store/apiSlice";
 import { setCustomerCredentials } from "@/store/customerAuthSlice";
+import { Button } from "@/components/ui/Button";
 import type { Customer } from "@/types";
 
-const inputClasses =
-  "h-11 w-full rounded-xl border border-gray-200 px-4 text-sm focus:border-aqua-400 focus:outline-none";
+const fieldClasses =
+  "h-12 w-full rounded-xl border border-gray-200 bg-white pl-11 pr-4 text-sm text-ocean-950 placeholder:text-gray-400 focus:border-aqua-400 focus:outline-none focus:ring-2 focus:ring-aqua-100";
 
 interface RegisterResponse {
   token: string;
@@ -28,6 +30,7 @@ export function RegisterForm({
   const [phone, setPhone] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [register, { isLoading }] = usePostMutation();
 
@@ -58,58 +61,112 @@ export function RegisterForm({
   }
 
   return (
-    <form onSubmit={handleSubmit} className="flex flex-col gap-3">
-      <input
-        required
-        placeholder="Full name"
-        aria-label="Full name"
-        value={name}
-        onChange={(e) => setName(e.target.value)}
-        className={inputClasses}
-      />
-      <input
-        required
-        type="email"
-        placeholder="Email address"
-        aria-label="Email address"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-        className={inputClasses}
-      />
-      <input
-        required
-        placeholder="Phone number"
-        aria-label="Phone number"
-        value={phone}
-        onChange={(e) => setPhone(e.target.value)}
-        className={inputClasses}
-      />
-      <input
-        required
-        type="password"
-        placeholder="Password (min. 6 characters)"
-        aria-label="Password"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-        className={inputClasses}
-      />
-      <input
-        required
-        type="password"
-        placeholder="Confirm password"
-        aria-label="Confirm password"
-        value={confirmPassword}
-        onChange={(e) => setConfirmPassword(e.target.value)}
-        className={inputClasses}
-      />
+    <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+      <div>
+        <label htmlFor="reg-name" className="mb-1.5 block text-xs font-semibold text-gray-600">
+          Full Name
+        </label>
+        <div className="relative">
+          <User className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
+          <input
+            id="reg-name"
+            required
+            placeholder="Your full name"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            className={fieldClasses}
+          />
+        </div>
+      </div>
+
+      <div>
+        <label htmlFor="reg-email" className="mb-1.5 block text-xs font-semibold text-gray-600">
+          Email Address
+        </label>
+        <div className="relative">
+          <Mail className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
+          <input
+            id="reg-email"
+            required
+            type="email"
+            placeholder="you@example.com"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            className={fieldClasses}
+          />
+        </div>
+      </div>
+
+      <div>
+        <label htmlFor="reg-phone" className="mb-1.5 block text-xs font-semibold text-gray-600">
+          Phone Number
+        </label>
+        <div className="relative">
+          <Phone className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
+          <input
+            id="reg-phone"
+            required
+            placeholder="05X XXX XXXX"
+            value={phone}
+            onChange={(e) => setPhone(e.target.value)}
+            className={fieldClasses}
+          />
+        </div>
+      </div>
+
+      <div>
+        <label htmlFor="reg-password" className="mb-1.5 block text-xs font-semibold text-gray-600">
+          Password
+        </label>
+        <div className="relative">
+          <Lock className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
+          <input
+            id="reg-password"
+            required
+            type={showPassword ? "text" : "password"}
+            placeholder="At least 6 characters"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            className={`${fieldClasses} pr-11`}
+          />
+          <button
+            type="button"
+            onClick={() => setShowPassword((v) => !v)}
+            aria-label={showPassword ? "Hide password" : "Show password"}
+            className="absolute right-3.5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+          >
+            {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+          </button>
+        </div>
+      </div>
+
+      <div>
+        <label
+          htmlFor="reg-confirm-password"
+          className="mb-1.5 block text-xs font-semibold text-gray-600"
+        >
+          Confirm Password
+        </label>
+        <div className="relative">
+          <Lock className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
+          <input
+            id="reg-confirm-password"
+            required
+            type={showPassword ? "text" : "password"}
+            placeholder="Re-enter your password"
+            value={confirmPassword}
+            onChange={(e) => setConfirmPassword(e.target.value)}
+            className={fieldClasses}
+          />
+        </div>
+      </div>
+
       {error && <p className="text-sm font-medium text-red-600">{error}</p>}
-      <button
-        type="submit"
-        disabled={isLoading}
-        className="h-11 rounded-xl bg-ocean-700 text-sm font-semibold text-white transition-colors hover:bg-ocean-600 disabled:opacity-50"
-      >
+
+      <Button type="submit" variant="primary" size="lg" className="mt-1 w-full" disabled={isLoading}>
         {isLoading ? "Creating account..." : "Create Account"}
-      </button>
+      </Button>
+
       {onSwitchToLogin && (
         <button
           type="button"
