@@ -2,6 +2,7 @@
 
 import { ShoppingBag } from "lucide-react";
 import { useGetQuery } from "@/store/apiSlice";
+import { OrderStatusTracker } from "@/components/account/OrderStatusTracker";
 import { formatAED, formatDateTime } from "@/lib/utils/format";
 import { cn } from "@/lib/utils/cn";
 import type { Order, OrderStatus } from "@/types";
@@ -9,6 +10,8 @@ import type { Order, OrderStatus } from "@/types";
 const STATUS_LABEL: Record<OrderStatus, string> = {
   pending: "Pending",
   confirmed: "Confirmed",
+  processing: "Processing",
+  shipped: "Shipped",
   out_for_delivery: "Out for Delivery",
   delivered: "Delivered",
   cancelled: "Cancelled",
@@ -17,6 +20,8 @@ const STATUS_LABEL: Record<OrderStatus, string> = {
 const STATUS_STYLE: Record<OrderStatus, string> = {
   pending: "bg-offer-500/10 text-offer-600",
   confirmed: "bg-aqua-500/10 text-aqua-700",
+  processing: "bg-aqua-500/10 text-aqua-700",
+  shipped: "bg-aqua-500/10 text-aqua-700",
   out_for_delivery: "bg-aqua-500/10 text-aqua-700",
   delivered: "bg-fresh-green-500/10 text-fresh-green-600",
   cancelled: "bg-red-500/10 text-red-600",
@@ -64,6 +69,10 @@ export default function AccountOrdersPage() {
             >
               {STATUS_LABEL[order.status]}
             </span>
+          </div>
+
+          <div className="mt-5 border-y border-gray-100 py-5">
+            <OrderStatusTracker status={order.status} />
           </div>
 
           <ul className="mt-4 flex flex-col gap-1.5 text-sm text-gray-600">

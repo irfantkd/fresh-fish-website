@@ -127,7 +127,14 @@ export interface Customer {
   createdAt: string;
 }
 
-export type OrderStatus = "pending" | "confirmed" | "out_for_delivery" | "delivered" | "cancelled";
+export type OrderStatus =
+  | "pending"
+  | "confirmed"
+  | "processing"
+  | "shipped"
+  | "out_for_delivery"
+  | "delivered"
+  | "cancelled";
 export type PaymentMethod = "cod" | "bank_transfer";
 export type PaymentStatus = "unpaid" | "pending_verification" | "verified" | "rejected";
 
