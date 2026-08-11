@@ -53,18 +53,8 @@ export function CategoryPageClient({ slug }: { slug: string }) {
           ]}
         />
 
-        <div className="mt-6 grid gap-8 lg:grid-cols-[1.1fr_1.4fr] lg:items-center">
-          <div className="relative aspect-4/3 w-full overflow-hidden rounded-3xl bg-gray-100">
-            <SeafoodImage
-              src={category.featuredImage.url}
-              alt={category.featuredImage.alt || category.name}
-              fill
-              priority
-              sizes="(min-width: 1024px) 40vw, 90vw"
-              className="object-cover"
-            />
-          </div>
-          <div className="flex flex-col gap-3">
+        <div className="mt-6 grid gap-8 lg:grid-cols-[1fr_1.2fr] lg:items-start lg:gap-12">
+          <div className="flex flex-col gap-3 lg:pt-2 lg:sticky lg:top-24">
             <span className="text-xs font-semibold uppercase tracking-[0.2em] text-aqua-600">
               Category
             </span>
@@ -72,15 +62,27 @@ export function CategoryPageClient({ slug }: { slug: string }) {
               {category.name}
             </h1>
           </div>
-        </div>
 
-        {category.topContent && (
-          <div
-            className="cms-content mt-10"
-            // eslint-disable-next-line react/no-danger
-            dangerouslySetInnerHTML={{ __html: category.topContent }}
-          />
-        )}
+          <div className="flex flex-col gap-6">
+            <div className="relative aspect-4/3 w-full overflow-hidden rounded-3xl bg-gray-100">
+              <SeafoodImage
+                src={category.featuredImage.url}
+                alt={category.featuredImage.alt || category.name}
+                fill
+                priority
+                sizes="(min-width: 1024px) 55vw, 90vw"
+                className="object-cover"
+              />
+            </div>
+            {category.topContent && (
+              <div
+                className="cms-content"
+                // eslint-disable-next-line react/no-danger
+                dangerouslySetInnerHTML={{ __html: category.topContent }}
+              />
+            )}
+          </div>
+        </div>
 
         <div className="mt-10">
           {isLoadingProducts ? <GridSkeleton count={8} /> : <ProductGrid products={products} />}

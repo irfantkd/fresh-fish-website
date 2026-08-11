@@ -1,6 +1,7 @@
 import { SITE_CONFIG } from "@/constants/site";
 import { getLowestSize } from "@/lib/utils/product";
-import type { BlogPost, FaqItem, Product } from "@/types";
+import { stripHtml } from "@/lib/utils/format";
+import type { BlogPost, Category, FaqItem, Product } from "@/types";
 
 export function organizationJsonLd() {
   return {
@@ -57,6 +58,27 @@ export function productJsonLd(product: Product) {
           reviewCount: product.reviewCount,
         }
       : undefined,
+  };
+}
+
+export function categoryJsonLd(category: Category) {
+  const description =
+    category.seo?.metaDescription ||
+    stripHtml(category.topContent).slice(0, 300) ||
+    `Shop ${category.name} at ${SITE_CONFIG.name}.`;
+
+  return {
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    name: category.name,
+    description,
+    url: `${SITE_CONFIG.url}/category/${category.slug}`,
+    image: category.featuredImage?.url || undefined,
+    isPartOf: { "@type": "WebSite", name: SITE_CONFIG.name, url: SITE_CONFIG.url },
+    mainEntity: {
+      "@type": "ItemList",
+      numberOfItems: category.productCount,
+    },
   };
 }
 

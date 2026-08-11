@@ -21,3 +21,13 @@ export function formatDate(value: string): string {
     day: "numeric",
   });
 }
+
+/** Strips HTML tags from CMS-authored rich text, for use in plain-text
+ * contexts like meta descriptions and JSON-LD. */
+export function stripHtml(html: string | undefined | null): string {
+  if (!html) return "";
+  return html
+    .replace(/<[^>]*>/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+}
