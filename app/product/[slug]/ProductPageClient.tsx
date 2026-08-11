@@ -12,6 +12,7 @@ import { ProductReviews } from "@/components/product/ProductReviews";
 import { ProductDetailTabs } from "@/components/product/ProductDetailTabs";
 import { FaqAccordion } from "@/components/sections/FaqAccordion";
 import { useGetQuery } from "@/store/apiSlice";
+import { formatAED, formatWeight } from "@/lib/utils/format";
 import type { Product } from "@/types";
 
 interface ProductsResponse {
@@ -99,6 +100,46 @@ export function ProductPageClient({ slug }: { slug: string }) {
         />
       ),
     },
+    ...(product.sizes.length > 1
+      ? [
+          {
+            title: "Sizes & Pricing",
+            content: (
+              <div className="overflow-x-auto">
+                <table className="w-full text-left text-sm">
+                  <thead>
+                    <tr className="border-b border-gray-100 text-xs uppercase tracking-wide text-gray-400">
+                      <th className="pb-3 pr-4 font-semibold">Size</th>
+                      <th className="pb-3 pr-4 font-semibold">Weight</th>
+                      <th className="pb-3 font-semibold">Price</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-gray-100">
+                    {product.sizes.map((size) => (
+                      <tr key={size.label}>
+                        <td className="py-3 pr-4 font-semibold text-ocean-950">{size.label}</td>
+                        <td className="py-3 pr-4 text-gray-500">
+                          {formatWeight(size.weightGrams)}
+                        </td>
+                        <td className="py-3">
+                          <span className="font-semibold text-ocean-900">
+                            {formatAED(size.price)}
+                          </span>
+                          {size.compareAtPrice && size.compareAtPrice > size.price && (
+                            <span className="ml-2 text-xs text-gray-400 line-through">
+                              {formatAED(size.compareAtPrice)}
+                            </span>
+                          )}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            ),
+          },
+        ]
+      : []),
     ...product.tabs.map((tab) => ({
       title: tab.title,
       content: (

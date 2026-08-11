@@ -24,11 +24,19 @@ export function ShopSection() {
   });
   const products = (data as ProductsResponse | undefined)?.items ?? [];
 
+  // Each tab prefers products flagged for it, but falls back to the general
+  // catalog so a tab never goes empty just because no product has that
+  // specific badge checked in the dashboard.
+  function pickProducts(predicate: (p: Product) => boolean | undefined) {
+    const flagged = products.filter(predicate);
+    return (flagged.length > 0 ? flagged : products).slice(0, 8);
+  }
+
   const tabs = [
-    { label: "Fresh Today", products: products.filter((p) => p.isFreshToday).slice(0, 8) },
-    { label: "Best Sellers", products: products.filter((p) => p.isBestSeller).slice(0, 8) },
-    { label: "Premium Selection", products: products.filter((p) => p.isPremium).slice(0, 8) },
-    { label: "Seasonal Picks", products: products.filter((p) => p.isSeasonal).slice(0, 8) },
+    { label: "Fresh Today", products: pickProducts((p) => p.isFreshToday) },
+    { label: "Best Sellers", products: pickProducts((p) => p.isBestSeller) },
+    { label: "Premium Selection", products: pickProducts((p) => p.isPremium) },
+    { label: "Seasonal Picks", products: pickProducts((p) => p.isSeasonal) },
   ];
 
   return (
