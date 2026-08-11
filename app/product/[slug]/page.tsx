@@ -22,12 +22,13 @@ export async function generateMetadata({
   const title = product.seo?.metaTitle || product.name;
   const description = product.seo?.metaDescription || product.shortDescription;
   const images = [product.featuredImage, ...product.gallery].filter((img) => img?.url);
+  const canonical = product.seo?.canonicalUrl || `/product/${product.slug}`;
 
   return {
     title,
     description,
     keywords: product.seo?.keywords,
-    alternates: { canonical: `/product/${product.slug}` },
+    alternates: { canonical },
     openGraph: {
       title,
       description,

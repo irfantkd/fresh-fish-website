@@ -1,7 +1,7 @@
 "use client";
 
 import Image, { type ImageProps } from "next/image";
-import { useRef, useState } from "react";
+import { useState } from "react";
 
 /**
  * LoremFlickr (our real-photo source for seafood images) is occasionally
@@ -22,11 +22,23 @@ function toFallbackSrc(src: string): string {
 
 export function SeafoodImage({ src, ...props }: ImageProps & { src: string }) {
   const [currentSrc, setCurrentSrc] = useState(src);
-  const attempts = useRef(0);
+  const [renderedSrc, setRenderedSrc] = useState(src);
+  const [attempts, setAttempts] = useState(0);
+
+  // `src` can change while this instance stays mounted (e.g. clicking a
+  // different gallery thumbnail) — resync during render (React's recommended
+  // pattern for this) so the image updates immediately instead of getting
+  // stuck on whatever it first rendered.
+  if (src !== renderedSrc) {
+    setRenderedSrc(src);
+    setCurrentSrc(src);
+    setAttempts(0);
+  }
 
   function handleError() {
-    attempts.current += 1;
-    if (attempts.current === 1) {
+    const nextAttempts = attempts + 1;
+    setAttempts(nextAttempts);
+    if (nextAttempts === 1) {
       setCurrentSrc(`${src}${src.includes("?") ? "&" : "?"}retry=1`);
     } else {
       setCurrentSrc(toFallbackSrc(src));

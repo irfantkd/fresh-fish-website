@@ -33,6 +33,7 @@ export interface ProductSeo {
   metaTitle?: string;
   metaDescription?: string;
   keywords?: string[];
+  canonicalUrl?: string;
 }
 
 export interface Product {
