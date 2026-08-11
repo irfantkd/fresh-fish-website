@@ -255,3 +255,27 @@ body {
   padding: 0.15em 0.4em;
   font-size: 0.875em;
 }
+
+.cms-content table {
+  border-collapse: collapse;
+  width: 100%;
+  margin: 1.5em 0;
+  font-size: 0.9em;
+  display: block;
+  overflow-x: auto;
+  max-width: 100%;
+}
+
+.cms-content td,
+.cms-content th {
+  border: 1px solid var(--color-gray-200);
+  padding: 0.6em 0.9em;
+  text-align: left;
+  vertical-align: top;
+}
+
+.cms-content th {
+  background: var(--color-gray-50, #f9fafb);
+  font-weight: 700;
+  color: var(--color-ocean-950);
+}

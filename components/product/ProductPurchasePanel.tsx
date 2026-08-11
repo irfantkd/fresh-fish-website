@@ -11,11 +11,15 @@ import { buildProductInquiryLink } from "@/lib/utils/whatsapp";
 import { cn } from "@/lib/utils/cn";
 import type { Product } from "@/types";
 
+const DESCRIPTION_PREVIEW_THRESHOLD = 180;
+
 export function ProductPurchasePanel({ product }: { product: Product }) {
   const [sizeIndex, setSizeIndex] = useState(0);
   const [quantity, setQuantity] = useState(1);
+  const [isDescriptionExpanded, setIsDescriptionExpanded] = useState(false);
   const { addItem, openDrawer } = useCart();
   const size = product.sizes[sizeIndex];
+  const plainDescription = stripHtml(product.description);
 
   function handleAddToCart() {
     addItem({
@@ -52,23 +56,33 @@ export function ProductPurchasePanel({ product }: { product: Product }) {
         </div>
       </div>
 
-      <p className="line-clamp-3 text-base leading-relaxed text-gray-500">
-        {stripHtml(product.description)}
-      </p>
-
-      <ul className="flex flex-wrap gap-2">
-        {product.benefits.map((benefit) => (
-          <li
-            key={benefit}
-            className="rounded-full bg-ocean-50 px-3 py-1.5 text-xs font-medium text-ocean-700"
+      <div className="flex flex-col items-start gap-2">
+        {isDescriptionExpanded ? (
+          <div
+            className="cms-content text-base text-gray-500"
+            // eslint-disable-next-line react/no-danger
+            dangerouslySetInnerHTML={{ __html: product.description }}
+          />
+        ) : (
+          <p className="line-clamp-3 text-base leading-relaxed text-gray-500">
+            {plainDescription}
+          </p>
+        )}
+        {plainDescription.length > DESCRIPTION_PREVIEW_THRESHOLD && (
+          <button
+            type="button"
+            onClick={() => setIsDescriptionExpanded((prev) => !prev)}
+            className="text-sm font-semibold text-aqua-600 hover:text-aqua-700"
           >
-            {benefit}
-          </li>
-        ))}
-      </ul>
+            {isDescriptionExpanded ? "Show less" : "Read more"}
+          </button>
+        )}
+      </div>
 
       <div>
-        <span className="mb-2 block text-sm font-semibold text-ocean-950">Select Size</span>
+        <span className="mb-2 block text-sm font-semibold text-ocean-950">
+          Select Size / Weight
+        </span>
         <div className="flex flex-wrap gap-2">
           {product.sizes.map((s, i) => (
             <button
@@ -81,19 +95,30 @@ export function ProductPurchasePanel({ product }: { product: Product }) {
                   : "border-gray-200 hover:border-ocean-300"
               )}
             >
-              <span className="block text-sm font-semibold">{formatWeight(s.weightGrams)}</span>
+              <span className="block text-sm font-semibold">{s.label}</span>
               <span
                 className={cn(
                   "block text-xs",
                   sizeIndex === i ? "text-white/70" : "text-gray-400"
                 )}
               >
-                {formatAED(s.price)}
+                {formatWeight(s.weightGrams)} &middot; {formatAED(s.price)}
               </span>
             </button>
           ))}
         </div>
       </div>
+
+      <ul className="flex flex-wrap gap-2">
+        {product.benefits.map((benefit) => (
+          <li
+            key={benefit}
+            className="rounded-full bg-ocean-50 px-3 py-1.5 text-xs font-medium text-ocean-700"
+          >
+            {benefit}
+          </li>
+        ))}
+      </ul>
 
       <div className="flex items-center justify-between rounded-2xl border border-gray-100 bg-gray-50/60 p-4">
         <div>

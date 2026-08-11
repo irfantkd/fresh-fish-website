@@ -9,14 +9,14 @@ export function ProductGallery({ images, name }: { images: string[]; name: strin
 
   return (
     <div className="flex flex-col gap-4">
-      <div className="group relative aspect-square w-full overflow-hidden rounded-3xl bg-gray-100">
+      <div className="relative aspect-square w-full overflow-hidden rounded-3xl bg-gray-100">
         <SeafoodImage
           src={images[active]}
           alt={name}
           fill
           priority
           sizes="(min-width: 1024px) 40vw, 90vw"
-          className="object-cover transition-transform duration-500 ease-out group-hover:scale-110"
+          className="object-contain"
         />
       </div>
       {images.length > 1 && (
