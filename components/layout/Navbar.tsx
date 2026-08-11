@@ -1,7 +1,8 @@
 "use client";
 
 import { AnimatePresence, motion } from "framer-motion";
-import { ChevronDown, Menu, MessageCircle, ShoppingBag, X } from "lucide-react";
+import { ChevronDown, Clock, Mail, Menu, MessageCircle, Phone, ShoppingBag, X } from "lucide-react";
+import { FaFacebook, FaInstagram, FaTiktok } from "react-icons/fa";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
@@ -58,13 +59,70 @@ export function Navbar() {
   }, []);
 
   return (
-    <header
-      className={cn(
-        "sticky top-0 z-40 w-full transition-all duration-300",
-        isScrolled
-          ? "border-b border-gray-100 bg-white/85 shadow-sm backdrop-blur-lg"
-          : "border-b border-transparent bg-transparent"
-      )}
+    <>
+      {/* Utility top bar — scrolls away with the page (not sticky), sits
+          above the main nav which stays pinned via its own sticky header. */}
+      <div className="hidden bg-navy-950 text-white/70 sm:block">
+        <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-2 text-xs sm:px-6 lg:px-8">
+          <div className="flex items-center gap-5">
+            <a
+              href={`tel:${SITE_CONFIG.phone}`}
+              className="flex items-center gap-1.5 transition-colors hover:text-aqua-300"
+            >
+              <Phone className="h-3.5 w-3.5" /> {SITE_CONFIG.phone}
+            </a>
+            <a
+              href={`mailto:${SITE_CONFIG.email}`}
+              className="hidden items-center gap-1.5 transition-colors hover:text-aqua-300 md:flex"
+            >
+              <Mail className="h-3.5 w-3.5" /> {SITE_CONFIG.email}
+            </a>
+          </div>
+
+          <div className="flex items-center gap-4">
+            <span className="hidden items-center gap-1.5 text-white/50 lg:flex">
+              <Clock className="h-3.5 w-3.5" /> Same-day delivery across Dubai, 24/7
+            </span>
+            <div className="flex items-center gap-3 border-l border-white/15 pl-4">
+              <a
+                href={SITE_CONFIG.social.instagram}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Instagram"
+                className="transition-colors hover:text-aqua-300"
+              >
+                <FaInstagram className="h-3.5 w-3.5" />
+              </a>
+              <a
+                href={SITE_CONFIG.social.facebook}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Facebook"
+                className="transition-colors hover:text-aqua-300"
+              >
+                <FaFacebook className="h-3.5 w-3.5" />
+              </a>
+              <a
+                href={SITE_CONFIG.social.tiktok}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="TikTok"
+                className="transition-colors hover:text-aqua-300"
+              >
+                <FaTiktok className="h-3.5 w-3.5" />
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <header
+        className={cn(
+          "sticky top-0 z-40 w-full transition-all duration-300",
+          isScrolled
+            ? "border-b border-gray-100 bg-white/85 shadow-sm backdrop-blur-lg"
+            : "border-b border-transparent bg-transparent"
+        )}
     >
       <div
         className={cn(
@@ -356,5 +414,6 @@ export function Navbar() {
         )}
       </AnimatePresence>
     </header>
+    </>
   );
 }
