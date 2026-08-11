@@ -22,6 +22,16 @@ export function formatDate(value: string): string {
   });
 }
 
+export function formatDateTime(value: string): string {
+  return new Date(value).toLocaleString("en-AE", {
+    year: "numeric",
+    month: "short",
+    day: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+}
+
 /** Strips HTML tags from CMS-authored rich text, for use in plain-text
  * contexts like meta descriptions and JSON-LD. */
 export function stripHtml(html: string | undefined | null): string {

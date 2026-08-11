@@ -1,7 +1,19 @@
 "use client";
 
 import { AnimatePresence, motion } from "framer-motion";
-import { ChevronDown, Clock, Mail, Menu, MessageCircle, Phone, ShoppingBag, X } from "lucide-react";
+import {
+  ChevronDown,
+  Clock,
+  LogOut,
+  Mail,
+  Menu,
+  MessageCircle,
+  Package,
+  Phone,
+  ShoppingBag,
+  User,
+  X,
+} from "lucide-react";
 import { FaFacebook, FaInstagram, FaTiktok } from "react-icons/fa";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -12,6 +24,7 @@ import { SearchBar } from "@/components/layout/SearchBar";
 import { ScrollProgressBar } from "@/components/layout/ScrollProgressBar";
 import { NAV_LINKS, SITE_CONFIG } from "@/constants/site";
 import { useCart } from "@/hooks/useCart";
+import { useCustomerAuth } from "@/hooks/useCustomerAuth";
 import { cn } from "@/lib/utils/cn";
 import { useGetQuery } from "@/store/apiSlice";
 import type { Category } from "@/types";
@@ -23,9 +36,12 @@ export function Navbar() {
   const [isMobileOpen, setIsMobileOpen] = useState(false);
   const [isCategoriesOpen, setIsCategoriesOpen] = useState(false);
   const [isMobileCategoriesOpen, setIsMobileCategoriesOpen] = useState(false);
+  const [isAccountOpen, setIsAccountOpen] = useState(false);
   const { totalCount, openDrawer } = useCart();
+  const { isAuthenticated, customer, logout } = useCustomerAuth();
   const pathname = usePathname();
   const categoriesRef = useRef<HTMLDivElement>(null);
+  const accountRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     function handleScroll() {
@@ -39,6 +55,7 @@ export function Navbar() {
   useEffect(() => {
     setIsMobileOpen(false);
     setIsCategoriesOpen(false);
+    setIsAccountOpen(false);
   }, [pathname]);
 
   useEffect(() => {
@@ -46,9 +63,15 @@ export function Navbar() {
       if (categoriesRef.current && !categoriesRef.current.contains(event.target as Node)) {
         setIsCategoriesOpen(false);
       }
+      if (accountRef.current && !accountRef.current.contains(event.target as Node)) {
+        setIsAccountOpen(false);
+      }
     }
     function handleEscape(event: KeyboardEvent) {
-      if (event.key === "Escape") setIsCategoriesOpen(false);
+      if (event.key === "Escape") {
+        setIsCategoriesOpen(false);
+        setIsAccountOpen(false);
+      }
     }
     document.addEventListener("mousedown", handleClickOutside);
     document.addEventListener("keydown", handleEscape);
@@ -273,6 +296,71 @@ export function Navbar() {
             <MessageCircle className="h-4 w-4" /> WhatsApp
           </Button>
 
+          {isAuthenticated ? (
+            <div ref={accountRef} className="relative hidden sm:block">
+              <button
+                type="button"
+                onClick={() => setIsAccountOpen((open) => !open)}
+                aria-expanded={isAccountOpen}
+                aria-haspopup="true"
+                aria-label="My account"
+                className="flex h-10 w-10 items-center justify-center rounded-full text-ocean-900 hover:bg-ocean-50"
+              >
+                <User className="h-5 w-5" />
+              </button>
+              <AnimatePresence>
+                {isAccountOpen && (
+                  <motion.div
+                    initial={{ opacity: 0, y: -8 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -8 }}
+                    transition={{ duration: 0.15 }}
+                    className="absolute right-0 top-full z-40 mt-2 w-56 rounded-2xl border border-gray-100 bg-white p-2 shadow-xl"
+                  >
+                    {customer && (
+                      <div className="px-3 py-2">
+                        <p className="truncate text-sm font-semibold text-ocean-950">
+                          {customer.name}
+                        </p>
+                        <p className="truncate text-xs text-gray-400">{customer.email}</p>
+                      </div>
+                    )}
+                    <div className="my-1 border-t border-gray-100" />
+                    <Link
+                      href="/account"
+                      className="flex items-center gap-2 rounded-xl px-3 py-2 text-sm text-ocean-950 hover:bg-ocean-50"
+                    >
+                      <User className="h-4 w-4" /> My Account
+                    </Link>
+                    <Link
+                      href="/account/orders"
+                      className="flex items-center gap-2 rounded-xl px-3 py-2 text-sm text-ocean-950 hover:bg-ocean-50"
+                    >
+                      <Package className="h-4 w-4" /> My Orders
+                    </Link>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        logout();
+                        setIsAccountOpen(false);
+                      }}
+                      className="flex w-full items-center gap-2 rounded-xl px-3 py-2 text-left text-sm text-red-600 hover:bg-red-50"
+                    >
+                      <LogOut className="h-4 w-4" /> Log Out
+                    </button>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
+          ) : (
+            <Link
+              href="/account/login"
+              className="hidden h-10 items-center rounded-full px-3.5 text-sm font-medium text-ocean-900 hover:bg-ocean-50 sm:flex"
+            >
+              Log In
+            </Link>
+          )}
+
           <button
             onClick={openDrawer}
             aria-label="Open cart"
@@ -398,6 +486,39 @@ export function Navbar() {
                     {link.label}
                   </Link>
                 ))}
+
+                <div className="my-1 border-t border-gray-100" />
+
+                {isAuthenticated ? (
+                  <>
+                    <Link
+                      href="/account"
+                      className="flex items-center gap-2 rounded-xl px-4 py-3 text-sm font-medium text-gray-600 hover:bg-ocean-50 hover:text-ocean-900"
+                    >
+                      <User className="h-4 w-4" /> My Account
+                    </Link>
+                    <Link
+                      href="/account/orders"
+                      className="flex items-center gap-2 rounded-xl px-4 py-3 text-sm font-medium text-gray-600 hover:bg-ocean-50 hover:text-ocean-900"
+                    >
+                      <Package className="h-4 w-4" /> My Orders
+                    </Link>
+                    <button
+                      type="button"
+                      onClick={() => logout()}
+                      className="flex items-center gap-2 rounded-xl px-4 py-3 text-left text-sm font-medium text-red-600 hover:bg-red-50"
+                    >
+                      <LogOut className="h-4 w-4" /> Log Out
+                    </button>
+                  </>
+                ) : (
+                  <Link
+                    href="/account/login"
+                    className="flex items-center gap-2 rounded-xl px-4 py-3 text-sm font-medium text-gray-600 hover:bg-ocean-50 hover:text-ocean-900"
+                  >
+                    <User className="h-4 w-4" /> Log In / Register
+                  </Link>
+                )}
               </nav>
 
               <Button

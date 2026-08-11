@@ -7,7 +7,10 @@ import { Container } from "@/components/ui/Container";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { Button } from "@/components/ui/Button";
 import { SeafoodImage } from "@/components/ui/SeafoodImage";
+import { LoginForm } from "@/components/account/LoginForm";
+import { RegisterForm } from "@/components/account/RegisterForm";
 import { useCart } from "@/hooks/useCart";
+import { useCustomerAuth } from "@/hooks/useCustomerAuth";
 import { formatAED } from "@/lib/utils/format";
 import { useGetQuery, usePostMutation } from "@/store/apiSlice";
 import { cn } from "@/lib/utils/cn";
@@ -41,7 +44,9 @@ const inputClasses =
 
 export default function CheckoutPage() {
   const { items, totalPrice, clearCart } = useCart();
+  const { isAuthenticated, customer } = useCustomerAuth();
 
+  const [authMode, setAuthMode] = useState<"login" | "register">("login");
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
   const [email, setEmail] = useState("");
@@ -51,6 +56,18 @@ export default function CheckoutPage() {
   const [receipt, setReceipt] = useState<Receipt | null>(null);
   const [formError, setFormError] = useState<string | null>(null);
   const [placedOrder, setPlacedOrder] = useState<PlacedOrder | null>(null);
+  const [prefilledFor, setPrefilledFor] = useState<string | null>(null);
+
+  // Pre-fill from the logged-in account once it arrives, but keep it
+  // editable — the delivery details for this order can differ from the
+  // account's own. Adjusting state during render (not in an effect) avoids
+  // an extra render pass.
+  if (customer && prefilledFor !== customer.id) {
+    setPrefilledFor(customer.id);
+    setName((prev) => prev || customer.name);
+    setPhone((prev) => prev || customer.phone);
+    setEmail((prev) => prev || customer.email);
+  }
 
   const { data: bankDetailsData, isLoading: isLoadingBankDetails } = useGetQuery(
     { path: "/settings/bank-details" },
@@ -162,6 +179,39 @@ export default function CheckoutPage() {
               Browse Seafood
             </Button>
           </div>
+        </Container>
+      </div>
+    );
+  }
+
+  if (!isAuthenticated) {
+    return (
+      <div className="py-16">
+        <Container className="max-w-md">
+          <SectionHeading
+            eyebrow="Checkout"
+            title={authMode === "login" ? "Log In to Continue" : "Create Your Account"}
+            align="center"
+            className="mx-auto"
+          />
+          <p className="mt-3 text-center text-sm text-gray-500">
+            {authMode === "login"
+              ? "Log in to place your order and track it from your account."
+              : "Create an account to place your order and track it any time."}
+          </p>
+          <div className="mt-8 rounded-3xl border border-gray-100 p-8">
+            {authMode === "login" ? (
+              <LoginForm onSwitchToRegister={() => setAuthMode("register")} />
+            ) : (
+              <RegisterForm onSwitchToLogin={() => setAuthMode("login")} />
+            )}
+          </div>
+          <Link
+            href="/cart"
+            className="mt-4 block text-center text-xs font-medium text-ocean-600 hover:underline"
+          >
+            &larr; Back to Cart
+          </Link>
         </Container>
       </div>
     );

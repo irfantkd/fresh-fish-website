@@ -6,6 +6,7 @@ import { CartDrawer } from "@/components/cart/CartDrawer";
 import { WhatsAppFloatingButton } from "@/components/layout/WhatsAppFloatingButton";
 import { CartProvider } from "@/providers/CartProvider";
 import { StoreProvider } from "@/providers/StoreProvider";
+import { CustomerAuthProvider } from "@/providers/CustomerAuthProvider";
 import { SITE_CONFIG } from "@/constants/site";
 import { organizationJsonLd } from "@/lib/seo/json-ld";
 import "./globals.css";
@@ -77,13 +78,15 @@ export default function RootLayout({
           dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd()) }}
         />
         <StoreProvider>
-          <CartProvider>
-            <Navbar />
-            <main className="flex-1">{children}</main>
-            <Footer />
-            <CartDrawer />
-            <WhatsAppFloatingButton />
-          </CartProvider>
+          <CustomerAuthProvider>
+            <CartProvider>
+              <Navbar />
+              <main className="flex-1">{children}</main>
+              <Footer />
+              <CartDrawer />
+              <WhatsAppFloatingButton />
+            </CartProvider>
+          </CustomerAuthProvider>
         </StoreProvider>
       </body>
     </html>

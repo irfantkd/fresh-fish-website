@@ -116,6 +116,49 @@ export interface FaqItem {
   answer: string;
 }
 
+export type CustomerStatus = "active" | "banned";
+
+export interface Customer {
+  id: string;
+  name: string;
+  email: string;
+  phone: string;
+  status: CustomerStatus;
+  createdAt: string;
+}
+
+export type OrderStatus = "pending" | "confirmed" | "out_for_delivery" | "delivered" | "cancelled";
+export type PaymentMethod = "cod" | "bank_transfer";
+export type PaymentStatus = "unpaid" | "pending_verification" | "verified" | "rejected";
+
+export interface OrderItem {
+  productId?: string;
+  productName: string;
+  productSlug?: string;
+  image?: string;
+  preparationType?: string;
+  sizeLabel: string;
+  price: number;
+  quantity: number;
+}
+
+export interface Order {
+  id: string;
+  orderNumber: string;
+  customerId?: string | null;
+  items: OrderItem[];
+  customer: { name: string; phone: string; email?: string; address: string };
+  notes?: string;
+  paymentMethod: PaymentMethod;
+  paymentStatus: PaymentStatus;
+  paymentReceiptImage?: { url: string; publicId: string };
+  status: OrderStatus;
+  subtotal: number;
+  total: number;
+  createdAt: string;
+  updatedAt: string;
+}
+
 export interface CartItem {
   productId: string;
   productName: string;
