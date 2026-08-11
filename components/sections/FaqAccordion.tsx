@@ -6,11 +6,16 @@ import { useState } from "react";
 import { cn } from "@/lib/utils/cn";
 import type { FaqItem } from "@/types";
 
-export function FaqAccordion({ faqs }: { faqs: FaqItem[] }) {
+export function FaqAccordion({ faqs, bare = false }: { faqs: FaqItem[]; bare?: boolean }) {
   const [openId, setOpenId] = useState<string | null>(faqs[0]?.id ?? null);
 
   return (
-    <div className="mx-auto flex max-w-3xl flex-col divide-y divide-gray-100 rounded-3xl border border-gray-100 bg-white">
+    <div
+      className={cn(
+        "flex flex-col divide-y divide-gray-100",
+        !bare && "mx-auto max-w-3xl rounded-3xl border border-gray-100 bg-white"
+      )}
+    >
       {faqs.map((faq) => {
         const isOpen = openId === faq.id;
         return (

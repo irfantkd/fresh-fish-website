@@ -131,6 +131,10 @@ export default function CartPage() {
                 />
               </div>
 
+              <Button href="/checkout" variant="aqua" size="lg" className="w-full">
+                Proceed to Checkout
+              </Button>
+
               {checkoutHref ? (
                 <Button
                   href={checkoutHref}

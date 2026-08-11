@@ -36,7 +36,7 @@ export function CategoryPageClient({ slug }: { slug: string }) {
   if (isLoadingCategories || !category) {
     return (
       <div className="pb-12">
-        <div className="h-[50vh] min-h-64 max-h-100 w-full animate-pulse bg-gray-100" />
+        <div className="h-[38vh] min-h-56 w-full animate-pulse bg-gray-100 sm:h-[45vh] sm:min-h-72 lg:h-[50vh] lg:max-h-100" />
         <Container>
           <div className="mt-8 h-32 w-full animate-pulse rounded-3xl bg-gray-100" />
         </Container>
@@ -48,7 +48,7 @@ export function CategoryPageClient({ slug }: { slug: string }) {
     <div className="pb-12">
       {/* Full-bleed hero banner — image with a top-transparent/bottom-black
           gradient so the overlaid heading stays legible against any photo. */}
-      <div className="relative h-[50vh] min-h-64 max-h-100 w-full overflow-hidden bg-gray-100">
+      <div className="relative h-[38vh] min-h-56 w-full overflow-hidden bg-gray-100 sm:h-[45vh] sm:min-h-72 lg:h-[50vh] lg:max-h-100">
         <SeafoodImage
           src={category.featuredImage.url}
           alt={category.featuredImage.alt || category.name}

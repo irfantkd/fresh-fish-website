@@ -6,7 +6,7 @@ import { Badge } from "@/components/ui/Badge";
 import { StarRating } from "@/components/ui/StarRating";
 import { Button } from "@/components/ui/Button";
 import { useCart } from "@/hooks/useCart";
-import { formatAED, formatWeight } from "@/lib/utils/format";
+import { formatAED, formatWeight, stripHtml } from "@/lib/utils/format";
 import { buildProductInquiryLink } from "@/lib/utils/whatsapp";
 import { cn } from "@/lib/utils/cn";
 import type { Product } from "@/types";
@@ -52,7 +52,9 @@ export function ProductPurchasePanel({ product }: { product: Product }) {
         </div>
       </div>
 
-      <p className="text-base leading-relaxed text-gray-500">{product.description}</p>
+      <p className="line-clamp-3 text-base leading-relaxed text-gray-500">
+        {stripHtml(product.description)}
+      </p>
 
       <ul className="flex flex-wrap gap-2">
         {product.benefits.map((benefit) => (

@@ -1,6 +1,7 @@
 "use client";
 
 import { notFound } from "next/navigation";
+import { Truck } from "lucide-react";
 import { Container } from "@/components/ui/Container";
 import { Breadcrumb } from "@/components/ui/Breadcrumb";
 import { SectionHeading } from "@/components/ui/SectionHeading";
@@ -8,6 +9,7 @@ import { ProductGallery } from "@/components/product/ProductGallery";
 import { ProductPurchasePanel } from "@/components/product/ProductPurchasePanel";
 import { ProductGrid } from "@/components/product/ProductGrid";
 import { ProductReviews } from "@/components/product/ProductReviews";
+import { ProductDetailTabs } from "@/components/product/ProductDetailTabs";
 import { FaqAccordion } from "@/components/sections/FaqAccordion";
 import { useGetQuery } from "@/store/apiSlice";
 import type { Product } from "@/types";
@@ -84,6 +86,47 @@ export function ProductPageClient({ slug }: { slug: string }) {
       ? product.faqs.map((faq, index) => ({ id: `product-faq-${index}`, ...faq }))
       : PRODUCT_FAQS;
 
+  const detailTabs = [
+    {
+      title: "Description",
+      content: (
+        <div
+          className="cms-content"
+          // eslint-disable-next-line react/no-danger
+          dangerouslySetInnerHTML={{
+            __html: product.description || "<p>No description available yet.</p>",
+          }}
+        />
+      ),
+    },
+    ...product.tabs.map((tab) => ({
+      title: tab.title,
+      content: (
+        <div
+          className="cms-content"
+          // eslint-disable-next-line react/no-danger
+          dangerouslySetInnerHTML={{ __html: tab.content }}
+        />
+      ),
+    })),
+    {
+      title: "FAQs",
+      content: <FaqAccordion faqs={faqs} bare />,
+    },
+    {
+      title: "Shipping & Delivery",
+      content: (
+        <div className="flex items-start gap-3 text-sm leading-relaxed text-gray-600">
+          <Truck className="mt-0.5 h-5 w-5 shrink-0 text-aqua-600" />
+          <p>
+            Same-day delivery available for orders placed before 2 PM across Dubai. Cold-chain
+            packaging keeps your seafood fresh from our facility to your door.
+          </p>
+        </div>
+      ),
+    },
+  ];
+
   return (
     <div className="py-12">
       <Container>
@@ -102,37 +145,8 @@ export function ProductPageClient({ slug }: { slug: string }) {
           <ProductPurchasePanel product={product} />
         </div>
 
-        {product.tabs.length > 0 && (
-          <div className="mt-20 flex flex-col gap-14">
-            {product.tabs.map((tab, index) => (
-              <div key={index}>
-                <h2 className="font-heading text-xl font-bold text-ocean-950">{tab.title}</h2>
-                <div
-                  className="cms-content mt-4"
-                  // eslint-disable-next-line react/no-danger
-                  dangerouslySetInnerHTML={{ __html: tab.content }}
-                />
-              </div>
-            ))}
-          </div>
-        )}
-
-        <div className="mt-20 grid gap-10 lg:grid-cols-[2fr_1fr]">
-          <div>
-            <h2 className="font-heading text-xl font-bold text-ocean-950">
-              Frequently Asked Questions
-            </h2>
-            <div className="mt-4">
-              <FaqAccordion faqs={faqs} />
-            </div>
-          </div>
-          <div className="rounded-3xl border border-gray-100 bg-gray-50/60 p-6">
-            <h2 className="font-heading text-lg font-bold text-ocean-950">Delivery Info</h2>
-            <p className="mt-2 text-sm text-gray-500">
-              Same-day delivery available for orders placed before 2 PM across Dubai. Cold-chain
-              packaging keeps your seafood fresh from our facility to your door.
-            </p>
-          </div>
+        <div className="mt-20">
+          <ProductDetailTabs tabs={detailTabs} />
         </div>
 
         <div className="mt-20">

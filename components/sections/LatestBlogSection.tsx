@@ -18,11 +18,16 @@ export async function LatestBlogSection() {
           <div className="flex flex-col items-center justify-between gap-6 text-center sm:flex-row sm:text-left">
             <SectionHeading
               eyebrow="From the Blog"
-              title="Seafood Guides, Recipes & News"
+              title="Blogs"
               description="Tips on choosing, storing, and cooking the freshest seafood in Dubai."
               className="items-center text-center sm:items-start sm:text-left [&_p]:mx-auto sm:[&_p]:mx-0"
             />
-            <Button href="/blog" variant="outline" size="md" className="shrink-0">
+            <Button
+              href="/blog"
+              variant="outline"
+              size="md"
+              className="shrink-0"
+            >
               Visit the Blog <ArrowRight className="h-4 w-4" />
             </Button>
           </div>

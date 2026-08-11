@@ -29,12 +29,17 @@ export const apiSlice = createApi({
     }),
 
     post: builder.mutation<unknown, { path: string; body?: unknown }>({
-      query: ({ path, body }) => ({
-        url: path,
-        method: "POST",
-        body,
-        headers: { "Content-Type": "application/json", Accept: "application/json" },
-      }),
+      query: ({ path, body }) => {
+        const isFormData = body instanceof FormData;
+        return {
+          url: path,
+          method: "POST",
+          body,
+          headers: isFormData
+            ? { Accept: "application/json" } // let the browser set the multipart boundary
+            : { "Content-Type": "application/json", Accept: "application/json" },
+        };
+      },
       invalidatesTags: ["KeyName"],
     }),
 

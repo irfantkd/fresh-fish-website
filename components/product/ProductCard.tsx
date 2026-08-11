@@ -33,10 +33,22 @@ export function ProductCard({ product }: { product: Product }) {
           />
         </Link>
 
-        <div className="absolute left-3 top-3 flex flex-col gap-1.5">
-          {product.isFreshToday && <Badge variant="fresh">Live · Fresh Today</Badge>}
-          {product.isPremium && <Badge variant="premium">Premium</Badge>}
-          {product.state === "frozen" && <Badge variant="frozen">Frozen (Raw)</Badge>}
+        <div className="absolute left-2 top-2 flex max-w-[calc(100%-2.75rem)] flex-col items-start gap-1 sm:left-3 sm:top-3 sm:gap-1.5">
+          {product.isFreshToday && (
+            <Badge variant="fresh" className="text-[10px] sm:text-xs">
+              Live · Fresh Today
+            </Badge>
+          )}
+          {product.isPremium && (
+            <Badge variant="premium" className="text-[10px] sm:text-xs">
+              Premium
+            </Badge>
+          )}
+          {product.state === "frozen" && (
+            <Badge variant="frozen" className="text-[10px] sm:text-xs">
+              Frozen (Raw)
+            </Badge>
+          )}
         </div>
 
         <button
@@ -70,9 +82,9 @@ export function ProductCard({ product }: { product: Product }) {
 
         <StarRating rating={product.rating} reviewCount={product.reviewCount} />
 
-        <div className="mt-1 flex items-center justify-between">
+        <div className="mt-1 flex flex-wrap items-center justify-between gap-2">
           <div className="flex flex-col">
-            <span className="font-heading text-lg font-bold text-ocean-900">
+            <span className="font-heading text-base font-bold text-ocean-900 sm:text-lg">
               {formatAED(size.price)}
             </span>
             <span className="text-xs text-gray-400">/ {formatWeight(size.weightGrams)}</span>
@@ -81,7 +93,7 @@ export function ProductCard({ product }: { product: Product }) {
             href={buildProductInquiryLink(product.name)}
             target="_blank"
             rel="noopener noreferrer"
-            className="flex h-10 items-center justify-center rounded-full bg-fresh-green-500 px-4 text-xs font-semibold text-white shadow-sm shadow-fresh-green-500/30 transition-colors hover:bg-fresh-green-600"
+            className="flex h-9 shrink-0 items-center justify-center rounded-full bg-fresh-green-500 px-3 text-xs font-semibold text-white shadow-sm shadow-fresh-green-500/30 transition-colors hover:bg-fresh-green-600 sm:h-10 sm:px-4"
           >
             WhatsApp
           </a>

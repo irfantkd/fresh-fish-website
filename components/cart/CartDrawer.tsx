@@ -150,6 +150,9 @@ export function CartDrawer() {
                   placeholder="Delivery address"
                   className="h-11 rounded-xl border border-gray-200 px-4 text-sm focus:border-aqua-400 focus:outline-none"
                 />
+                <Button href="/checkout" variant="aqua" className="w-full" onClick={closeDrawer}>
+                  Proceed to Checkout
+                </Button>
                 {checkoutHref ? (
                   <Button
                     href={checkoutHref}

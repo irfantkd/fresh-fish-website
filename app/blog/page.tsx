@@ -39,8 +39,8 @@ export default async function BlogIndexPage({
         <Breadcrumb items={[{ name: "Blog", url: "/blog" }]} />
         <SectionHeading
           eyebrow="Fresh Fish Dubai Blog"
-          title="Seafood Guides, Recipes & News"
-          description="Tips on choosing, storing, and cooking the freshest seafood, plus company news and updates."
+          title="Blogs"
+          // description="Tips on choosing, storing, and cooking the freshest seafood, plus company news and updates."
           className="mt-6"
         />
 
@@ -49,7 +49,9 @@ export default async function BlogIndexPage({
             href="/blog"
             className={cn(
               "rounded-full px-4 py-2 text-sm font-semibold transition-colors",
-              !category ? "bg-ocean-800 text-white" : "bg-gray-100 text-gray-600 hover:bg-ocean-50"
+              !category
+                ? "bg-ocean-800 text-white"
+                : "bg-gray-100 text-gray-600 hover:bg-ocean-50",
             )}
           >
             All Posts
@@ -62,7 +64,7 @@ export default async function BlogIndexPage({
                 "rounded-full px-4 py-2 text-sm font-semibold transition-colors",
                 category === cat.slug
                   ? "bg-ocean-800 text-white"
-                  : "bg-gray-100 text-gray-600 hover:bg-ocean-50"
+                  : "bg-gray-100 text-gray-600 hover:bg-ocean-50",
               )}
             >
               {cat.name}
