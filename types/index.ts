@@ -1,5 +1,6 @@
 export type FreshState = "fresh" | "frozen";
 export type ContentStatus = "draft" | "published";
+export type StockStatus = "in_stock" | "out_of_stock";
 
 export interface ImageObject {
   url: string;
@@ -50,6 +51,7 @@ export interface Product {
   benefits: string[];
   origin: ProductOrigin;
   state: FreshState;
+  stockStatus?: StockStatus;
   preparationTypes: string[];
   preparationRequired?: boolean;
   sizes: ProductSize[];

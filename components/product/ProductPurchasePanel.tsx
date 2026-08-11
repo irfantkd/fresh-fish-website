@@ -14,6 +14,7 @@ import type { Product } from "@/types";
 const DESCRIPTION_PREVIEW_THRESHOLD = 180;
 
 export function ProductPurchasePanel({ product }: { product: Product }) {
+  const isOutOfStock = product.stockStatus === "out_of_stock";
   const hasPreparationTypes = product.preparationTypes.length > 0;
   const [preparationType, setPreparationType] = useState<string | null>(null);
   const [preparationError, setPreparationError] = useState(false);
@@ -25,6 +26,7 @@ export function ProductPurchasePanel({ product }: { product: Product }) {
   const plainDescription = stripHtml(product.description);
 
   function handleAddToCart() {
+    if (isOutOfStock) return;
     if (product.preparationRequired && !preparationType) {
       setPreparationError(true);
       return;
@@ -46,6 +48,7 @@ export function ProductPurchasePanel({ product }: { product: Product }) {
   return (
     <div className="flex flex-col gap-6">
       <div className="flex flex-wrap items-center gap-2">
+        {isOutOfStock && <Badge variant="outOfStock">Out of Stock</Badge>}
         {product.isFreshToday && <Badge variant="fresh">Fresh Today</Badge>}
         {product.isPremium && <Badge variant="premium">Premium</Badge>}
         {product.state === "frozen" && <Badge variant="frozen">Frozen</Badge>}
@@ -186,19 +189,32 @@ export function ProductPurchasePanel({ product }: { product: Product }) {
       </div>
 
       <div className="flex flex-col gap-3 sm:flex-row">
-        <Button onClick={handleAddToCart} variant="primary" size="lg" className="flex-1">
-          <ShoppingCart className="h-4.5 w-4.5" /> Add to Cart
-        </Button>
         <Button
-          href={buildProductInquiryLink(product.name)}
-          target="_blank"
-          rel="noopener noreferrer"
-          variant="whatsapp"
+          onClick={handleAddToCart}
+          variant="primary"
           size="lg"
           className="flex-1"
+          disabled={isOutOfStock}
         >
-          <MessageCircle className="h-4.5 w-4.5" /> Order on WhatsApp
+          <ShoppingCart className="h-4.5 w-4.5" />
+          {isOutOfStock ? "Out of Stock" : "Add to Cart"}
         </Button>
+        {isOutOfStock ? (
+          <Button variant="whatsapp" size="lg" className="flex-1" disabled>
+            <MessageCircle className="h-4.5 w-4.5" /> Order on WhatsApp
+          </Button>
+        ) : (
+          <Button
+            href={buildProductInquiryLink(product.name)}
+            target="_blank"
+            rel="noopener noreferrer"
+            variant="whatsapp"
+            size="lg"
+            className="flex-1"
+          >
+            <MessageCircle className="h-4.5 w-4.5" /> Order on WhatsApp
+          </Button>
+        )}
       </div>
 
       <div className="flex items-start gap-2 rounded-2xl bg-ocean-50 p-4 text-sm text-ocean-800">

@@ -12,6 +12,7 @@ const badgeVariants = cva(
         aqua: "bg-aqua-500/10 text-aqua-700",
         frozen: "bg-ocean-100 text-ocean-700",
         neutral: "bg-gray-100 text-gray-600",
+        outOfStock: "bg-red-500/10 text-red-600",
       },
     },
     defaultVariants: {

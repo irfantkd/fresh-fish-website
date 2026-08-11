@@ -15,6 +15,7 @@ import type { Product } from "@/types";
 export function ProductCard({ product }: { product: Product }) {
   const [wishlisted, setWishlisted] = useState(false);
   const size = getLowestSize(product);
+  const isOutOfStock = product.stockStatus === "out_of_stock";
 
   return (
     <motion.div
@@ -34,6 +35,11 @@ export function ProductCard({ product }: { product: Product }) {
         </Link>
 
         <div className="absolute left-2 top-2 flex max-w-[calc(100%-2.75rem)] flex-col items-start gap-1 sm:left-3 sm:top-3 sm:gap-1.5">
+          {isOutOfStock && (
+            <Badge variant="outOfStock" className="text-[10px] sm:text-xs">
+              Out of Stock
+            </Badge>
+          )}
           {product.isFreshToday && (
             <Badge variant="fresh" className="text-[10px] sm:text-xs">
               Live · Fresh Today
@@ -89,14 +95,20 @@ export function ProductCard({ product }: { product: Product }) {
             </span>
             <span className="text-xs text-gray-400">/ {formatWeight(size.weightGrams)}</span>
           </div>
-          <a
-            href={buildProductInquiryLink(product.name)}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex h-9 shrink-0 items-center justify-center rounded-full bg-fresh-green-500 px-3 text-xs font-semibold text-white shadow-sm shadow-fresh-green-500/30 transition-colors hover:bg-fresh-green-600 sm:h-10 sm:px-4"
-          >
-            WhatsApp
-          </a>
+          {isOutOfStock ? (
+            <span className="flex h-9 shrink-0 cursor-not-allowed items-center justify-center rounded-full bg-gray-200 px-3 text-xs font-semibold text-gray-400 sm:h-10 sm:px-4">
+              WhatsApp
+            </span>
+          ) : (
+            <a
+              href={buildProductInquiryLink(product.name)}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex h-9 shrink-0 items-center justify-center rounded-full bg-fresh-green-500 px-3 text-xs font-semibold text-white shadow-sm shadow-fresh-green-500/30 transition-colors hover:bg-fresh-green-600 sm:h-10 sm:px-4"
+            >
+              WhatsApp
+            </a>
+          )}
         </div>
       </div>
     </motion.div>
