@@ -18,7 +18,9 @@ export async function generateMetadata({
   if (!category) return {};
 
   const title = category.seo?.metaTitle || `${category.name} | Fresh Seafood Delivered in Dubai`;
-  const description = category.seo?.metaDescription || category.description;
+  const description =
+    category.seo?.metaDescription ||
+    `Shop ${category.name} online — fresh, hand-picked, and delivered across Dubai.`;
 
   return {
     title,

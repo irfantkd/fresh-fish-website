@@ -71,7 +71,6 @@ export function CategoryPageClient({ slug }: { slug: string }) {
             <h1 className="text-balance font-heading text-3xl font-bold tracking-tight text-ocean-950 sm:text-4xl lg:text-5xl">
               {category.name}
             </h1>
-            <p className="max-w-2xl text-base text-gray-500 sm:text-lg">{category.description}</p>
           </div>
         </div>
 

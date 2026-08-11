@@ -33,7 +33,6 @@ export function CategoryCard({ category }: { category: Category }) {
           <h3 className="font-heading text-xl font-bold text-white sm:text-2xl">
             {category.name}
           </h3>
-          <p className="line-clamp-2 text-sm text-white/65">{category.description}</p>
 
           <div className="mt-3 flex items-center gap-2 text-sm font-semibold text-white">
             Shop {category.name}

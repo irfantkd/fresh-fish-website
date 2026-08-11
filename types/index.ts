@@ -73,7 +73,6 @@ export interface Category {
   id: string;
   slug: string;
   name: string;
-  description: string;
   featuredImage: ImageObject;
   topContent?: string;
   bottomContent?: string;
