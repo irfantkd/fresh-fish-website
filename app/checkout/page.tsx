@@ -100,15 +100,18 @@ export default function CheckoutPage() {
     }
 
     const body = {
-      items: items.map(({ productId, productName, productSlug, image, sizeLabel, price, quantity }) => ({
-        productId,
-        productName,
-        productSlug,
-        image,
-        sizeLabel,
-        price,
-        quantity,
-      })),
+      items: items.map(
+        ({ productId, productName, productSlug, image, preparationType, sizeLabel, price, quantity }) => ({
+          productId,
+          productName,
+          productSlug,
+          image,
+          preparationType,
+          sizeLabel,
+          price,
+          quantity,
+        })
+      ),
       customer: { name, phone, email, address },
       notes,
       paymentMethod,
@@ -359,9 +362,14 @@ export default function CheckoutPage() {
             <h2 className="font-heading text-lg font-bold text-ocean-950">Order Summary</h2>
             <ul className="flex flex-col gap-3">
               {items.map((item) => (
-                <li key={`${item.productId}-${item.sizeLabel}`} className="flex justify-between text-sm">
+                <li
+                  key={`${item.productId}-${item.sizeLabel}-${item.preparationType ?? ""}`}
+                  className="flex justify-between text-sm"
+                >
                   <span className="text-gray-500">
-                    {item.productName} ({item.sizeLabel}) &times;{item.quantity}
+                    {item.productName}
+                    {item.preparationType ? ` (${item.preparationType}, ${item.sizeLabel})` : ` (${item.sizeLabel})`}
+                    {" "}&times;{item.quantity}
                   </span>
                   <span className="font-semibold text-ocean-900">
                     {formatAED(item.price * item.quantity)}

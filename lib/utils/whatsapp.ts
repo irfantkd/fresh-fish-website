@@ -15,10 +15,12 @@ export function buildCartOrderLink(
   const lines = [
     `*New Order - Fresh Fish Dubai*`,
     "",
-    ...items.map(
-      (item, i) =>
-        `${i + 1}. ${item.productName} (${item.sizeLabel}) x${item.quantity} — ${item.price * item.quantity} AED${item.notes ? `\n   Note: ${item.notes}` : ""}`
-    ),
+    ...items.map((item, i) => {
+      const variant = item.preparationType
+        ? `${item.preparationType}, ${item.sizeLabel}`
+        : item.sizeLabel;
+      return `${i + 1}. ${item.productName} (${variant}) x${item.quantity} — ${item.price * item.quantity} AED${item.notes ? `\n   Note: ${item.notes}` : ""}`;
+    }),
     "",
     `*Order Total:* ${total} AED`,
     "",

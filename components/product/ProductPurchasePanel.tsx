@@ -14,6 +14,9 @@ import type { Product } from "@/types";
 const DESCRIPTION_PREVIEW_THRESHOLD = 180;
 
 export function ProductPurchasePanel({ product }: { product: Product }) {
+  const hasPreparationTypes = product.preparationTypes.length > 0;
+  const [preparationType, setPreparationType] = useState<string | null>(null);
+  const [preparationError, setPreparationError] = useState(false);
   const [sizeIndex, setSizeIndex] = useState(0);
   const [quantity, setQuantity] = useState(1);
   const [isDescriptionExpanded, setIsDescriptionExpanded] = useState(false);
@@ -22,11 +25,17 @@ export function ProductPurchasePanel({ product }: { product: Product }) {
   const plainDescription = stripHtml(product.description);
 
   function handleAddToCart() {
+    if (product.preparationRequired && !preparationType) {
+      setPreparationError(true);
+      return;
+    }
+
     addItem({
       productId: product.id,
       productName: product.name,
       productSlug: product.slug,
       image: product.featuredImage.url,
+      preparationType: preparationType ?? undefined,
       sizeLabel: size.label,
       price: size.price,
       quantity,
@@ -78,6 +87,39 @@ export function ProductPurchasePanel({ product }: { product: Product }) {
           </button>
         )}
       </div>
+
+      {hasPreparationTypes && (
+        <div>
+          <span className="mb-2 block text-sm font-semibold text-ocean-950">
+            Select Type{product.preparationRequired ? "" : " (optional)"}
+          </span>
+          <div className="flex flex-wrap gap-2">
+            {product.preparationTypes.map((type) => (
+              <button
+                key={type}
+                type="button"
+                onClick={() => {
+                  setPreparationType(type);
+                  setPreparationError(false);
+                }}
+                className={cn(
+                  "rounded-full border px-4 py-2 text-sm font-medium transition-colors",
+                  preparationType === type
+                    ? "border-ocean-800 bg-ocean-800 text-white"
+                    : "border-gray-200 text-ocean-900 hover:border-ocean-300"
+                )}
+              >
+                {type}
+              </button>
+            ))}
+          </div>
+          {preparationError && (
+            <p className="mt-1.5 text-xs font-medium text-red-600">
+              Please select a type before adding to cart.
+            </p>
+          )}
+        </div>
+      )}
 
       <div>
         <span className="mb-2 block text-sm font-semibold text-ocean-950">

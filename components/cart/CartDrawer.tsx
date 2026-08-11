@@ -68,7 +68,7 @@ export function CartDrawer() {
                 <ul className="flex flex-col gap-4">
                   {items.map((item) => (
                     <li
-                      key={`${item.productId}-${item.sizeLabel}`}
+                      key={`${item.productId}-${item.sizeLabel}-${item.preparationType ?? ""}`}
                       className="flex gap-3 rounded-2xl border border-gray-100 p-3"
                     >
                       <div className="relative h-16 w-16 shrink-0 overflow-hidden rounded-xl bg-gray-100">
@@ -84,7 +84,10 @@ export function CartDrawer() {
                         <span className="text-sm font-semibold text-ocean-950">
                           {item.productName}
                         </span>
-                        <span className="text-xs text-gray-400">{item.sizeLabel}</span>
+                        <span className="text-xs text-gray-400">
+                          {item.preparationType ? `${item.preparationType} · ` : ""}
+                          {item.sizeLabel}
+                        </span>
                         <div className="mt-2 flex items-center justify-between">
                           <div className="flex items-center gap-2 rounded-full border border-gray-200 px-2 py-1">
                             <button
@@ -93,7 +96,8 @@ export function CartDrawer() {
                                 updateQuantity(
                                   item.productId,
                                   item.sizeLabel,
-                                  item.quantity - 1
+                                  item.quantity - 1,
+                                  item.preparationType
                                 )
                               }
                             >
@@ -108,7 +112,8 @@ export function CartDrawer() {
                                 updateQuantity(
                                   item.productId,
                                   item.sizeLabel,
-                                  item.quantity + 1
+                                  item.quantity + 1,
+                                  item.preparationType
                                 )
                               }
                             >
@@ -122,7 +127,9 @@ export function CartDrawer() {
                       </div>
                       <button
                         aria-label="Remove item"
-                        onClick={() => removeItem(item.productId, item.sizeLabel)}
+                        onClick={() =>
+                          removeItem(item.productId, item.sizeLabel, item.preparationType)
+                        }
                         className="self-start text-gray-300 hover:text-offer-500"
                       >
                         <Trash2 className="h-4 w-4" />

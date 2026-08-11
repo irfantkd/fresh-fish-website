@@ -49,6 +49,8 @@ export interface Product {
   benefits: string[];
   origin: ProductOrigin;
   state: FreshState;
+  preparationTypes: string[];
+  preparationRequired?: boolean;
   sizes: ProductSize[];
   rating: number;
   reviewCount: number;
@@ -122,6 +124,7 @@ export interface CartItem {
   productName: string;
   productSlug: string;
   image: string;
+  preparationType?: string;
   sizeLabel: string;
   price: number;
   quantity: number;

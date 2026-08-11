@@ -41,7 +41,7 @@ export default function CartPage() {
             <ul className="flex flex-col gap-4">
               {items.map((item) => (
                 <li
-                  key={`${item.productId}-${item.sizeLabel}`}
+                  key={`${item.productId}-${item.sizeLabel}-${item.preparationType ?? ""}`}
                   className="flex gap-4 rounded-3xl border border-gray-100 p-4"
                 >
                   <div className="relative h-24 w-24 shrink-0 overflow-hidden rounded-2xl bg-gray-100">
@@ -61,14 +61,22 @@ export default function CartPage() {
                       >
                         {item.productName}
                       </Link>
-                      <p className="text-xs text-gray-400">{item.sizeLabel}</p>
+                      <p className="text-xs text-gray-400">
+                        {item.preparationType ? `${item.preparationType} · ` : ""}
+                        {item.sizeLabel}
+                      </p>
                     </div>
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-3 rounded-full border border-gray-200 px-3 py-1.5">
                         <button
                           aria-label="Decrease quantity"
                           onClick={() =>
-                            updateQuantity(item.productId, item.sizeLabel, item.quantity - 1)
+                            updateQuantity(
+                              item.productId,
+                              item.sizeLabel,
+                              item.quantity - 1,
+                              item.preparationType
+                            )
                           }
                         >
                           <Minus className="h-3.5 w-3.5" />
@@ -79,7 +87,12 @@ export default function CartPage() {
                         <button
                           aria-label="Increase quantity"
                           onClick={() =>
-                            updateQuantity(item.productId, item.sizeLabel, item.quantity + 1)
+                            updateQuantity(
+                              item.productId,
+                              item.sizeLabel,
+                              item.quantity + 1,
+                              item.preparationType
+                            )
                           }
                         >
                           <Plus className="h-3.5 w-3.5" />
@@ -92,7 +105,9 @@ export default function CartPage() {
                   </div>
                   <button
                     aria-label="Remove item"
-                    onClick={() => removeItem(item.productId, item.sizeLabel)}
+                    onClick={() =>
+                      removeItem(item.productId, item.sizeLabel, item.preparationType)
+                    }
                     className="self-start text-gray-300 hover:text-offer-500"
                   >
                     <Trash2 className="h-5 w-5" />
