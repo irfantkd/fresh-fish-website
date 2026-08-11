@@ -52,11 +52,18 @@ export default function CheckoutPage() {
   const [formError, setFormError] = useState<string | null>(null);
   const [placedOrder, setPlacedOrder] = useState<PlacedOrder | null>(null);
 
-  const { data: bankDetailsData } = useGetQuery(
+  const { data: bankDetailsData, isLoading: isLoadingBankDetails } = useGetQuery(
     { path: "/settings/bank-details" },
     { skip: paymentMethod !== "bank_transfer" }
   );
   const bankDetails = bankDetailsData as BankDetails | undefined;
+  const hasBankDetails = Boolean(
+    bankDetails &&
+      (bankDetails.bankName ||
+        bankDetails.accountName ||
+        bankDetails.accountNumber ||
+        bankDetails.iban)
+  );
 
   const [uploadReceipt, { isLoading: isUploading }] = usePostMutation();
   const [createOrder, { isLoading: isPlacingOrder }] = usePostMutation();
@@ -250,7 +257,9 @@ export default function CheckoutPage() {
 
               {paymentMethod === "bank_transfer" && (
                 <div className="mt-5 flex flex-col gap-4 rounded-2xl bg-gray-50/60 p-5">
-                  {bankDetails ? (
+                  {isLoadingBankDetails ? (
+                    <p className="text-sm text-gray-400">Loading bank details...</p>
+                  ) : hasBankDetails && bankDetails ? (
                     <div className="grid gap-2 text-sm sm:grid-cols-2">
                       {bankDetails.bankName && (
                         <p>
@@ -293,7 +302,10 @@ export default function CheckoutPage() {
                       )}
                     </div>
                   ) : (
-                    <p className="text-sm text-gray-400">Loading bank details...</p>
+                    <p className="text-sm font-medium text-offer-600">
+                      Bank transfer details haven&apos;t been set up yet. Please choose Cash on
+                      Delivery, or contact us on WhatsApp to complete a bank transfer order.
+                    </p>
                   )}
 
                   <div>

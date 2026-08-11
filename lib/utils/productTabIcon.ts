@@ -9,6 +9,7 @@ import {
   AlertTriangle,
   MapPin,
   ChefHat,
+  Star,
   Info,
   type LucideIcon,
 } from "lucide-react";
@@ -24,6 +25,7 @@ const RULES: [RegExp, LucideIcon][] = [
   [/allerg|warning|caution/i, AlertTriangle],
   [/origin|source|sourcing|catch/i, MapPin],
   [/cook|recipe|prepare|preparation/i, ChefHat],
+  [/review|rating|feedback/i, Star],
 ];
 
 /** Picks a reasonable Lucide icon for a product tab based on its title. */

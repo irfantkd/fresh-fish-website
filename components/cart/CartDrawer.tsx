@@ -14,11 +14,12 @@ export function CartDrawer() {
   const { items, isDrawerOpen, closeDrawer, removeItem, updateQuantity, totalPrice } =
     useCart();
   const [name, setName] = useState("");
+  const [phone, setPhone] = useState("");
   const [address, setAddress] = useState("");
 
   const checkoutHref =
-    items.length > 0 && name && address
-      ? buildCartOrderLink(items, { name, address })
+    items.length > 0 && name && phone && address
+      ? buildCartOrderLink(items, { name, phone, address })
       : undefined;
 
   return (
@@ -145,6 +146,12 @@ export function CartDrawer() {
                   className="h-11 rounded-xl border border-gray-200 px-4 text-sm focus:border-aqua-400 focus:outline-none"
                 />
                 <input
+                  value={phone}
+                  onChange={(e) => setPhone(e.target.value)}
+                  placeholder="Phone number"
+                  className="h-11 rounded-xl border border-gray-200 px-4 text-sm focus:border-aqua-400 focus:outline-none"
+                />
+                <input
                   value={address}
                   onChange={(e) => setAddress(e.target.value)}
                   placeholder="Delivery address"
@@ -165,7 +172,7 @@ export function CartDrawer() {
                   </Button>
                 ) : (
                   <Button variant="whatsapp" className="w-full" disabled>
-                    Enter name & address to checkout
+                    Enter name, phone & address
                   </Button>
                 )}
                 <Link
