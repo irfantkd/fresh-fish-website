@@ -2,34 +2,20 @@
 
 import { useState } from "react";
 import { Star } from "lucide-react";
-import { useGetQuery, usePostMutation } from "@/store/apiSlice";
+import { usePostMutation } from "@/store/apiSlice";
 import { formatDate } from "@/lib/utils/format";
 import { cn } from "@/lib/utils/cn";
-
-interface Review {
-  id: string;
-  customerName: string;
-  rating: number;
-  comment: string;
-  createdAt: string;
-}
-
-interface ReviewsResponse {
-  items: Review[];
-  total: number;
-  page: number;
-  limit: number;
-}
+import type { CustomerReview } from "@/types";
 
 const emptyForm = { customerName: "", customerEmail: "", rating: 5, comment: "" };
 
-export function ProductReviews({ productId }: { productId: string }) {
-  const { data, isLoading } = useGetQuery({
-    path: "/reviews",
-    params: { productId, status: "approved" },
-  });
-  const reviews = (data as ReviewsResponse | undefined)?.items ?? [];
-
+export function ProductReviews({
+  productId,
+  reviews,
+}: {
+  productId: string;
+  reviews: CustomerReview[];
+}) {
   const [postReview, { isLoading: isSubmitting }] = usePostMutation();
   const [submitted, setSubmitted] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -50,13 +36,7 @@ export function ProductReviews({ productId }: { productId: string }) {
 
   return (
     <div className="flex flex-col gap-8">
-      {isLoading ? (
-        <div className="flex flex-col gap-4">
-          {Array.from({ length: 2 }).map((_, i) => (
-            <div key={i} className="h-24 w-full animate-pulse rounded-2xl bg-gray-100" />
-          ))}
-        </div>
-      ) : reviews.length === 0 ? (
+      {reviews.length === 0 ? (
         <p className="text-sm text-gray-400">
           No reviews yet — be the first to share your experience.
         </p>

@@ -1,6 +1,5 @@
 "use client";
 
-import { notFound } from "next/navigation";
 import { Container } from "@/components/ui/Container";
 import { Breadcrumb } from "@/components/ui/Breadcrumb";
 import { SectionHeading } from "@/components/ui/SectionHeading";
@@ -9,81 +8,20 @@ import { ProductPurchasePanel } from "@/components/product/ProductPurchasePanel"
 import { ProductGrid } from "@/components/product/ProductGrid";
 import { ProductReviews } from "@/components/product/ProductReviews";
 import { ProductDetailTabs } from "@/components/product/ProductDetailTabs";
-import { FaqAccordion } from "@/components/sections/FaqAccordion";
-import { useGetQuery } from "@/store/apiSlice";
-import type { Product } from "@/types";
+import type { CustomerReview, Product } from "@/types";
 
-interface ProductsResponse {
-  items: Product[];
-  total: number;
-  page: number;
-  limit: number;
-}
-
-const PRODUCT_FAQS = [
-  {
-    id: "pf-1",
-    question: "How fresh is this product when delivered?",
-    answer:
-      "Fresh items are prepared and delivered the same day they're ordered. Frozen items are flash-frozen at peak quality and delivered still frozen.",
-  },
-  {
-    id: "pf-2",
-    question: "Can I request a specific cut or preparation?",
-    answer:
-      "Yes, add a note during checkout or mention it in your WhatsApp order and our fishmongers will prepare it to your preference.",
-  },
-];
-
-export function ProductPageClient({ slug }: { slug: string }) {
-  const {
-    data: product,
-    isLoading,
-    isError,
-  } = useGetQuery({ path: `/products/slug/${slug}` }) as {
-    data: Product | undefined;
-    isLoading: boolean;
-    isError: boolean;
-  };
-
-  const { data: relatedData } = useGetQuery(
-    { path: "/products", params: { categorySlug: product?.categorySlug, status: "published" } },
-    { skip: !product }
-  );
-  const related = ((relatedData as ProductsResponse | undefined)?.items ?? [])
-    .filter((p) => p.id !== product?.id)
-    .slice(0, 4);
-
-  if (!isLoading && (isError || !product)) {
-    notFound();
-  }
-
-  if (isLoading || !product) {
-    return (
-      <div className="py-12">
-        <Container>
-          <div className="grid gap-10 lg:grid-cols-2 lg:gap-16">
-            <div className="aspect-square w-full animate-pulse rounded-3xl bg-gray-100" />
-            <div className="flex flex-col gap-4">
-              <div className="h-4 w-24 animate-pulse rounded bg-gray-100" />
-              <div className="h-9 w-2/3 animate-pulse rounded-lg bg-gray-100" />
-              <div className="h-20 w-full animate-pulse rounded-2xl bg-gray-100" />
-              <div className="h-32 w-full animate-pulse rounded-2xl bg-gray-100" />
-            </div>
-          </div>
-        </Container>
-      </div>
-    );
-  }
-
+export function ProductPageClient({
+  product,
+  related,
+  reviews,
+}: {
+  product: Product;
+  related: Product[];
+  reviews: CustomerReview[];
+}) {
   const galleryImages = [product.featuredImage, ...product.gallery]
     .filter((img) => img?.url)
     .map((img) => img.url);
-
-  const faqs =
-    product.faqs.length > 0
-      ? product.faqs.map((faq, index) => ({ id: `product-faq-${index}`, ...faq }))
-      : PRODUCT_FAQS;
 
   const detailTabs = [
     ...product.tabs.map((tab) => ({
@@ -97,12 +35,8 @@ export function ProductPageClient({ slug }: { slug: string }) {
       ),
     })),
     {
-      title: "FAQs",
-      content: <FaqAccordion faqs={faqs} bare />,
-    },
-    {
       title: "Reviews",
-      content: <ProductReviews productId={product.id} />,
+      content: <ProductReviews productId={product.id} reviews={reviews} />,
     },
   ];
 

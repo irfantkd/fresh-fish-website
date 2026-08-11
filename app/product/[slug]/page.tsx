@@ -1,6 +1,11 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { getAllProducts, getProductBySlug } from "@/lib/services/products.service";
+import {
+  getAllProducts,
+  getProductBySlug,
+  getRelatedProducts,
+} from "@/lib/services/products.service";
+import { getProductReviews } from "@/lib/services/reviews.service";
 import { productJsonLd } from "@/lib/seo/json-ld";
 import { SITE_CONFIG } from "@/constants/site";
 import { ProductPageClient } from "./ProductPageClient";
@@ -47,6 +52,14 @@ export default async function ProductPage({
   const product = await getProductBySlug(slug);
   if (!product) notFound();
 
+  // Fetched here (server-side) rather than inside the client component so
+  // the description, tabs, gallery, and reviews are all present in the
+  // page's initial HTML/source — not just filled in after client hydration.
+  const [related, reviews] = await Promise.all([
+    getRelatedProducts(product, 4),
+    getProductReviews(product.id),
+  ]);
+
   return (
     <>
       {/* Rendered server-side (not via the client component below) so search
@@ -57,7 +70,7 @@ export default async function ProductPage({
         // eslint-disable-next-line react/no-danger
         dangerouslySetInnerHTML={{ __html: JSON.stringify(productJsonLd(product)) }}
       />
-      <ProductPageClient slug={slug} />
+      <ProductPageClient product={product} related={related} reviews={reviews} />
     </>
   );
 }

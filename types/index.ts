@@ -25,11 +25,6 @@ export interface ProductTab {
   content: string;
 }
 
-export interface ProductFaq {
-  question: string;
-  answer: string;
-}
-
 export interface ProductSeo {
   metaTitle?: string;
   metaDescription?: string;
@@ -64,7 +59,6 @@ export interface Product {
   storageInstructions: string;
   tags: string[];
   tabs: ProductTab[];
-  faqs: ProductFaq[];
   status: ContentStatus;
   seo?: ProductSeo;
 }
@@ -85,13 +79,13 @@ export interface Category {
   seo?: CategorySeo;
 }
 
-export interface Testimonial {
+export interface CustomerReview {
   id: string;
-  name: string;
-  location: string;
-  avatar: string;
+  customerName: string;
   rating: number;
-  quote: string;
+  comment: string;
+  productName?: string;
+  createdAt: string;
 }
 
 export interface BannerCta {
