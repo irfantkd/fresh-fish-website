@@ -35,52 +35,56 @@ export function CategoryPageClient({ slug }: { slug: string }) {
 
   if (isLoadingCategories || !category) {
     return (
-      <div className="py-12">
+      <div className="pb-12">
+        <div className="h-[50vh] min-h-64 max-h-100 w-full animate-pulse bg-gray-100" />
         <Container>
-          <div className="h-96 w-full animate-pulse rounded-3xl bg-gray-100" />
+          <div className="mt-8 h-32 w-full animate-pulse rounded-3xl bg-gray-100" />
         </Container>
       </div>
     );
   }
 
   return (
-    <div className="py-12">
-      <Container>
-        <Breadcrumb
-          items={[
-            { name: "Shop", url: "/shop" },
-            { name: category.name, url: `/category/${category.slug}` },
-          ]}
+    <div className="pb-12">
+      {/* Full-bleed hero banner — image with a top-transparent/bottom-black
+          gradient so the overlaid heading stays legible against any photo. */}
+      <div className="relative h-[50vh] min-h-64 max-h-100 w-full overflow-hidden bg-gray-100">
+        <SeafoodImage
+          src={category.featuredImage.url}
+          alt={category.featuredImage.alt || category.name}
+          fill
+          priority
+          sizes="100vw"
+          className="object-cover"
         />
+        <div className="absolute inset-0 bg-linear-to-t from-black via-black/35 to-transparent" />
+        <Container className="absolute inset-x-0 bottom-0 pb-6 sm:pb-8 lg:pb-10">
+          <span className="text-xs font-semibold uppercase tracking-[0.2em] text-aqua-300">
+            Category
+          </span>
+          <h1 className="mt-2 text-balance font-heading text-3xl font-bold tracking-tight text-white sm:text-4xl lg:text-5xl">
+            {category.name}
+          </h1>
+        </Container>
+      </div>
 
-        <div className="mt-6 grid gap-8 lg:grid-cols-[65fr_35fr] lg:items-start lg:gap-12">
-          <div className="flex flex-col gap-3">
-            <span className="text-xs font-semibold uppercase tracking-[0.2em] text-aqua-600">
-              Category
-            </span>
-            <h1 className="text-balance font-heading text-3xl font-bold tracking-tight text-ocean-950 sm:text-4xl lg:text-5xl">
-              {category.name}
-            </h1>
-            {category.topContent && (
-              <div
-                className="cms-content mt-2"
-                // eslint-disable-next-line react/no-danger
-                dangerouslySetInnerHTML={{ __html: category.topContent }}
-              />
-            )}
-          </div>
-
-          <div className="relative aspect-4/3 w-full overflow-hidden rounded-3xl bg-gray-100 lg:sticky lg:top-24">
-            <SeafoodImage
-              src={category.featuredImage.url}
-              alt={category.featuredImage.alt || category.name}
-              fill
-              priority
-              sizes="(min-width: 1024px) 35vw, 90vw"
-              className="object-cover"
-            />
-          </div>
+      <Container>
+        <div className="pt-6">
+          <Breadcrumb
+            items={[
+              { name: "Shop", url: "/shop" },
+              { name: category.name, url: `/category/${category.slug}` },
+            ]}
+          />
         </div>
+
+        {category.topContent && (
+          <div
+            className="cms-content mt-8 max-w-3xl"
+            // eslint-disable-next-line react/no-danger
+            dangerouslySetInnerHTML={{ __html: category.topContent }}
+          />
+        )}
 
         <div className="mt-10">
           {isLoadingProducts ? <GridSkeleton count={8} /> : <ProductGrid products={products} />}
