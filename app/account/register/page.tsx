@@ -17,13 +17,16 @@ function RegisterPageContent() {
 
   return (
     <AuthLayout
-      eyebrow="Join Fresh Fish Dubai"
+      eyebrow="Fresh Fish Dubai"
       title="Create Your Account"
       description="Register in seconds to track orders, save your details, and check out faster."
       footer={
         <p className="text-center text-sm text-gray-500">
           Already have an account?{" "}
-          <Link href={loginHref} className="font-semibold text-aqua-600 hover:text-aqua-700">
+          <Link
+            href={loginHref}
+            className="font-semibold text-aqua-600 hover:text-aqua-700"
+          >
             Log in
           </Link>
         </p>

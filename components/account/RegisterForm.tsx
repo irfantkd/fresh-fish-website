@@ -56,14 +56,20 @@ export function RegisterForm({
       onSuccess?.(result.customer);
     } catch (err) {
       const apiError = err as { data?: { message?: string } };
-      setError(apiError?.data?.message ?? "Failed to create your account. Please try again.");
+      setError(
+        apiError?.data?.message ??
+          "Failed to create your account. Please try again.",
+      );
     }
   }
 
   return (
     <form onSubmit={handleSubmit} className="flex flex-col gap-4">
       <div>
-        <label htmlFor="reg-name" className="mb-1.5 block text-xs font-semibold text-gray-600">
+        <label
+          htmlFor="reg-name"
+          className="mb-1.5 block text-xs font-semibold text-gray-600"
+        >
           Full Name
         </label>
         <div className="relative">
@@ -80,7 +86,10 @@ export function RegisterForm({
       </div>
 
       <div>
-        <label htmlFor="reg-email" className="mb-1.5 block text-xs font-semibold text-gray-600">
+        <label
+          htmlFor="reg-email"
+          className="mb-1.5 block text-xs font-semibold text-gray-600"
+        >
           Email Address
         </label>
         <div className="relative">
@@ -98,7 +107,10 @@ export function RegisterForm({
       </div>
 
       <div>
-        <label htmlFor="reg-phone" className="mb-1.5 block text-xs font-semibold text-gray-600">
+        <label
+          htmlFor="reg-phone"
+          className="mb-1.5 block text-xs font-semibold text-gray-600"
+        >
           Phone Number
         </label>
         <div className="relative">
@@ -106,7 +118,7 @@ export function RegisterForm({
           <input
             id="reg-phone"
             required
-            placeholder="05X XXX XXXX"
+            placeholder="+971 XX XXX XXXX"
             value={phone}
             onChange={(e) => setPhone(e.target.value)}
             className={fieldClasses}
@@ -115,7 +127,10 @@ export function RegisterForm({
       </div>
 
       <div>
-        <label htmlFor="reg-password" className="mb-1.5 block text-xs font-semibold text-gray-600">
+        <label
+          htmlFor="reg-password"
+          className="mb-1.5 block text-xs font-semibold text-gray-600"
+        >
           Password
         </label>
         <div className="relative">
@@ -135,7 +150,11 @@ export function RegisterForm({
             aria-label={showPassword ? "Hide password" : "Show password"}
             className="absolute right-3.5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
           >
-            {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+            {showPassword ? (
+              <EyeOff className="h-4 w-4" />
+            ) : (
+              <Eye className="h-4 w-4" />
+            )}
           </button>
         </div>
       </div>
@@ -163,7 +182,13 @@ export function RegisterForm({
 
       {error && <p className="text-sm font-medium text-red-600">{error}</p>}
 
-      <Button type="submit" variant="primary" size="lg" className="mt-1 w-full" disabled={isLoading}>
+      <Button
+        type="submit"
+        variant="primary"
+        size="lg"
+        className="mt-1 w-full"
+        disabled={isLoading}
+      >
         {isLoading ? "Creating account..." : "Create Account"}
       </Button>
 
@@ -173,7 +198,8 @@ export function RegisterForm({
           onClick={onSwitchToLogin}
           className="text-center text-sm text-gray-500 hover:text-aqua-700"
         >
-          Already have an account? <span className="font-semibold text-aqua-600">Log In</span>
+          Already have an account?{" "}
+          <span className="font-semibold text-aqua-600">Log In</span>
         </button>
       )}
     </form>
