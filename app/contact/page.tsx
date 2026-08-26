@@ -73,7 +73,12 @@ export default function ContactPage() {
               </div>
             </a>
 
-            <div className="flex items-center gap-4 rounded-3xl border border-gray-100 bg-gray-50/60 p-6">
+            <a
+              href={SITE_CONFIG.mapLinkUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-4 rounded-3xl border border-gray-100 bg-gray-50/60 p-6 transition-colors hover:border-gray-300"
+            >
               <span className="flex h-12 w-12 items-center justify-center rounded-2xl bg-gray-200/60 text-gray-600">
                 <MapPin className="h-5 w-5" />
               </span>
@@ -81,7 +86,7 @@ export default function ContactPage() {
                 <p className="font-heading font-bold text-ocean-950">{SITE_CONFIG.address}</p>
                 <p className="text-sm text-gray-500">Visit our facility</p>
               </div>
-            </div>
+            </a>
 
             <Button
               href={`https://wa.me/${SITE_CONFIG.whatsappNumber}`}
@@ -102,6 +107,16 @@ export default function ContactPage() {
             </div>
           </FadeIn>
         </div>
+
+        <FadeIn delay={0.15} className="mt-10 overflow-hidden rounded-3xl border border-gray-100 shadow-sm">
+          <iframe
+            src={SITE_CONFIG.mapEmbedUrl}
+            title="Fresh Fish Dubai location"
+            loading="lazy"
+            referrerPolicy="no-referrer-when-downgrade"
+            className="h-96 w-full border-0"
+          />
+        </FadeIn>
       </Container>
     </div>
   );

@@ -15,12 +15,10 @@ export function Footer() {
         className="pointer-events-none absolute inset-x-0 top-0 h-px bg-linear-to-r from-transparent via-aqua-400/40 to-transparent"
       />
       <Container className="grid gap-12 py-16 lg:grid-cols-[1.4fr_1fr_1fr_1fr]">
-        <div className="flex flex-col gap-5">
-          <Image
-            src={verticalLogo}
-            alt="Fresh Fish Dubai"
-            className="h-24 w-auto"
-          />
+        <div className="flex flex-col gap-5 justify-center">
+          <Link href="/" className="w-fit">
+            <Image src={verticalLogo} alt="Fresh Fish Dubai" className=" w-52 " />
+          </Link>
           <p className="max-w-sm text-sm leading-relaxed text-white/60">
             {SITE_CONFIG.description}
           </p>

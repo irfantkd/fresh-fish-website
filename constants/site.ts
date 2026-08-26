@@ -7,8 +7,11 @@ export const SITE_CONFIG = {
   locale: "en_AE",
   phone: "+971 50 123 4567",
   whatsappNumber: "971501234567",
-  email: "hello@freshfishdubai.com",
-  address: "Al Quoz Fish Market, Dubai, UAE",
+  email: "info@freshfishdubai.com",
+  address: "1st Floor Shop No 285, Waterfront Market, Dubai, UAE",
+  mapEmbedUrl:
+    "https://www.google.com/maps?q=Waterfront+Market+Dubai+UAE&output=embed",
+  mapLinkUrl: "https://www.google.com/maps?q=Waterfront+Market+Dubai+UAE",
   social: {
     instagram: "https://instagram.com/freshfishdubai",
     facebook: "https://facebook.com/freshfishdubai",

@@ -37,6 +37,7 @@ export function organizationJsonLd() {
     email: SITE_CONFIG.email,
     address: {
       "@type": "PostalAddress",
+      streetAddress: "1st Floor Shop No 285, Waterfront Market",
       addressLocality: "Dubai",
       addressCountry: "AE",
     },
