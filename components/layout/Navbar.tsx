@@ -27,23 +27,43 @@ import { NAV_LINKS, SITE_CONFIG } from "@/constants/site";
 import { useCart } from "@/hooks/useCart";
 import { useCustomerAuth } from "@/hooks/useCustomerAuth";
 import { cn } from "@/lib/utils/cn";
+import { formatDate } from "@/lib/utils/format";
 import { useGetQuery } from "@/store/apiSlice";
-import type { Category } from "@/types";
+import type { BlogPost, Category } from "@/types";
 import horizontalLogo from "@/public/assets/images/Horizontal_logo_Fresh_Fish_Dubai-removebg-preview.png";
+
+interface BlogsResponse {
+  items: BlogPost[];
+  total: number;
+  page: number;
+  limit: number;
+}
+
+const MEGA_MENU_CATEGORY_LIMIT = 6;
 
 export function Navbar() {
   const { data: categories } = useGetQuery({ path: "/categories" });
   const categoryList = (categories as Category[]) ?? [];
+  const { data: blogsData } = useGetQuery({
+    path: "/blogs",
+    params: { status: "published", sort: "newest", limit: 3 },
+  });
+  const recentPosts = (blogsData as BlogsResponse | undefined)?.items ?? [];
+
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileOpen, setIsMobileOpen] = useState(false);
   const [isCategoriesOpen, setIsCategoriesOpen] = useState(false);
+  const [isBlogOpen, setIsBlogOpen] = useState(false);
   const [isMobileCategoriesOpen, setIsMobileCategoriesOpen] = useState(false);
   const [isAccountOpen, setIsAccountOpen] = useState(false);
   const { totalCount, openDrawer } = useCart();
   const { isAuthenticated, customer, logout } = useCustomerAuth();
   const pathname = usePathname();
   const categoriesRef = useRef<HTMLDivElement>(null);
+  const blogRef = useRef<HTMLDivElement>(null);
   const accountRef = useRef<HTMLDivElement>(null);
+  const categoriesCloseTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const blogCloseTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
     function handleScroll() {
@@ -57,6 +77,7 @@ export function Navbar() {
   useEffect(() => {
     setIsMobileOpen(false);
     setIsCategoriesOpen(false);
+    setIsBlogOpen(false);
     setIsAccountOpen(false);
   }, [pathname]);
 
@@ -68,6 +89,9 @@ export function Navbar() {
       ) {
         setIsCategoriesOpen(false);
       }
+      if (blogRef.current && !blogRef.current.contains(event.target as Node)) {
+        setIsBlogOpen(false);
+      }
       if (
         accountRef.current &&
         !accountRef.current.contains(event.target as Node)
@@ -78,6 +102,7 @@ export function Navbar() {
     function handleEscape(event: KeyboardEvent) {
       if (event.key === "Escape") {
         setIsCategoriesOpen(false);
+        setIsBlogOpen(false);
         setIsAccountOpen(false);
       }
     }
@@ -86,6 +111,31 @@ export function Navbar() {
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
       document.removeEventListener("keydown", handleEscape);
+    };
+  }, []);
+
+  // Hover-open with a short close delay — moving the mouse from the trigger
+  // to the panel below briefly leaves both elements' bounds, and without a
+  // delay that gap would flicker the menu shut before the mouse arrives.
+  function openCategoriesMenu() {
+    if (categoriesCloseTimeout.current) clearTimeout(categoriesCloseTimeout.current);
+    setIsCategoriesOpen(true);
+  }
+  function closeCategoriesMenu() {
+    categoriesCloseTimeout.current = setTimeout(() => setIsCategoriesOpen(false), 200);
+  }
+  function openBlogMenu() {
+    if (blogCloseTimeout.current) clearTimeout(blogCloseTimeout.current);
+    setIsBlogOpen(true);
+  }
+  function closeBlogMenu() {
+    blogCloseTimeout.current = setTimeout(() => setIsBlogOpen(false), 200);
+  }
+
+  useEffect(() => {
+    return () => {
+      if (categoriesCloseTimeout.current) clearTimeout(categoriesCloseTimeout.current);
+      if (blogCloseTimeout.current) clearTimeout(blogCloseTimeout.current);
     };
   }, []);
 
@@ -196,7 +246,12 @@ export function Navbar() {
               <span className="relative">Home</span>
             </Link>
 
-            <div ref={categoriesRef} className="relative">
+            <div
+              ref={categoriesRef}
+              className="relative"
+              onMouseEnter={openCategoriesMenu}
+              onMouseLeave={closeCategoriesMenu}
+            >
               <button
                 type="button"
                 onClick={() => setIsCategoriesOpen((open) => !open)}
@@ -232,25 +287,28 @@ export function Navbar() {
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: -8 }}
                     transition={{ duration: 0.15 }}
-                    className="absolute left-0 top-full z-40 mt-2 w-80 rounded-2xl border border-gray-100 bg-white p-3 shadow-xl"
+                    className="absolute left-1/2 top-full z-40 mt-3 w-160 -translate-x-1/2 rounded-3xl border border-gray-100 bg-white p-5 shadow-2xl"
                   >
-                    <div className="grid grid-cols-2 gap-1">
-                      {categoryList.map((category) => (
+                    <p className="mb-3 px-1 text-xs font-semibold uppercase tracking-wide text-gray-400">
+                      Shop by Category
+                    </p>
+                    <div className="grid grid-cols-3 gap-3">
+                      {categoryList.slice(0, MEGA_MENU_CATEGORY_LIMIT).map((category) => (
                         <Link
                           key={category.id}
                           href={`/category/${category.slug}`}
-                          className="flex items-center gap-3 rounded-xl p-2 hover:bg-ocean-50"
+                          className="group flex flex-col overflow-hidden rounded-2xl border border-gray-100 transition-all hover:border-aqua-200 hover:shadow-lg"
                         >
-                          <div className="relative h-10 w-10 shrink-0 overflow-hidden rounded-lg bg-gray-100">
+                          <div className="relative aspect-4/3 w-full overflow-hidden bg-gray-100">
                             <SeafoodImage
                               src={category.featuredImage.url}
                               alt={category.featuredImage.alt || category.name}
                               fill
-                              sizes="40px"
-                              className="object-cover"
+                              sizes="200px"
+                              className="object-cover transition-transform duration-300 group-hover:scale-105"
                             />
                           </div>
-                          <div className="min-w-0">
+                          <div className="p-3">
                             <p className="truncate text-sm font-semibold text-ocean-950">
                               {category.name}
                             </p>
@@ -263,7 +321,7 @@ export function Navbar() {
                     </div>
                     <Link
                       href="/categories"
-                      className="mt-2 flex items-center justify-center rounded-xl border-t border-gray-100 pt-3 text-sm font-semibold text-aqua-600 hover:text-aqua-700"
+                      className="mt-4 flex items-center justify-center rounded-xl border-t border-gray-100 pt-4 text-sm font-semibold text-aqua-600 hover:text-aqua-700"
                     >
                       View All Categories
                     </Link>
@@ -272,34 +330,118 @@ export function Navbar() {
               </AnimatePresence>
             </div>
 
-            {NAV_LINKS.filter((link) => link.href !== "/").map((link) => {
-              const isActive = pathname === link.href;
-              return (
-                <Link
-                  key={link.href}
-                  href={link.href}
+            <div
+              ref={blogRef}
+              className="relative"
+              onMouseEnter={openBlogMenu}
+              onMouseLeave={closeBlogMenu}
+            >
+              <Link
+                href="/blog"
+                onClick={() => setIsBlogOpen(false)}
+                className={cn(
+                  "relative flex items-center gap-1 rounded-full px-4 py-2 text-sm font-medium transition-colors",
+                  pathname.startsWith("/blog")
+                    ? "text-ocean-900"
+                    : "text-gray-600 hover:text-ocean-900",
+                )}
+              >
+                {pathname.startsWith("/blog") && (
+                  <motion.span
+                    layoutId="nav-active-pill"
+                    className="absolute inset-0 rounded-full bg-ocean-50"
+                    transition={{ type: "spring", stiffness: 380, damping: 32 }}
+                  />
+                )}
+                <span className="relative">Blog</span>
+                <ChevronDown
                   className={cn(
-                    "relative rounded-full px-4 py-2 text-sm font-medium transition-colors",
-                    isActive
-                      ? "text-ocean-900"
-                      : "text-gray-600 hover:text-ocean-900",
+                    "relative h-3.5 w-3.5 transition-transform",
+                    isBlogOpen && "rotate-180",
                   )}
-                >
-                  {isActive && (
-                    <motion.span
-                      layoutId="nav-active-pill"
-                      className="absolute inset-0 rounded-full bg-ocean-50"
-                      transition={{
-                        type: "spring",
-                        stiffness: 380,
-                        damping: 32,
-                      }}
-                    />
-                  )}
-                  <span className="relative">{link.label}</span>
-                </Link>
-              );
-            })}
+                />
+              </Link>
+
+              <AnimatePresence>
+                {isBlogOpen && recentPosts.length > 0 && (
+                  <motion.div
+                    initial={{ opacity: 0, y: -8 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -8 }}
+                    transition={{ duration: 0.15 }}
+                    className="absolute left-1/2 top-full z-40 mt-3 w-160 -translate-x-1/2 rounded-3xl border border-gray-100 bg-white p-5 shadow-2xl"
+                  >
+                    <p className="mb-3 px-1 text-xs font-semibold uppercase tracking-wide text-gray-400">
+                      From the Blog
+                    </p>
+                    <div className="grid grid-cols-3 gap-3">
+                      {recentPosts.map((post) => (
+                        <Link
+                          key={post.id}
+                          href={`/blog/${post.slug}`}
+                          className="group flex flex-col overflow-hidden rounded-2xl border border-gray-100 transition-all hover:border-aqua-200 hover:shadow-lg"
+                        >
+                          <div className="relative aspect-4/3 w-full overflow-hidden bg-gray-100">
+                            <SeafoodImage
+                              src={post.featuredImage?.url ?? ""}
+                              alt={post.featuredImage?.alt || post.title}
+                              fill
+                              sizes="200px"
+                              className="object-cover transition-transform duration-300 group-hover:scale-105"
+                            />
+                          </div>
+                          <div className="p-3">
+                            <p className="line-clamp-2 text-sm font-semibold text-ocean-950">
+                              {post.title}
+                            </p>
+                            <p className="text-xs text-gray-400">
+                              {formatDate(post.publishDate)}
+                            </p>
+                          </div>
+                        </Link>
+                      ))}
+                    </div>
+                    <Link
+                      href="/blog"
+                      className="mt-4 flex items-center justify-center rounded-xl border-t border-gray-100 pt-4 text-sm font-semibold text-aqua-600 hover:text-aqua-700"
+                    >
+                      View All Posts
+                    </Link>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
+
+            {NAV_LINKS.filter((link) => link.href !== "/" && link.href !== "/blog").map(
+              (link) => {
+                const isActive = pathname === link.href;
+                return (
+                  <Link
+                    key={link.href}
+                    href={link.href}
+                    className={cn(
+                      "relative rounded-full px-4 py-2 text-sm font-medium transition-colors",
+                      isActive
+                        ? "text-ocean-900"
+                        : "text-gray-600 hover:text-ocean-900",
+                    )}
+                  >
+                    {isActive && (
+                      <motion.span
+                        layoutId="nav-active-pill"
+                        className="absolute inset-0 rounded-full bg-ocean-50"
+                        transition={{
+                          type: "spring",
+                          stiffness: 380,
+                          damping: 32,
+                        }}
+                      />
+                    )}
+                    <span className="relative">{link.label}</span>
+                  </Link>
+                );
+              },
+            )}
           </nav>
 
           <SearchBar className="relative ml-auto hidden max-w-xs flex-1 md:block" />

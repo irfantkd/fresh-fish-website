@@ -16,15 +16,11 @@ export function Footer() {
       />
       <Container className="grid gap-12 py-16 lg:grid-cols-[1.4fr_1fr_1fr_1fr]">
         <div className="flex flex-col gap-5">
-          {/* Logo text is dark navy — wrapped in a light card so it stays
-              legible against the footer's dark background. */}
-          <div className=" ">
-            <Image
-              src={verticalLogo}
-              alt="Fresh Fish Dubai"
-              className="h-24 w-auto"
-            />
-          </div>
+          <Image
+            src={verticalLogo}
+            alt="Fresh Fish Dubai"
+            className="h-24 w-auto"
+          />
           <p className="max-w-sm text-sm leading-relaxed text-white/60">
             {SITE_CONFIG.description}
           </p>
