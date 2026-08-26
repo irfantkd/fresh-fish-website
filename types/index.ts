@@ -33,6 +33,7 @@ export interface ProductSeo {
   metaDescription?: string;
   keywords?: string[];
   canonicalUrl?: string;
+  customSchema?: string;
 }
 
 export interface Product {
@@ -67,6 +68,7 @@ export interface Product {
 export interface CategorySeo {
   metaTitle?: string;
   metaDescription?: string;
+  customSchema?: string;
 }
 
 export interface Category {
@@ -201,6 +203,7 @@ export interface BlogSeo {
   ogTitle?: string;
   ogDescription?: string;
   ogImage?: string;
+  customSchema?: string;
 }
 
 export interface BlogAuthor {

@@ -6,7 +6,7 @@ import {
   getRelatedProducts,
 } from "@/lib/services/products.service";
 import { getProductReviews } from "@/lib/services/reviews.service";
-import { productJsonLd } from "@/lib/seo/json-ld";
+import { productJsonLd, resolveJsonLd } from "@/lib/seo/json-ld";
 import { SITE_CONFIG } from "@/constants/site";
 import { ProductPageClient } from "./ProductPageClient";
 
@@ -68,7 +68,11 @@ export default async function ProductPage({
       <script
         type="application/ld+json"
         // eslint-disable-next-line react/no-danger
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(productJsonLd(product)) }}
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(
+            resolveJsonLd(product.seo?.customSchema, () => productJsonLd(product))
+          ),
+        }}
       />
       <ProductPageClient product={product} related={related} reviews={reviews} />
     </>

@@ -3,6 +3,28 @@ import { getLowestSize } from "@/lib/utils/product";
 import { stripHtml } from "@/lib/utils/format";
 import type { BlogPost, Category, FaqItem, Product } from "@/types";
 
+/**
+ * Admins can paste a complete custom JSON-LD object per product/category/blog
+ * post in the dashboard. When present (and valid JSON), it's used verbatim
+ * instead of the auto-generated schema below — giving full control for
+ * anyone who wants to hand-tune structured data, while everyone else gets a
+ * Google-compatible schema for free with zero setup.
+ */
+export function resolveJsonLd<T extends object>(
+  customSchema: string | undefined,
+  generate: () => T
+): object {
+  if (customSchema?.trim()) {
+    try {
+      return JSON.parse(customSchema);
+    } catch {
+      // Malformed custom JSON shouldn't ever ship broken structured data —
+      // fall back to the auto-generated schema instead.
+    }
+  }
+  return generate();
+}
+
 export function organizationJsonLd() {
   return {
     "@context": "https://schema.org",

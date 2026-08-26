@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { getAllCategories, getCategoryBySlug } from "@/lib/services/categories.service";
-import { categoryJsonLd } from "@/lib/seo/json-ld";
+import { categoryJsonLd, resolveJsonLd } from "@/lib/seo/json-ld";
 import { stripHtml } from "@/lib/utils/format";
 import { SITE_CONFIG } from "@/constants/site";
 import { CategoryPageClient } from "./CategoryPageClient";
@@ -57,7 +57,11 @@ export default async function CategoryPage({
       <script
         type="application/ld+json"
         // eslint-disable-next-line react/no-danger
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(categoryJsonLd(category)) }}
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(
+            resolveJsonLd(category.seo?.customSchema, () => categoryJsonLd(category))
+          ),
+        }}
       />
       <CategoryPageClient slug={slug} />
     </>

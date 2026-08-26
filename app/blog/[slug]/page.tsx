@@ -12,7 +12,7 @@ import {
   getBlogPostBySlug,
   getRelatedBlogPosts,
 } from "@/lib/services/blog.service";
-import { blogPostingJsonLd } from "@/lib/seo/json-ld";
+import { blogPostingJsonLd, resolveJsonLd } from "@/lib/seo/json-ld";
 import { formatDate } from "@/lib/utils/format";
 import { SITE_CONFIG } from "@/constants/site";
 import type { RobotsMeta } from "@/types";
@@ -100,7 +100,11 @@ export default async function BlogPostPage({
       <script
         type="application/ld+json"
         // eslint-disable-next-line react/no-danger
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(blogPostingJsonLd(post)) }}
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(
+            resolveJsonLd(post.seo?.customSchema, () => blogPostingJsonLd(post))
+          ),
+        }}
       />
 
       {/* Full-bleed hero — image with a top-transparent/bottom-black gradient
