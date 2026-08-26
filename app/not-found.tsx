@@ -12,7 +12,7 @@ export default function NotFound() {
         </span>
         <h1 className="font-heading text-4xl font-bold text-ocean-950">404</h1>
         <p className="max-w-md text-gray-500">
-          Looks like this catch got away. The page you're looking for doesn't exist.
+          Looks like this catch got away. The page you&apos;re looking for doesn&apos;t exist.
         </p>
         <div className="flex gap-3">
           <Button href="/" variant="primary">

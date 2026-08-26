@@ -1,9 +1,11 @@
 import { Mail, MapPin, Phone } from "lucide-react";
 import { FaFacebook, FaInstagram } from "react-icons/fa";
+import Image from "next/image";
 import Link from "next/link";
 import { Container } from "@/components/ui/Container";
 import { NewsletterForm } from "@/components/layout/NewsletterForm";
 import { FOOTER_LINKS, SITE_CONFIG } from "@/constants/site";
+import verticalLogo from "@/public/assets/images/Main_logo_Fresh_fish_Dubai-removebg-preview.png";
 
 export function Footer() {
   return (
@@ -14,13 +16,14 @@ export function Footer() {
       />
       <Container className="grid gap-12 py-16 lg:grid-cols-[1.4fr_1fr_1fr_1fr]">
         <div className="flex flex-col gap-5">
-          <div className="flex items-center gap-2">
-            <span className="flex h-10 w-10 items-center justify-center rounded-full bg-aqua-500/20 font-heading text-lg font-bold text-aqua-300">
-              FF
-            </span>
-            <span className="font-heading text-lg font-bold text-white">
-              Fresh Fish Dubai
-            </span>
+          {/* Logo text is dark navy — wrapped in a light card so it stays
+              legible against the footer's dark background. */}
+          <div className="w-fit rounded-2xl bg-white p-3">
+            <Image
+              src={verticalLogo}
+              alt="Fresh Fish Dubai"
+              className="h-24 w-auto"
+            />
           </div>
           <p className="max-w-sm text-sm leading-relaxed text-white/60">
             {SITE_CONFIG.description}

@@ -14,6 +14,9 @@ export interface ProductOrigin {
 }
 
 export interface ProductSize {
+  // Optional preparation/service type for this specific variation (e.g.
+  // "Whole", "Cut", "Cleaned") — blank when the product doesn't need one.
+  type?: string;
   label: string;
   weightGrams: number;
   price: number;
@@ -47,8 +50,6 @@ export interface Product {
   origin: ProductOrigin;
   state: FreshState;
   stockStatus?: StockStatus;
-  preparationTypes: string[];
-  preparationRequired?: boolean;
   sizes: ProductSize[];
   rating: number;
   reviewCount: number;

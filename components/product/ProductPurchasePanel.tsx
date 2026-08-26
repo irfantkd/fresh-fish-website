@@ -15,29 +15,42 @@ const DESCRIPTION_PREVIEW_THRESHOLD = 180;
 
 export function ProductPurchasePanel({ product }: { product: Product }) {
   const isOutOfStock = product.stockStatus === "out_of_stock";
-  const hasPreparationTypes = product.preparationTypes.length > 0;
-  const [preparationType, setPreparationType] = useState<string | null>(null);
-  const [preparationError, setPreparationError] = useState(false);
+
+  // Type is just an attribute of each variation (e.g. "Whole", "Cut",
+  // "Cleaned") — price is tied to the specific type + weight combination,
+  // not selected independently of price. Products that don't need it never
+  // set a type on any variation, so this list stays empty and the type
+  // selector never renders.
+  const types = Array.from(
+    new Set(product.sizes.map((s) => s.type).filter((t): t is string => Boolean(t)))
+  );
+  const hasTypes = types.length > 0;
+  const [selectedType, setSelectedType] = useState<string | null>(types[0] ?? null);
+  const variations = hasTypes
+    ? product.sizes.filter((s) => s.type === selectedType)
+    : product.sizes;
+
   const [sizeIndex, setSizeIndex] = useState(0);
   const [quantity, setQuantity] = useState(1);
   const [isDescriptionExpanded, setIsDescriptionExpanded] = useState(false);
   const { addItem, openDrawer } = useCart();
-  const size = product.sizes[sizeIndex];
+  const size = variations[sizeIndex] ?? variations[0];
   const plainDescription = stripHtml(product.description);
 
+  function handleSelectType(type: string) {
+    setSelectedType(type);
+    setSizeIndex(0);
+  }
+
   function handleAddToCart() {
-    if (isOutOfStock) return;
-    if (product.preparationRequired && !preparationType) {
-      setPreparationError(true);
-      return;
-    }
+    if (isOutOfStock || !size) return;
 
     addItem({
       productId: product.id,
       productName: product.name,
       productSlug: product.slug,
       image: product.featuredImage.url,
-      preparationType: preparationType ?? undefined,
+      preparationType: size.type || undefined,
       sizeLabel: size.label,
       price: size.price,
       quantity,
@@ -91,23 +104,18 @@ export function ProductPurchasePanel({ product }: { product: Product }) {
         )}
       </div>
 
-      {hasPreparationTypes && (
+      {hasTypes && (
         <div>
-          <span className="mb-2 block text-sm font-semibold text-ocean-950">
-            Select Type{product.preparationRequired ? "" : " (optional)"}
-          </span>
+          <span className="mb-2 block text-sm font-semibold text-ocean-950">Select Type</span>
           <div className="flex flex-wrap gap-2">
-            {product.preparationTypes.map((type) => (
+            {types.map((type) => (
               <button
                 key={type}
                 type="button"
-                onClick={() => {
-                  setPreparationType(type);
-                  setPreparationError(false);
-                }}
+                onClick={() => handleSelectType(type)}
                 className={cn(
                   "rounded-full border px-4 py-2 text-sm font-medium transition-colors",
-                  preparationType === type
+                  selectedType === type
                     ? "border-ocean-800 bg-ocean-800 text-white"
                     : "border-gray-200 text-ocean-900 hover:border-ocean-300"
                 )}
@@ -116,43 +124,40 @@ export function ProductPurchasePanel({ product }: { product: Product }) {
               </button>
             ))}
           </div>
-          {preparationError && (
-            <p className="mt-1.5 text-xs font-medium text-red-600">
-              Please select a type before adding to cart.
-            </p>
-          )}
         </div>
       )}
 
-      <div>
-        <span className="mb-2 block text-sm font-semibold text-ocean-950">
-          Select Size / Weight
-        </span>
-        <div className="flex flex-wrap gap-2">
-          {product.sizes.map((s, i) => (
-            <button
-              key={s.label}
-              onClick={() => setSizeIndex(i)}
-              className={cn(
-                "rounded-2xl border px-4 py-3 text-left transition-colors",
-                sizeIndex === i
-                  ? "border-ocean-800 bg-ocean-800 text-white"
-                  : "border-gray-200 hover:border-ocean-300"
-              )}
-            >
-              <span className="block text-sm font-semibold">{s.label}</span>
-              <span
+      {size && (
+        <div>
+          <span className="mb-2 block text-sm font-semibold text-ocean-950">
+            Select Size / Weight
+          </span>
+          <div className="flex flex-wrap gap-2">
+            {variations.map((s, i) => (
+              <button
+                key={`${s.type ?? ""}-${s.label}`}
+                onClick={() => setSizeIndex(i)}
                 className={cn(
-                  "block text-xs",
-                  sizeIndex === i ? "text-white/70" : "text-gray-400"
+                  "rounded-2xl border px-4 py-3 text-left transition-colors",
+                  sizeIndex === i
+                    ? "border-ocean-800 bg-ocean-800 text-white"
+                    : "border-gray-200 hover:border-ocean-300"
                 )}
               >
-                {formatWeight(s.weightGrams)} &middot; {formatAED(s.price)}
-              </span>
-            </button>
-          ))}
+                <span className="block text-sm font-semibold">{s.label}</span>
+                <span
+                  className={cn(
+                    "block text-xs",
+                    sizeIndex === i ? "text-white/70" : "text-gray-400"
+                  )}
+                >
+                  {formatWeight(s.weightGrams)} &middot; {formatAED(s.price)}
+                </span>
+              </button>
+            ))}
+          </div>
         </div>
-      </div>
+      )}
 
       <ul className="flex flex-wrap gap-2">
         {product.benefits.map((benefit) => (
@@ -165,28 +170,30 @@ export function ProductPurchasePanel({ product }: { product: Product }) {
         ))}
       </ul>
 
-      <div className="flex items-center justify-between rounded-2xl border border-gray-100 bg-gray-50/60 p-4">
-        <div>
-          <span className="block font-heading text-2xl font-bold text-ocean-900">
-            {formatAED(size.price * quantity)}
-          </span>
-          <span className="text-xs text-gray-400">
-            {quantity} x {formatWeight(size.weightGrams)}
-          </span>
+      {size && (
+        <div className="flex items-center justify-between rounded-2xl border border-gray-100 bg-gray-50/60 p-4">
+          <div>
+            <span className="block font-heading text-2xl font-bold text-ocean-900">
+              {formatAED(size.price * quantity)}
+            </span>
+            <span className="text-xs text-gray-400">
+              {quantity} x {formatWeight(size.weightGrams)}
+            </span>
+          </div>
+          <div className="flex items-center gap-3 rounded-full border border-gray-200 bg-white px-3 py-2">
+            <button
+              aria-label="Decrease quantity"
+              onClick={() => setQuantity((q) => Math.max(1, q - 1))}
+            >
+              <Minus className="h-4 w-4" />
+            </button>
+            <span className="w-5 text-center text-sm font-semibold">{quantity}</span>
+            <button aria-label="Increase quantity" onClick={() => setQuantity((q) => q + 1)}>
+              <Plus className="h-4 w-4" />
+            </button>
+          </div>
         </div>
-        <div className="flex items-center gap-3 rounded-full border border-gray-200 bg-white px-3 py-2">
-          <button
-            aria-label="Decrease quantity"
-            onClick={() => setQuantity((q) => Math.max(1, q - 1))}
-          >
-            <Minus className="h-4 w-4" />
-          </button>
-          <span className="w-5 text-center text-sm font-semibold">{quantity}</span>
-          <button aria-label="Increase quantity" onClick={() => setQuantity((q) => q + 1)}>
-            <Plus className="h-4 w-4" />
-          </button>
-        </div>
-      </div>
+      )}
 
       <div className="flex flex-col gap-3 sm:flex-row">
         <Button
@@ -194,7 +201,7 @@ export function ProductPurchasePanel({ product }: { product: Product }) {
           variant="primary"
           size="lg"
           className="flex-1"
-          disabled={isOutOfStock}
+          disabled={isOutOfStock || !size}
         >
           <ShoppingCart className="h-4.5 w-4.5" />
           {isOutOfStock ? "Out of Stock" : "Add to Cart"}
