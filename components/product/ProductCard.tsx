@@ -9,7 +9,7 @@ import { SeafoodImage } from "@/components/ui/SeafoodImage";
 import { StarRating } from "@/components/ui/StarRating";
 import { formatAED, formatWeight } from "@/lib/utils/format";
 import { getLowestSize } from "@/lib/utils/product";
-import { buildProductInquiryLink } from "@/lib/utils/whatsapp";
+import { buildDirectOrderLink } from "@/lib/utils/whatsapp";
 import type { Product } from "@/types";
 
 export function ProductCard({ product }: { product: Product }) {
@@ -101,7 +101,14 @@ export function ProductCard({ product }: { product: Product }) {
             </span>
           ) : (
             <a
-              href={buildProductInquiryLink(product.name)}
+              href={buildDirectOrderLink({
+                productName: product.name,
+                type: size.type || undefined,
+                sizeLabel: size.label,
+                weightGrams: size.weightGrams,
+                price: size.price,
+                quantity: 1,
+              })}
               target="_blank"
               rel="noopener noreferrer"
               className="flex h-9 shrink-0 items-center justify-center rounded-full bg-fresh-green-500 px-3 text-xs font-semibold text-white shadow-sm shadow-fresh-green-500/30 transition-colors hover:bg-fresh-green-600 sm:h-10 sm:px-4"

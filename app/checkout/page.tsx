@@ -12,18 +12,9 @@ import { RegisterForm } from "@/components/account/RegisterForm";
 import { useCart } from "@/hooks/useCart";
 import { useCustomerAuth } from "@/hooks/useCustomerAuth";
 import { formatAED } from "@/lib/utils/format";
-import { useGetQuery, usePostMutation } from "@/store/apiSlice";
+import { usePostMutation } from "@/store/apiSlice";
 import { cn } from "@/lib/utils/cn";
-
-interface BankDetails {
-  bankName: string;
-  accountName: string;
-  accountNumber: string;
-  iban: string;
-  swiftCode: string;
-  branch: string;
-  notes: string;
-}
+import { BANK_TRANSFER_DETAILS } from "@/constants/site";
 
 interface Receipt {
   url: string;
@@ -69,17 +60,12 @@ export default function CheckoutPage() {
     setEmail((prev) => prev || customer.email);
   }
 
-  const { data: bankDetailsData, isLoading: isLoadingBankDetails } = useGetQuery(
-    { path: "/settings/bank-details" },
-    { skip: paymentMethod !== "bank_transfer" }
-  );
-  const bankDetails = bankDetailsData as BankDetails | undefined;
+  const bankDetails = BANK_TRANSFER_DETAILS;
   const hasBankDetails = Boolean(
-    bankDetails &&
-      (bankDetails.bankName ||
-        bankDetails.accountName ||
-        bankDetails.accountNumber ||
-        bankDetails.iban)
+    bankDetails.bankName ||
+      bankDetails.accountName ||
+      bankDetails.accountNumber ||
+      bankDetails.iban
   );
 
   const [uploadReceipt, { isLoading: isUploading }] = usePostMutation();
@@ -310,9 +296,7 @@ export default function CheckoutPage() {
 
               {paymentMethod === "bank_transfer" && (
                 <div className="mt-5 flex flex-col gap-4 rounded-2xl bg-gray-50/60 p-5">
-                  {isLoadingBankDetails ? (
-                    <p className="text-sm text-gray-400">Loading bank details...</p>
-                  ) : hasBankDetails && bankDetails ? (
+                  {hasBankDetails ? (
                     <div className="grid gap-2 text-sm sm:grid-cols-2">
                       {bankDetails.bankName && (
                         <p>

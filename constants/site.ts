@@ -19,6 +19,19 @@ export const SITE_CONFIG = {
   },
 } as const;
 
+// Shown to customers on the Bank Transfer step of checkout. Hardcoded here
+// (not editable from the dashboard/backend) — update these values directly
+// when the account details change.
+export const BANK_TRANSFER_DETAILS = {
+  bankName: "",
+  accountName: "",
+  accountNumber: "",
+  iban: "",
+  swiftCode: "",
+  branch: "",
+  notes: "",
+} as const;
+
 export const NAV_LINKS = [
   { label: "Home", href: "/" },
   { label: "Shop", href: "/shop" },

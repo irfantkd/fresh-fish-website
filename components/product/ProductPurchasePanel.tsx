@@ -7,7 +7,7 @@ import { StarRating } from "@/components/ui/StarRating";
 import { Button } from "@/components/ui/Button";
 import { useCart } from "@/hooks/useCart";
 import { formatAED, formatWeight, stripHtml } from "@/lib/utils/format";
-import { buildProductInquiryLink } from "@/lib/utils/whatsapp";
+import { buildDirectOrderLink } from "@/lib/utils/whatsapp";
 import { cn } from "@/lib/utils/cn";
 import type { Product } from "@/types";
 
@@ -212,7 +212,18 @@ export function ProductPurchasePanel({ product }: { product: Product }) {
           </Button>
         ) : (
           <Button
-            href={buildProductInquiryLink(product.name)}
+            href={
+              size
+                ? buildDirectOrderLink({
+                    productName: product.name,
+                    type: size.type || undefined,
+                    sizeLabel: size.label,
+                    weightGrams: size.weightGrams,
+                    price: size.price,
+                    quantity,
+                  })
+                : "#"
+            }
             target="_blank"
             rel="noopener noreferrer"
             variant="whatsapp"
