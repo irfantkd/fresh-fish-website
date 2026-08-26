@@ -18,7 +18,7 @@ export function Footer() {
         <div className="flex flex-col gap-5">
           {/* Logo text is dark navy — wrapped in a light card so it stays
               legible against the footer's dark background. */}
-          <div className="w-fit rounded-2xl bg-white p-3">
+          <div className=" ">
             <Image
               src={verticalLogo}
               alt="Fresh Fish Dubai"
@@ -79,7 +79,8 @@ export function Footer() {
       <div className="border-t border-white/10 py-6">
         <Container className="flex flex-col items-center justify-between gap-3 text-xs text-white/40 sm:flex-row">
           <p>
-            &copy; {new Date().getFullYear()} {SITE_CONFIG.name}. All rights reserved.
+            &copy; {new Date().getFullYear()} {SITE_CONFIG.name}. All rights
+            reserved.
           </p>
           <p>Crafted with care for seafood lovers in the UAE.</p>
         </Container>
