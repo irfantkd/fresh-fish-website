@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { Container } from "@/components/ui/Container";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { Breadcrumb } from "@/components/ui/Breadcrumb";
@@ -12,6 +13,12 @@ import type { Category } from "@/types";
 export function CategoriesPageClient() {
   const { data, isLoading } = useGetQuery({ path: "/categories" });
   const categories = (data as Category[] | undefined) ?? [];
+  const topLevel = categories.filter((c) => !c.parentId);
+  const childrenByParent = categories.reduce<Record<string, Category[]>>((map, c) => {
+    if (!c.parentId) return map;
+    (map[c.parentId] ??= []).push(c);
+    return map;
+  }, {});
 
   return (
     <div className="py-12">
@@ -30,11 +37,27 @@ export function CategoriesPageClient() {
           </div>
         ) : (
           <div className="mt-10 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {categories.map((category, i) => (
-              <FadeIn key={category.id} delay={i * 0.06}>
-                <CategoryCard category={category} />
-              </FadeIn>
-            ))}
+            {topLevel.map((category, i) => {
+              const children = childrenByParent[category.id] ?? [];
+              return (
+                <FadeIn key={category.id} delay={i * 0.06} className="flex flex-col gap-3">
+                  <CategoryCard category={category} />
+                  {children.length > 0 && (
+                    <div className="flex flex-wrap gap-2 px-1">
+                      {children.map((child) => (
+                        <Link
+                          key={child.id}
+                          href={`/category/${child.slug}`}
+                          className="rounded-full border border-gray-200 px-3 py-1.5 text-xs font-medium text-ocean-800 transition-colors hover:border-ocean-300 hover:bg-ocean-50"
+                        >
+                          {child.name}
+                        </Link>
+                      ))}
+                    </div>
+                  )}
+                </FadeIn>
+              );
+            })}
           </div>
         )}
       </Container>

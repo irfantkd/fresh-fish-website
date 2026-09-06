@@ -13,15 +13,9 @@ import {
   getRelatedBlogPosts,
 } from "@/lib/services/blog.service";
 import { blogPostingJsonLd, resolveJsonLd } from "@/lib/seo/json-ld";
+import { resolveRobots } from "@/lib/seo/robots";
 import { formatDate } from "@/lib/utils/format";
 import { SITE_CONFIG } from "@/constants/site";
-import type { RobotsMeta } from "@/types";
-
-const ROBOTS_MAP: Record<RobotsMeta, { index: boolean; follow: boolean }> = {
-  "index-follow": { index: true, follow: true },
-  "noindex-follow": { index: false, follow: true },
-  "noindex-nofollow": { index: false, follow: false },
-};
 
 export async function generateStaticParams() {
   const posts = await getAllBlogPosts();
@@ -52,7 +46,7 @@ export async function generateMetadata({
     description,
     keywords: keywords.length > 0 ? keywords : undefined,
     alternates: { canonical },
-    robots: ROBOTS_MAP[post.seo?.robotsMeta ?? "index-follow"],
+    robots: resolveRobots(post.seo?.robotsMeta),
     openGraph: {
       type: "article",
       title: ogTitle,

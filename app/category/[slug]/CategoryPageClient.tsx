@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Container } from "@/components/ui/Container";
 import { Breadcrumb } from "@/components/ui/Breadcrumb";
@@ -22,6 +23,9 @@ export function CategoryPageClient({ slug }: { slug: string }) {
   });
   const categories = (categoriesData as Category[] | undefined) ?? [];
   const category = categories.find((c) => c.slug === slug);
+  const subcategories = category
+    ? categories.filter((c) => c.parentId === category.id)
+    : [];
 
   const { data: productsData, isLoading: isLoadingProducts } = useGetQuery(
     { path: "/products", params: { categorySlug: slug, status: "published" } },
@@ -44,6 +48,14 @@ export function CategoryPageClient({ slug }: { slug: string }) {
     );
   }
 
+  const breadcrumbItems = [
+    { name: "Shop", url: "/shop" },
+    ...(category.parentId && category.parentSlug
+      ? [{ name: category.parentName ?? "", url: `/category/${category.parentSlug}` }]
+      : []),
+    { name: category.name, url: `/category/${category.slug}` },
+  ];
+
   return (
     <div className="pb-12">
       {/* Full-bleed hero banner — image with a top-transparent/bottom-black
@@ -61,7 +73,7 @@ export function CategoryPageClient({ slug }: { slug: string }) {
         <div className="absolute inset-0 bg-linear-to-t from-black via-black/35 to-transparent" />
         <Container className="absolute inset-x-0 bottom-0 pb-6 sm:pb-8 lg:pb-10">
           <span className="text-xs font-semibold uppercase tracking-[0.2em] text-aqua-300">
-            Category
+            {category.parentName ? `${category.parentName} · Subcategory` : "Category"}
           </span>
           <h1 className="mt-2 text-balance font-heading text-3xl font-bold tracking-tight text-white sm:text-4xl lg:text-5xl">
             {category.name}
@@ -71,13 +83,34 @@ export function CategoryPageClient({ slug }: { slug: string }) {
 
       <Container>
         <div className="pt-6">
-          <Breadcrumb
-            items={[
-              { name: "Shop", url: "/shop" },
-              { name: category.name, url: `/category/${category.slug}` },
-            ]}
-          />
+          <Breadcrumb items={breadcrumbItems} />
         </div>
+
+        {subcategories.length > 0 && (
+          <div className="mt-8">
+            <span className="mb-3 block text-sm font-semibold text-ocean-950">
+              Shop by Subcategory
+            </span>
+            <div className="flex flex-wrap gap-2">
+              <Link
+                href={`/category/${category.slug}`}
+                className="rounded-full border border-ocean-800 bg-ocean-800 px-4 py-2 text-sm font-medium text-white"
+              >
+                All {category.name}
+              </Link>
+              {subcategories.map((sub) => (
+                <Link
+                  key={sub.id}
+                  href={`/category/${sub.slug}`}
+                  className="rounded-full border border-gray-200 px-4 py-2 text-sm font-medium text-ocean-900 transition-colors hover:border-ocean-300 hover:bg-ocean-50"
+                >
+                  {sub.name}
+                  <span className="ml-1.5 text-xs text-gray-400">({sub.productCount})</span>
+                </Link>
+              ))}
+            </div>
+          </div>
+        )}
 
         {category.topContent && (
           <div

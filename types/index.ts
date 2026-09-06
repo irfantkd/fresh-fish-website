@@ -33,6 +33,7 @@ export interface ProductSeo {
   metaDescription?: string;
   keywords?: string[];
   canonicalUrl?: string;
+  robotsMeta?: RobotsMeta;
   customSchema?: string;
 }
 
@@ -43,6 +44,8 @@ export interface Product {
   categoryId: string;
   categorySlug: string;
   categoryName?: string;
+  categoryParentName?: string | null;
+  categoryParentSlug?: string | null;
   featuredImage: ImageObject;
   gallery: ImageObject[];
   shortDescription: string;
@@ -68,6 +71,7 @@ export interface Product {
 export interface CategorySeo {
   metaTitle?: string;
   metaDescription?: string;
+  robotsMeta?: RobotsMeta;
   customSchema?: string;
 }
 
@@ -80,6 +84,10 @@ export interface Category {
   bottomContent?: string;
   productCount: number;
   seo?: CategorySeo;
+  parentId?: string | null;
+  parentName?: string | null;
+  parentSlug?: string | null;
+  subcategoryCount?: number;
 }
 
 export interface CustomerReview {

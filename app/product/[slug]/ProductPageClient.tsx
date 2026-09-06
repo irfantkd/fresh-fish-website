@@ -46,6 +46,9 @@ export function ProductPageClient({
         <Breadcrumb
           items={[
             { name: "Shop", url: "/shop" },
+            ...(product.categoryParentName && product.categoryParentSlug
+              ? [{ name: product.categoryParentName, url: `/category/${product.categoryParentSlug}` }]
+              : []),
             ...(product.categoryName && product.categorySlug
               ? [{ name: product.categoryName, url: `/category/${product.categorySlug}` }]
               : []),

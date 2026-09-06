@@ -25,6 +25,11 @@ export function ShopFilters({ categories }: { categories: Category[] }) {
   const pathname = usePathname();
   const searchParams = useSearchParams();
 
+  // Only top-level categories — picking one includes its subcategories'
+  // products too (see ShopPageClient), so there's no need to also list
+  // subcategories here as separate pills.
+  const topLevelCategories = categories.filter((c) => !c.parentId);
+
   const activeFilter = searchParams.get("filter") ?? "all";
   const activeCategory = searchParams.get("category") ?? "all";
   const activeSort = searchParams.get("sort") ?? "newest";
@@ -71,7 +76,7 @@ export function ShopFilters({ categories }: { categories: Category[] }) {
           >
             All Categories
           </button>
-          {categories.map((cat) => (
+          {topLevelCategories.map((cat) => (
             <button
               key={cat.slug}
               onClick={() => updateParam("category", cat.slug)}

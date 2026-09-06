@@ -7,6 +7,7 @@ import {
 } from "@/lib/services/products.service";
 import { getProductReviews } from "@/lib/services/reviews.service";
 import { productJsonLd, resolveJsonLd } from "@/lib/seo/json-ld";
+import { resolveRobots } from "@/lib/seo/robots";
 import { SITE_CONFIG } from "@/constants/site";
 import { ProductPageClient } from "./ProductPageClient";
 
@@ -34,6 +35,7 @@ export async function generateMetadata({
     description,
     keywords: product.seo?.keywords,
     alternates: { canonical },
+    robots: resolveRobots(product.seo?.robotsMeta),
     openGraph: {
       title,
       description,

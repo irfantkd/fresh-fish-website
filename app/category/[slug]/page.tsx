@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { getAllCategories, getCategoryBySlug } from "@/lib/services/categories.service";
 import { categoryJsonLd, resolveJsonLd } from "@/lib/seo/json-ld";
+import { resolveRobots } from "@/lib/seo/robots";
 import { stripHtml } from "@/lib/utils/format";
 import { SITE_CONFIG } from "@/constants/site";
 import { CategoryPageClient } from "./CategoryPageClient";
@@ -30,6 +31,7 @@ export async function generateMetadata({
     title,
     description,
     alternates: { canonical: `/category/${category.slug}` },
+    robots: resolveRobots(category.seo?.robotsMeta),
     openGraph: {
       title,
       description,

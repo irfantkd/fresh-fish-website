@@ -29,9 +29,20 @@ export function ShopPageClient() {
   const allProducts = (productsData as ProductsResponse | undefined)?.items ?? [];
   const categories = (categoriesData as Category[] | undefined) ?? [];
 
+  // A parent category's filter pill should match its own products plus its
+  // subcategories' — same aggregation the category detail page does.
+  const activeCategorySlug = searchParams.get("category") ?? undefined;
+  const activeCategory = categories.find((c) => c.slug === activeCategorySlug);
+  const categorySlugs = activeCategory
+    ? [
+        activeCategory.slug,
+        ...categories.filter((c) => c.parentId === activeCategory.id).map((c) => c.slug),
+      ]
+    : activeCategorySlug;
+
   const products = filterAndSortProducts(allProducts, {
     filter: searchParams.get("filter") ?? undefined,
-    category: searchParams.get("category") ?? undefined,
+    category: categorySlugs,
     sort: searchParams.get("sort") ?? undefined,
   });
 

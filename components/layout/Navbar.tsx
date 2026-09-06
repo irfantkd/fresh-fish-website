@@ -43,7 +43,9 @@ const MEGA_MENU_CATEGORY_LIMIT = 6;
 
 export function Navbar() {
   const { data: categories } = useGetQuery({ path: "/categories" });
-  const categoryList = (categories as Category[]) ?? [];
+  // Only top-level categories in the nav — subcategories live on their
+  // parent's category page, not in this quick-access menu.
+  const categoryList = ((categories as Category[]) ?? []).filter((c) => !c.parentId);
   const { data: blogsData } = useGetQuery({
     path: "/blogs",
     params: { status: "published", sort: "newest", limit: 3 },

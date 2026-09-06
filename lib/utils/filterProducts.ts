@@ -3,7 +3,10 @@ import type { Product } from "@/types";
 
 export interface ProductFilterOptions {
   filter?: string;
-  category?: string;
+  // A single slug, or (for a parent category) itself plus every one of its
+  // subcategories' slugs — the caller resolves the hierarchy, this just
+  // matches whatever set it's given.
+  category?: string | string[];
   sort?: string;
 }
 
@@ -14,7 +17,8 @@ export function filterAndSortProducts(
   let result = [...products];
 
   if (category && category !== "all") {
-    result = result.filter((p) => p.categorySlug === category);
+    const slugs = Array.isArray(category) ? category : [category];
+    result = result.filter((p) => slugs.includes(p.categorySlug));
   }
 
   switch (filter) {
