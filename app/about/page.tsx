@@ -7,7 +7,7 @@ import { FadeIn, Stagger, StaggerItem } from "@/components/animations/FadeIn";
 import { SITE_CONFIG } from "@/constants/site";
 
 export const metadata: Metadata = {
-  title: "About Us",
+  title: `About Us | ${SITE_CONFIG.name}`,
   description:
     "Learn about Fresh Fish Dubai's mission to deliver premium, sustainably sourced seafood across the UAE.",
   alternates: { canonical: "/about" },

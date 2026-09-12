@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
+import { SITE_CONFIG } from "@/constants/site";
 import { ShopPageClient } from "./ShopPageClient";
 
 export const metadata: Metadata = {
-  title: "Shop Fresh Seafood Online",
+  title: `Shop Fresh Seafood Online | ${SITE_CONFIG.name}`,
   description:
     "Browse our full range of fresh and frozen seafood — fish, shrimp, crab, lobster and more. Delivered fast across Dubai.",
   alternates: { canonical: "/shop" },

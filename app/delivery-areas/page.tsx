@@ -5,9 +5,10 @@ import { SectionHeading } from "@/components/ui/SectionHeading";
 import { Breadcrumb } from "@/components/ui/Breadcrumb";
 import { Stagger, StaggerItem } from "@/components/animations/FadeIn";
 import { getDeliveryAreas } from "@/lib/services/delivery-areas.service";
+import { SITE_CONFIG } from "@/constants/site";
 
 export const metadata: Metadata = {
-  title: "Delivery Areas",
+  title: `Delivery Areas | ${SITE_CONFIG.name}`,
   description:
     "Check which Dubai neighborhoods Fresh Fish Dubai delivers to and estimated delivery times.",
   alternates: { canonical: "/delivery-areas" },

@@ -14,7 +14,7 @@ import { SITE_CONFIG } from "@/constants/site";
 import { cn } from "@/lib/utils/cn";
 
 export const metadata: Metadata = {
-  title: "Blog",
+  title: `Blog | ${SITE_CONFIG.name}`,
   description: `Seafood guides, recipes, and news from ${SITE_CONFIG.name}.`,
   alternates: { canonical: "/blog" },
 };

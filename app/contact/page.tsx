@@ -9,7 +9,7 @@ import { FadeIn } from "@/components/animations/FadeIn";
 import { SITE_CONFIG } from "@/constants/site";
 
 export const metadata: Metadata = {
-  title: "Contact Us",
+  title: `Contact Us | ${SITE_CONFIG.name}`,
   description:
     "Get in touch with Fresh Fish Dubai for orders, questions, or feedback. Reach us via WhatsApp, phone, or email.",
   alternates: { canonical: "/contact" },

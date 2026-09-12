@@ -5,8 +5,8 @@ export const SITE_CONFIG = {
     "Live and fresh fish & seafood, hand-picked and cleaned to your order, delivered to your door in Dubai. Custom orders welcome, 24/7 service.",
   url: "https://www.freshfishdubai.com",
   locale: "en_AE",
-  phone: "+971 50 123 4567",
-  whatsappNumber: "971501234567",
+  phone: "+971 52 359 9567",
+  whatsappNumber: "971523599567",
   email: "info@freshfishdubai.com",
   address: "1st Floor Shop No 285, Waterfront Market, Dubai, UAE",
   mapEmbedUrl:

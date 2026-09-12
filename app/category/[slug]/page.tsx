@@ -21,7 +21,7 @@ export async function generateMetadata({
   const category = await getCategoryBySlug(slug);
   if (!category) return {};
 
-  const title = category.seo?.metaTitle || `${category.name} | Fresh Seafood Delivered in Dubai`;
+  const title = category.seo?.metaTitle || category.name;
   const description =
     category.seo?.metaDescription ||
     stripHtml(category.topContent).slice(0, 160) ||
@@ -31,7 +31,7 @@ export async function generateMetadata({
     title,
     description,
     alternates: { canonical: `/category/${category.slug}` },
-    robots: resolveRobots(category.seo?.robotsMeta),
+    robots: await resolveRobots(category.seo?.robotsMeta),
     openGraph: {
       title,
       description,

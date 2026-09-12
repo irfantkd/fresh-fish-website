@@ -5,9 +5,10 @@ import { Breadcrumb } from "@/components/ui/Breadcrumb";
 import { FaqAccordion } from "@/components/sections/FaqAccordion";
 import { getFaqs } from "@/lib/services/faq.service";
 import { faqJsonLd } from "@/lib/seo/json-ld";
+import { SITE_CONFIG } from "@/constants/site";
 
 export const metadata: Metadata = {
-  title: "Frequently Asked Questions",
+  title: `Frequently Asked Questions | ${SITE_CONFIG.name}`,
   description:
     "Answers to common questions about ordering, delivery, freshness, and payment at Fresh Fish Dubai.",
   alternates: { canonical: "/faq" },

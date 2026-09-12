@@ -46,7 +46,7 @@ export async function generateMetadata({
     description,
     keywords: keywords.length > 0 ? keywords : undefined,
     alternates: { canonical },
-    robots: resolveRobots(post.seo?.robotsMeta),
+    robots: await resolveRobots(post.seo?.robotsMeta),
     openGraph: {
       type: "article",
       title: ogTitle,

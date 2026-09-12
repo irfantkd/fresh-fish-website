@@ -35,7 +35,7 @@ export async function generateMetadata({
     description,
     keywords: product.seo?.keywords,
     alternates: { canonical },
-    robots: resolveRobots(product.seo?.robotsMeta),
+    robots: await resolveRobots(product.seo?.robotsMeta),
     openGraph: {
       title,
       description,
