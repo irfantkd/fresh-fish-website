@@ -6,9 +6,10 @@ import { customerLogout } from "./customerAuthSlice";
 // slice with path-based get/post/put/patch/delete endpoints, so every page
 // that needs live data calls the same backend the dashboard writes to.
 
-// Falls back to the deployed backend (not localhost) so a missing
-// NEXT_PUBLIC_API_URL on Vercel doesn't break client-side data fetching.
-const API_URL = process.env.NEXT_PUBLIC_API_URL || "https://fresh-fish-backend.vercel.app/api";
+// Always set via .env (committed, the shared default — e.g. the deployed
+// backend on Vercel) and .env.local (gitignored, overrides it for local
+// dev) — never hardcoded here.
+const API_URL = process.env.NEXT_PUBLIC_API_URL!;
 export const API_BASE_URL = API_URL;
 
 const rawBaseQuery = fetchBaseQuery({
