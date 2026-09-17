@@ -3,7 +3,7 @@ export const SITE_CONFIG = {
   shortName: "Fresh Fish",
   description:
     "Live and fresh fish & seafood, hand-picked and cleaned to your order, delivered to your door in Dubai. Custom orders welcome, 24/7 service.",
-  url: "https://www.freshfishdubai.com",
+  url: "https://freshfishdubai.com",
   locale: "en_AE",
   phone: "+971 52 359 9567",
   whatsappNumber: "971523599567",
