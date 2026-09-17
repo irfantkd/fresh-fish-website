@@ -12,10 +12,14 @@ const CANONICAL_HOST = "freshfishdubai.com";
 const NON_CANONICAL_HOST = "www.freshfishdubai.com";
 
 export function middleware(request: NextRequest) {
-  const host = request.headers.get("host");
+  // Strip any port (e.g. a reverse proxy forwarding "www.example.com:3000")
+  // before comparing — and never let a port slip into the redirect target.
+  const host = request.headers.get("host")?.split(":")[0];
   if (host === NON_CANONICAL_HOST) {
     const url = request.nextUrl.clone();
+    url.protocol = "https:";
     url.host = CANONICAL_HOST;
+    url.port = "";
     return NextResponse.redirect(url, 308);
   }
   return NextResponse.next();
