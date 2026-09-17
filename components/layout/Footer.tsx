@@ -4,7 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { Container } from "@/components/ui/Container";
 import { NewsletterForm } from "@/components/layout/NewsletterForm";
-import { FOOTER_LINKS, SITE_CONFIG } from "@/constants/site";
+import { FOOTER_LINKS, LEGAL_LINKS, SITE_CONFIG } from "@/constants/site";
 import verticalLogo from "@/public/assets/images/Main_logo_Fresh_fish_Dubai-removebg-preview.png";
 
 export function Footer() {
@@ -71,12 +71,28 @@ export function Footer() {
       </Container>
 
       <div className="border-t border-white/10 py-6">
-        <Container className="flex flex-col items-center justify-between gap-3 text-xs text-white/40 sm:flex-row">
-          <p>
-            &copy; {new Date().getFullYear()} {SITE_CONFIG.name}. All rights
-            reserved.
-          </p>
-          <p>Crafted with care for seafood lovers in the UAE.</p>
+        <Container className="flex flex-col items-center gap-4">
+          <nav
+            aria-label="Legal"
+            className="flex flex-wrap items-center justify-center gap-x-5 gap-y-2"
+          >
+            {LEGAL_LINKS.map((link) => (
+              <Link
+                key={link.href}
+                href={link.href}
+                className="text-xs text-white/50 transition-colors hover:text-aqua-300"
+              >
+                {link.label}
+              </Link>
+            ))}
+          </nav>
+          <div className="flex w-full flex-col items-center justify-between gap-3 text-xs text-white/40 sm:flex-row">
+            <p>
+              &copy; {new Date().getFullYear()} {SITE_CONFIG.name}. All rights
+              reserved.
+            </p>
+            <p>Crafted with care for seafood lovers in the UAE.</p>
+          </div>
         </Container>
       </div>
     </footer>

@@ -27,6 +27,19 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: path === "" ? 1 : 0.7,
   }));
 
+  const legalRoutes: MetadataRoute.Sitemap = [
+    "/privacy-policy",
+    "/terms-and-conditions",
+    "/refund-return-policy",
+    "/cancellation-policy",
+    "/delivery-policy",
+  ].map((path) => ({
+    url: `${SITE_CONFIG.url}${path}`,
+    lastModified: new Date(),
+    changeFrequency: "yearly",
+    priority: 0.3,
+  }));
+
   const productRoutes: MetadataRoute.Sitemap = products.map((product) => ({
     url: `${SITE_CONFIG.url}/product/${product.slug}`,
     lastModified: new Date(),
@@ -48,5 +61,5 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.5,
   }));
 
-  return [...staticRoutes, ...productRoutes, ...categoryRoutes, ...blogRoutes];
+  return [...staticRoutes, ...legalRoutes, ...productRoutes, ...categoryRoutes, ...blogRoutes];
 }

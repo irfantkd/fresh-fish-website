@@ -61,6 +61,14 @@ export const FOOTER_LINKS = {
   ],
 } as const;
 
+export const LEGAL_LINKS = [
+  { label: "Privacy Policy", href: "/privacy-policy" },
+  { label: "Terms & Conditions", href: "/terms-and-conditions" },
+  { label: "Refund & Return Policy", href: "/refund-return-policy" },
+  { label: "Cancellation Policy", href: "/cancellation-policy" },
+  { label: "Delivery Policy", href: "/delivery-policy" },
+] as const;
+
 export const CATEGORY_SLUGS = [
   "fish",
   "shrimp-prawns",
