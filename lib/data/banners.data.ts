@@ -1,15 +1,15 @@
 import { SITE_CONFIG } from "@/constants/site";
-import { seafoodImage } from "@/lib/utils/seafood-image";
 import type { Banner } from "@/types";
 
 /**
- * Homepage banner slides. Swap `image` for an uploaded banner asset (e.g. a
- * CMS/admin upload) at any time — nothing else needs to change.
+ * Homepage banner slides. Images are real photos pasted into
+ * public/assets/images/ — swap the `image` path for a different uploaded
+ * banner asset at any time, nothing else needs to change.
  */
 export const BANNERS: Banner[] = [
   {
     id: "b-1",
-    image: seafoodImage("salmon,fresh", 401),
+    image: "/assets/images/Header1.jpeg",
     eyebrow: "100% Live & Fresh",
     title: "Fresh Fish & Seafood, Delivered to Your Door",
     subtitle: "Hand-picked, prepared to your order, and delivered fresh — every single time.",
@@ -22,7 +22,7 @@ export const BANNERS: Banner[] = [
   },
   {
     id: "b-2",
-    image: seafoodImage("lobster,seafood", 402),
+    image: "/assets/images/header2.jpeg",
     eyebrow: "Premium Selection",
     title: "Lobster, King Crab & Other Indulgent Catches",
     subtitle: "Restaurant-grade seafood for special occasions, hand-picked just for you.",
@@ -30,7 +30,15 @@ export const BANNERS: Banner[] = [
   },
   {
     id: "b-3",
-    image: seafoodImage("shrimp,prawn", 403),
+    image: "/assets/images/header-3.jpeg",
+    eyebrow: "Sourced Daily",
+    title: "A Full Catch of the Day, Every Day",
+    subtitle: "From sea bass to red snapper — hand-graded for freshness before it reaches you.",
+    primaryCta: { label: "Browse the Catch", href: "/shop" },
+  },
+  {
+    id: "b-4",
+    image: "/assets/images/header4.jpeg",
     eyebrow: "Always Available",
     title: "Order Anytime — We're Open 24/7",
     subtitle: "Message us on WhatsApp any hour of the day for a custom order.",
@@ -42,8 +50,16 @@ export const BANNERS: Banner[] = [
     secondaryCta: { label: "Request a Custom Order", href: "/contact" },
   },
   {
-    id: "b-4",
-    image: seafoodImage("crab,seafood", 404),
+    id: "b-5",
+    image: "/assets/images/header5.jpeg",
+    eyebrow: "Ocean to Table",
+    title: "Every Variety, From Salmon to Scallops",
+    subtitle: "One order, endless variety — fish, shellfish, and crustaceans on the same plate.",
+    primaryCta: { label: "Shop Now", href: "/shop" },
+  },
+  {
+    id: "b-6",
+    image: "/assets/images/header6.jpeg",
     eyebrow: "Fast & Reliable",
     title: "Free Home Delivery Across Dubai",
     subtitle: "Hygienic, cold-chain delivery straight to your door, wherever you are.",
