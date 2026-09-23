@@ -1,29 +1,28 @@
 import { Hand, MessageCircle, ShoppingCart, Truck } from "lucide-react";
 import { Container } from "@/components/ui/Container";
 import { SectionHeading } from "@/components/ui/SectionHeading";
-import { Button } from "@/components/ui/Button";
 import { FadeIn, Stagger, StaggerItem } from "@/components/animations/FadeIn";
 
 const STEPS = [
   {
     icon: ShoppingCart,
-    title: "Browse",
-    description: "Pick fresh or frozen fish and seafood.",
+    title: "Browse & Select",
+    description: "Pick from live and fresh fish & seafood, or tell us exactly what you need.",
   },
   {
     icon: MessageCircle,
-    title: "Order",
-    description: "Check out on WhatsApp, or message or call us.",
+    title: "Order Anytime, 24/7",
+    description: "Confirm your order on WhatsApp or by call — day or night, we're available.",
   },
   {
     icon: Hand,
-    title: "We prepare",
-    description: "Your fish is weighed, then cleaned and cut as you asked.",
+    title: "Hand-Picked to Order",
+    description: "We hand-pick, clean, and prepare it whole — never pre-cooked, always real.",
   },
   {
     icon: Truck,
-    title: "We deliver",
-    description: "It arrives cold, within 2 hours in Dubai.",
+    title: "Delivered to Your Door",
+    description: "Fresh, hygienic home delivery — exactly what you ordered, nothing else.",
   },
 ];
 
@@ -34,7 +33,7 @@ export function HowItWorks() {
         <FadeIn>
           <SectionHeading
             eyebrow="How It Works"
-            title="How to Order Fresh Fish Online in Dubai, UAE"
+            title="From Our Hands to Your Door"
             align="center"
             className="mx-auto"
           />
@@ -57,13 +56,6 @@ export function HowItWorks() {
             </StaggerItem>
           ))}
         </Stagger>
-
-        <div className="mt-10 flex flex-col items-center gap-4">
-          <p className="text-sm text-gray-500">Pay cash on delivery.</p>
-          <Button href="/shop" variant="aqua" size="lg">
-            Start Your Order
-          </Button>
-        </div>
       </Container>
     </section>
   );

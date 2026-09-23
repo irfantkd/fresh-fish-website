@@ -5,7 +5,6 @@ import { motion } from "framer-motion";
 import { ArrowUpRight, Layers } from "lucide-react";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { Container } from "@/components/ui/Container";
-import { Button } from "@/components/ui/Button";
 import { SeafoodImage } from "@/components/ui/SeafoodImage";
 import { FadeIn } from "@/components/animations/FadeIn";
 import { useGetQuery } from "@/store/apiSlice";
@@ -70,8 +69,8 @@ export function CategoriesSection() {
         <FadeIn>
           <SectionHeading
             eyebrow="Shop by Category"
-            title="Shop Fresh Fish and Seafood in Dubai, UAE"
-            description="Fresh or frozen, whole or cut to order. Pick a category."
+            title="Every Catch, Perfectly Sorted"
+            description="From delicate white fish to indulgent shellfish — explore our full range, sourced daily from trusted waters."
             align="center"
             className="mx-auto"
           />
@@ -85,12 +84,6 @@ export function CategoriesSection() {
                   <CategoryQuickCard category={category} />
                 </FadeIn>
               ))}
-        </div>
-
-        <div className="mt-10 text-center">
-          <Button href="/shop" variant="outline" size="lg">
-            View Full Shop
-          </Button>
         </div>
       </Container>
     </section>

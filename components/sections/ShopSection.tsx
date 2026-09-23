@@ -46,7 +46,7 @@ export function ShopSection() {
           <div className="flex flex-col items-center justify-between gap-6 text-center sm:flex-row sm:text-left">
             <SectionHeading
               eyebrow="Shop Live & Fresh"
-              title="Popular Fish and Seafood Today"
+              title="Hand-Picked, Ready to Deliver"
               description="No cooked meals — just live and fresh whole fish & seafood, cleaned and prepared to your order."
               className="items-center text-center sm:items-start sm:text-left [&_p]:mx-auto sm:[&_p]:mx-0"
             />

@@ -11,7 +11,7 @@ import { NextResponse, type NextRequest } from "next/server";
 const CANONICAL_HOST = "freshfishdubai.com";
 const NON_CANONICAL_HOST = "www.freshfishdubai.com";
 
-export function proxy(request: NextRequest) {
+export function middleware(request: NextRequest) {
   // Strip any port (e.g. a reverse proxy forwarding "www.example.com:3000")
   // before comparing — and never let a port slip into the redirect target.
   const host = request.headers.get("host")?.split(":")[0];
