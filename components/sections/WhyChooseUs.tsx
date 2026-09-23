@@ -1,28 +1,38 @@
-import { Clock, Hand, SlidersHorizontal, Truck } from "lucide-react";
+import { CalendarCheck, Clock, Layers, Scale, Store, Truck } from "lucide-react";
 import { Container } from "@/components/ui/Container";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { FadeIn, Stagger, StaggerItem } from "@/components/animations/FadeIn";
 
 const REASONS = [
   {
-    icon: Hand,
-    title: "Live & Hand-Picked",
-    description: "Never cooked, never pre-packed — we hand-pick and clean it whole, just for you.",
+    icon: Store,
+    title: "Serving Dubai since 2020",
+    description: "A real shop at Waterfront Market, not just a website.",
   },
   {
-    icon: SlidersHorizontal,
-    title: "Custom Orders, Anytime",
-    description: "Tell us the size, cut, or quantity you need — we'll prepare it exactly that way.",
+    icon: Layers,
+    title: "100+ products",
+    description: "Fresh and frozen, clearly labelled on every page.",
   },
   {
-    icon: Clock,
-    title: "24/7 Service",
-    description: "Order by WhatsApp or call any time, day or night — we're always available.",
+    icon: Scale,
+    title: "Exact weight",
+    description: "Every order is precisely weighed and timestamp-verified.",
+  },
+  {
+    icon: CalendarCheck,
+    title: "Any cut you want",
+    description: "Whole, cleaned, cut or fillet.",
   },
   {
     icon: Truck,
-    title: "Reliable Home Delivery",
-    description: "Hygienic, cold-chain delivery straight to your door across Dubai.",
+    title: "2-hour express delivery",
+    description: "Every area of Dubai, UAE, with delivery to the other emirates.",
+  },
+  {
+    icon: Clock,
+    title: "Order 24/7",
+    description: "WhatsApp, phone or website. Pay cash on delivery.",
   },
 ];
 
@@ -33,13 +43,13 @@ export function WhyChooseUs() {
         <FadeIn>
           <SectionHeading
             eyebrow="Why Choose Us"
-            title="Trusted by Seafood Lovers Across Dubai"
+            title="Why Order Fresh Fish and Seafood From Us"
             align="center"
             className="mx-auto [&_h2]:text-white"
           />
         </FadeIn>
 
-        <Stagger className="mt-14 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+        <Stagger className="mt-14 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {REASONS.map((reason) => (
             <StaggerItem
               key={reason.title}

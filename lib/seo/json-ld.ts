@@ -28,11 +28,12 @@ export function resolveJsonLd<T extends object>(
 export function organizationJsonLd() {
   return {
     "@context": "https://schema.org",
-    "@type": "Organization",
+    "@type": ["Organization", "Store"],
     name: SITE_CONFIG.name,
     url: SITE_CONFIG.url,
     logo: `${SITE_CONFIG.url}/logo.png`,
     description: SITE_CONFIG.description,
+    foundingDate: "2020",
     telephone: SITE_CONFIG.phone,
     email: SITE_CONFIG.email,
     address: {
@@ -41,6 +42,15 @@ export function organizationJsonLd() {
       addressLocality: "Dubai",
       addressCountry: "AE",
     },
+    areaServed: [
+      "Dubai",
+      "Abu Dhabi",
+      "Sharjah",
+      "Ajman",
+      "Umm Al Quwain",
+      "Ras Al Khaimah",
+      "Fujairah",
+    ],
     sameAs: [SITE_CONFIG.social.instagram, SITE_CONFIG.social.facebook],
   };
 }

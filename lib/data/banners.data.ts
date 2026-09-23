@@ -61,7 +61,7 @@ export const BANNERS: Banner[] = [
     id: "b-6",
     image: "/assets/images/header6.jpeg",
     eyebrow: "Fast & Reliable",
-    title: "Free Home Delivery Across Dubai",
+    title: "2-Hour Express Delivery Across Dubai",
     subtitle: "Hygienic, cold-chain delivery straight to your door, wherever you are.",
     primaryCta: { label: "Check Delivery Areas", href: "/delivery-areas" },
   },

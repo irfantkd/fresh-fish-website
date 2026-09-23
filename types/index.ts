@@ -125,6 +125,10 @@ export interface FaqItem {
   id: string;
   question: string;
   answer: string;
+  category?: string;
+  order?: number;
+  showOnHomepage?: boolean;
+  status?: ContentStatus;
 }
 
 export type CustomerStatus = "active" | "banned";
