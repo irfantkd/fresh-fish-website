@@ -1,28 +1,38 @@
-import { Clock, Hand, SlidersHorizontal, Truck } from "lucide-react";
+import { CalendarCheck, Clock, Layers, Scale, Store, Truck } from "lucide-react";
 import { Container } from "@/components/ui/Container";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { FadeIn, Stagger, StaggerItem } from "@/components/animations/FadeIn";
 
 const REASONS = [
   {
-    icon: Hand,
-    title: "Live & Hand-Picked",
-    description: "Never cooked, never pre-packed — we hand-pick and clean it whole, just for you.",
+    icon: Store,
+    title: "Serving Dubai since 2018",
+    description: "A real shop at Waterfront Market, not just a website.",
   },
   {
-    icon: SlidersHorizontal,
-    title: "Custom Orders, Anytime",
-    description: "Tell us the size, cut, or quantity you need — we'll prepare it exactly that way.",
+    icon: Layers,
+    title: "100+ products",
+    description: "Fresh and frozen, clearly labelled on every page.",
   },
   {
-    icon: Clock,
-    title: "24/7 Service",
-    description: "Order by WhatsApp or call any time, day or night — we're always available.",
+    icon: Scale,
+    title: "Exact weight",
+    description: "Every order is precisely weighed before it leaves us.",
+  },
+  {
+    icon: CalendarCheck,
+    title: "Any cut you want",
+    description: "Whole, cleaned, cut or fillet.",
   },
   {
     icon: Truck,
-    title: "Reliable Home Delivery",
-    description: "Hygienic, cold-chain delivery straight to your door across Dubai.",
+    title: "2-hour express delivery",
+    description: "Every area of Dubai, UAE, with delivery to the other emirates.",
+  },
+  {
+    icon: Clock,
+    title: "Order 24/7",
+    description: "WhatsApp, phone or website. Pay cash on delivery.",
   },
 ];
 
@@ -33,19 +43,19 @@ export function WhyChooseUs() {
         <FadeIn>
           <SectionHeading
             eyebrow="Why Choose Us"
-            title="Trusted by Seafood Lovers Across Dubai"
+            title="Why Order Fresh Fish and Seafood From Us"
             align="center"
             className="mx-auto [&_h2]:text-white"
           />
         </FadeIn>
 
-        <Stagger className="mt-14 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+        <Stagger className="mt-14 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {REASONS.map((reason) => (
             <StaggerItem
               key={reason.title}
-              className="flex flex-col items-center gap-4 rounded-3xl border border-white/10 bg-white/5 p-8 text-center backdrop-blur transition-colors hover:border-aqua-400/40"
+              className="group flex flex-col items-center gap-4 rounded-3xl border border-white/10 bg-white/5 p-8 text-center backdrop-blur transition-all duration-300 hover:-translate-y-1 hover:border-aqua-400/40 hover:bg-white/10"
             >
-              <span className="flex h-14 w-14 items-center justify-center rounded-2xl bg-aqua-500/15 text-aqua-300">
+              <span className="flex h-14 w-14 items-center justify-center rounded-2xl bg-aqua-500/15 text-aqua-300 transition-transform duration-300 group-hover:scale-110">
                 <reason.icon className="h-6 w-6" />
               </span>
               <h3 className="font-heading text-lg font-bold text-white">{reason.title}</h3>

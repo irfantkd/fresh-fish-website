@@ -8,11 +8,11 @@ import { CustomerReviews } from "@/components/sections/CustomerReviews";
 import { DeliveryAreasSection } from "@/components/sections/DeliveryAreasSection";
 import { FaqSection } from "@/components/sections/FaqSection";
 import { LatestBlogSection } from "@/components/sections/LatestBlogSection";
-import { SITE_CONFIG } from "@/constants/site";
 
 export const metadata: Metadata = {
-  title: `${SITE_CONFIG.name} | Live & Fresh Seafood Delivery in Dubai`,
-  description: SITE_CONFIG.description,
+  title: "Fresh Fish Dubai | 2-Hour Seafood Delivery Dubai, UAE",
+  description:
+    "Fresh Fish Dubai: 100+ fresh and frozen seafood products from our Waterfront Market shop, since 2018. 2-hour delivery in Dubai, UAE. Cash on delivery.",
   alternates: { canonical: "/" },
 };
 

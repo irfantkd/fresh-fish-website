@@ -24,21 +24,34 @@ function buildQuery(params?: Record<string, string | number | boolean | undefine
   return `?${search.toString()}`;
 }
 
+/**
+ * `revalidateSeconds` lets a caller opt into Next.js's fetch cache instead of
+ * the default `no-store`. Only use it for data that can tolerate being a
+ * little stale (categories, listings, blog posts, reviews) — never for a
+ * single product's own price/stock (kept `no-store` in getProductBySlug) or
+ * anything in the cart/checkout flow.
+ */
 export async function apiGet<T>(
   path: string,
-  params?: Record<string, string | number | boolean | undefined>
+  params?: Record<string, string | number | boolean | undefined>,
+  revalidateSeconds?: number
 ): Promise<T> {
-  const res = await fetch(`${API_URL}${path}${buildQuery(params)}`, { cache: "no-store" });
+  const res = await fetch(`${API_URL}${path}${buildQuery(params)}`, {
+    ...(revalidateSeconds
+      ? { next: { revalidate: revalidateSeconds } }
+      : { cache: "no-store" }),
+  });
   if (!res.ok) throw new ApiFetchError(res.status, path);
   return res.json();
 }
 
 export async function apiGetOrUndefined<T>(
   path: string,
-  params?: Record<string, string | number | boolean | undefined>
+  params?: Record<string, string | number | boolean | undefined>,
+  revalidateSeconds?: number
 ): Promise<T | undefined> {
   try {
-    return await apiGet<T>(path, params);
+    return await apiGet<T>(path, params, revalidateSeconds);
   } catch (error) {
     if (error instanceof ApiFetchError && error.status === 404) return undefined;
     throw error;

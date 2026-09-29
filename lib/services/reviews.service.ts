@@ -14,7 +14,11 @@ interface ReviewsResponse {
  * fabricated/mock data.
  */
 export async function getFeaturedReviews(limit = 9): Promise<CustomerReview[]> {
-  const res = await apiGet<ReviewsResponse>("/reviews", { status: "approved", limit: 30 });
+  const res = await apiGet<ReviewsResponse>(
+    "/reviews",
+    { status: "approved", limit: 30 },
+    120
+  );
   return [...res.items].sort((a, b) => b.rating - a.rating).slice(0, limit);
 }
 

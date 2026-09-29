@@ -45,7 +45,7 @@ export async function searchBlogPosts(query: string): Promise<BlogPost[]> {
 }
 
 export async function getAllBlogCategories(): Promise<BlogCategory[]> {
-  return apiGet<BlogCategory[]>("/blog-categories");
+  return apiGet<BlogCategory[]>("/blog-categories", undefined, 300);
 }
 
 export async function getBlogCategoryBySlug(slug: string): Promise<BlogCategory | undefined> {

@@ -30,8 +30,8 @@ export default function DeliveryPolicyPage() {
 
       <h2>2. Delivery Charges</h2>
       <p>
-        We offer free home delivery across our serviceable areas in Dubai, with no minimum order
-        value required unless otherwise stated at checkout.
+        Delivery charges and the minimum order value depend on your area. We confirm both on
+        WhatsApp when you place your order.
       </p>
 
       <h2>3. Order Placement and Delivery Hours</h2>

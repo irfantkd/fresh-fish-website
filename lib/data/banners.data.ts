@@ -10,10 +10,11 @@ export const BANNERS: Banner[] = [
   {
     id: "b-1",
     image: "/assets/images/Header1.jpeg",
-    eyebrow: "100% Live & Fresh",
-    title: "Fresh Fish & Seafood, Delivered to Your Door",
-    subtitle: "Hand-picked, prepared to your order, and delivered fresh — every single time.",
-    primaryCta: { label: "Shop Now", href: "/shop" },
+    eyebrow: "100+ Products, 2-Hour Delivery",
+    title: "Fresh Fish Dubai Providing Seafood Delivery to Your Door in Dubai, UAE",
+    subtitle:
+      "Order fresh fish online in Dubai, UAE from 100+ fresh and frozen products. Cleaned and cut your way, kept at 0 to 4°C, and delivered within 2 hours.",
+    primaryCta: { label: "Shop Fresh Fish", href: "/shop" },
     secondaryCta: {
       label: "Order on WhatsApp",
       href: `https://wa.me/${SITE_CONFIG.whatsappNumber}`,
@@ -61,8 +62,8 @@ export const BANNERS: Banner[] = [
     id: "b-6",
     image: "/assets/images/header6.jpeg",
     eyebrow: "Fast & Reliable",
-    title: "Free Home Delivery Across Dubai",
-    subtitle: "Hygienic, cold-chain delivery straight to your door, wherever you are.",
+    title: "2-Hour Express Delivery Across Dubai",
+    subtitle: "Cold-chain delivery straight to your door. Cash on delivery available.",
     primaryCta: { label: "Check Delivery Areas", href: "/delivery-areas" },
   },
 ];

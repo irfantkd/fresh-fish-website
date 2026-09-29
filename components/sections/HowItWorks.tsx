@@ -6,23 +6,23 @@ import { FadeIn, Stagger, StaggerItem } from "@/components/animations/FadeIn";
 const STEPS = [
   {
     icon: ShoppingCart,
-    title: "Browse & Select",
-    description: "Pick from live and fresh fish & seafood, or tell us exactly what you need.",
+    title: "Browse",
+    description: "Pick fresh or frozen fish and seafood.",
   },
   {
     icon: MessageCircle,
-    title: "Order Anytime, 24/7",
-    description: "Confirm your order on WhatsApp or by call — day or night, we're available.",
+    title: "Order",
+    description: "Check out on WhatsApp, or message or call us.",
   },
   {
     icon: Hand,
-    title: "Hand-Picked to Order",
-    description: "We hand-pick, clean, and prepare it whole — never pre-cooked, always real.",
+    title: "We Prepare",
+    description: "Your fish is weighed, then cleaned and cut as you asked.",
   },
   {
     icon: Truck,
-    title: "Delivered to Your Door",
-    description: "Fresh, hygienic home delivery — exactly what you ordered, nothing else.",
+    title: "We Deliver",
+    description: "It arrives cold, within 2 hours in Dubai.",
   },
 ];
 
@@ -33,7 +33,7 @@ export function HowItWorks() {
         <FadeIn>
           <SectionHeading
             eyebrow="How It Works"
-            title="From Our Hands to Your Door"
+            title="How to Order Fresh Fish Online in Dubai, UAE"
             align="center"
             className="mx-auto"
           />
@@ -43,12 +43,12 @@ export function HowItWorks() {
           {STEPS.map((step, index) => (
             <StaggerItem
               key={step.title}
-              className="relative flex flex-col items-center gap-4 rounded-3xl border border-gray-100 bg-gray-50/60 p-8 text-center"
+              className="group relative flex flex-col items-center gap-4 rounded-3xl border border-gray-100 bg-gray-50/60 p-8 text-center transition-all duration-300 hover:-translate-y-1 hover:border-aqua-200 hover:bg-white hover:shadow-lg hover:shadow-ocean-900/5"
             >
               <span className="absolute right-5 top-5 font-heading text-3xl font-bold text-gray-100">
                 0{index + 1}
               </span>
-              <span className="flex h-14 w-14 items-center justify-center rounded-2xl bg-ocean-800 text-aqua-300">
+              <span className="flex h-14 w-14 items-center justify-center rounded-2xl bg-ocean-800 text-aqua-300 transition-transform duration-300 group-hover:scale-110">
                 <step.icon className="h-6 w-6" />
               </span>
               <h3 className="font-heading text-lg font-bold text-ocean-950">{step.title}</h3>
