@@ -73,6 +73,9 @@ export async function generateMetadata(): Promise<Metadata> {
       canonical: "/",
     },
     robots,
+    verification: {
+      google: "1szmxqN-7QsxGn1a9HG9R4QEJbQ6E-d1nqpoxcOlgk8",
+    },
   };
 }
 
