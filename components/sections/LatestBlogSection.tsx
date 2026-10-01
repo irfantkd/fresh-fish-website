@@ -7,19 +7,19 @@ import { BlogPostGrid } from "@/components/blog/BlogPostGrid";
 import { getLatestBlogPosts } from "@/lib/services/blog.service";
 
 export async function LatestBlogSection() {
-  const posts = await getLatestBlogPosts(3);
+  const posts = await getLatestBlogPosts(8);
 
   if (posts.length === 0) return null;
 
   return (
-    <section className="py-20 sm:py-28">
+    <section className="bg-gray-50/60 py-20 sm:py-28">
       <Container>
         <FadeIn>
           <div className="flex flex-col items-center justify-between gap-6 text-center sm:flex-row sm:text-left">
             <SectionHeading
-              eyebrow="From the Blog"
-              title="Blogs"
-              description="Tips on choosing, storing, and cooking the freshest seafood in Dubai."
+              eyebrow="From Our Fishmongers"
+              title="Seafood Tips and Guides"
+              description="How to choose, store, and cook the freshest fish and seafood in Dubai."
               className="items-center text-center sm:items-start sm:text-left [&_p]:mx-auto sm:[&_p]:mx-0"
             />
             <Button
@@ -34,7 +34,7 @@ export async function LatestBlogSection() {
         </FadeIn>
 
         <div className="mt-10">
-          <BlogPostGrid posts={posts} />
+          <BlogPostGrid posts={posts} className="lg:grid-cols-4" />
         </div>
       </Container>
     </section>

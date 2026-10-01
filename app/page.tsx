@@ -11,7 +11,7 @@ import { DeliveryAreasSection } from "@/components/sections/DeliveryAreasSection
 import { HowItWorks } from "@/components/sections/HowItWorks";
 import { FishmongerSection } from "@/components/sections/FishmongerSection";
 import { CustomerReviews } from "@/components/sections/CustomerReviews";
-import { FishGuidesSection } from "@/components/sections/FishGuidesSection";
+import { LatestBlogSection } from "@/components/sections/LatestBlogSection";
 import { FaqSection } from "@/components/sections/FaqSection";
 import { FinalCtaSection } from "@/components/sections/FinalCtaSection";
 import { getProductCount, formatProductCountClaim } from "@/lib/services/products.service";
@@ -39,7 +39,7 @@ export default function HomePage() {
       <HowItWorks />
       <FishmongerSection />
       <CustomerReviews />
-      <FishGuidesSection />
+      <LatestBlogSection />
       <FaqSection />
       <VisitShopSection />
       <FinalCtaSection />

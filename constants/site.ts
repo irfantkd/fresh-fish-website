@@ -9,9 +9,11 @@ export const SITE_CONFIG = {
   whatsappNumber: "971523599567",
   email: "info@freshfishdubai.com",
   address: "1st Floor Shop No 285, Waterfront Market, Dubai, UAE",
-  mapEmbedUrl:
-    "https://www.google.com/maps?q=Waterfront+Market+Dubai+UAE&output=embed",
-  mapLinkUrl: "https://www.google.com/maps?q=Waterfront+Market+Dubai+UAE",
+  // 25°17'31.9"N 55°19'25.6"E — the shop's exact coordinates.
+  latitude: 25.292194,
+  longitude: 55.323778,
+  mapEmbedUrl: "https://www.google.com/maps?q=25.292194,55.323778&z=18&output=embed",
+  mapLinkUrl: "https://www.google.com/maps?q=25.292194,55.323778&z=18",
   social: {
     instagram: "https://instagram.com/freshfishdubai",
     facebook: "https://facebook.com/freshfishdubai",

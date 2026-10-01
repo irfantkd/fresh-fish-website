@@ -42,6 +42,11 @@ export function organizationJsonLd() {
       addressLocality: "Dubai",
       addressCountry: "AE",
     },
+    geo: {
+      "@type": "GeoCoordinates",
+      latitude: SITE_CONFIG.latitude,
+      longitude: SITE_CONFIG.longitude,
+    },
     areaServed: [
       "Dubai",
       "Abu Dhabi",
