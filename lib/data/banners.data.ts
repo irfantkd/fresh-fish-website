@@ -14,7 +14,7 @@ export const BANNERS: Banner[] = [
     title: "Fresh Fish Dubai Providing Seafood Delivery to Your Door in Dubai, UAE",
     subtitle:
       "Order fresh fish online in Dubai, UAE from 100+ fresh and frozen products. Cleaned and cut your way, kept at 0 to 4°C, and delivered within 2 hours.",
-    primaryCta: { label: "Shop Fresh Fish", href: "/shop" },
+    primaryCta: { label: "Shop Fresh Fish", href: "/category/fresh-fish" },
     secondaryCta: {
       label: "Order on WhatsApp",
       href: `https://wa.me/${SITE_CONFIG.whatsappNumber}`,

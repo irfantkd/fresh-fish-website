@@ -3,30 +3,13 @@ import { Container } from "@/components/ui/Container";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { Button } from "@/components/ui/Button";
 import { FadeIn } from "@/components/animations/FadeIn";
-import { ProductTabs } from "@/components/sections/ProductTabs";
-import { getAllProducts } from "@/lib/services/products.service";
-import type { Product } from "@/types";
+import { ProductGrid } from "@/components/product/ProductGrid";
+import { getRandomProducts } from "@/lib/services/products.service";
 
 export async function ShopSection() {
-  // Fetched server-side instead of via a client-side round trip after
-  // hydration — the grid is in the first HTML response, with no loading
-  // skeleton flash.
-  const products = await getAllProducts();
-
-  // Each tab prefers products flagged for it, but falls back to the general
-  // catalog so a tab never goes empty just because no product has that
-  // specific badge checked in the dashboard.
-  function pickProducts(predicate: (p: Product) => boolean | undefined) {
-    const flagged = products.filter(predicate);
-    return (flagged.length > 0 ? flagged : products).slice(0, 8);
-  }
-
-  const tabs = [
-    { label: "Fresh Today", products: pickProducts((p) => p.isFreshToday) },
-    { label: "Best Sellers", products: pickProducts((p) => p.isBestSeller) },
-    { label: "Premium Selection", products: pickProducts((p) => p.isPremium) },
-    { label: "Seasonal Picks", products: pickProducts((p) => p.isSeasonal) },
-  ];
+  // A random 12 published products, sampled at the database level — never
+  // cached, so a fresh set of 12 is picked on every page load/refresh.
+  const products = await getRandomProducts(12);
 
   return (
     <section className="bg-gray-50/60 py-20 sm:py-28">
@@ -45,9 +28,9 @@ export async function ShopSection() {
           </div>
         </FadeIn>
 
-        <div className="mt-10">
-          <ProductTabs tabs={tabs} />
-        </div>
+        <FadeIn delay={0.1} className="mt-10">
+          <ProductGrid products={products} />
+        </FadeIn>
       </Container>
     </section>
   );

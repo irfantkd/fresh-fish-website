@@ -2,41 +2,47 @@ import { CalendarCheck, Clock, Layers, Scale, Store, Truck } from "lucide-react"
 import { Container } from "@/components/ui/Container";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { FadeIn, Stagger, StaggerItem } from "@/components/animations/FadeIn";
+import { getProductCount, formatProductCountClaim } from "@/lib/services/products.service";
 
-const REASONS = [
-  {
-    icon: Store,
-    title: "Serving Dubai since 2018",
-    description: "A real shop at Waterfront Market, not just a website.",
-  },
-  {
-    icon: Layers,
-    title: "100+ products",
-    description: "Fresh and frozen, clearly labelled on every page.",
-  },
-  {
-    icon: Scale,
-    title: "Exact weight",
-    description: "Every order is precisely weighed before it leaves us.",
-  },
-  {
-    icon: CalendarCheck,
-    title: "Any cut you want",
-    description: "Whole, cleaned, cut or fillet.",
-  },
-  {
-    icon: Truck,
-    title: "2-hour express delivery",
-    description: "Every area of Dubai, UAE, with delivery to the other emirates.",
-  },
-  {
-    icon: Clock,
-    title: "Order 24/7",
-    description: "WhatsApp, phone or website. Pay cash on delivery.",
-  },
-];
+function buildReasons(countClaim: string) {
+  return [
+    {
+      icon: Store,
+      title: "Serving Dubai since 2018",
+      description: "A real shop at Waterfront Market, not just a website.",
+    },
+    {
+      icon: Layers,
+      title: `${countClaim} products`,
+      description: "Fresh and frozen, clearly labelled on every page.",
+    },
+    {
+      icon: Scale,
+      title: "Exact weight",
+      description: "Every order is precisely weighed before it leaves us.",
+    },
+    {
+      icon: CalendarCheck,
+      title: "Any cut you want",
+      description: "Whole, cleaned, cut or fillet.",
+    },
+    {
+      icon: Truck,
+      title: "2-hour express delivery",
+      description: "Every area of Dubai, UAE, with delivery to the other emirates.",
+    },
+    {
+      icon: Clock,
+      title: "Order 24/7",
+      description: "WhatsApp, phone or website. Pay cash on delivery.",
+    },
+  ];
+}
 
-export function WhyChooseUs() {
+export async function WhyChooseUs() {
+  const countClaim = formatProductCountClaim(await getProductCount());
+  const reasons = buildReasons(countClaim);
+
   return (
     <section className="bg-ocean-950 py-20 text-white sm:py-28">
       <Container>
@@ -50,7 +56,7 @@ export function WhyChooseUs() {
         </FadeIn>
 
         <Stagger className="mt-14 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {REASONS.map((reason) => (
+          {reasons.map((reason) => (
             <StaggerItem
               key={reason.title}
               className="group flex flex-col items-center gap-4 rounded-3xl border border-white/10 bg-white/5 p-8 text-center backdrop-blur transition-all duration-300 hover:-translate-y-1 hover:border-aqua-400/40 hover:bg-white/10"

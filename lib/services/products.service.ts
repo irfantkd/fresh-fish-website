@@ -19,6 +19,37 @@ export async function getAllProducts(): Promise<Product[]> {
   return res.items;
 }
 
+/**
+ * The real published product count, fetched cheaply (limit: 1 — only the
+ * `total` field is used, not the items). Used to back marketing copy like
+ * "100+ products" with the real number instead of a hardcoded guess that
+ * can go stale or become false as the catalog changes.
+ */
+export async function getProductCount(): Promise<number> {
+  const res = await apiGet<ProductsResponse>("/products", { status: "published", limit: 1 });
+  return res.total;
+}
+
+/** Rounds down to the nearest 10 so the claim is always true, e.g. 95 -> "90+". */
+export function formatProductCountClaim(count: number): string {
+  return `${Math.floor(count / 10) * 10}+`;
+}
+
+/**
+ * A random sample of published products, picked at the database level
+ * (backend uses MongoDB's $sample) so this fetches and decorates only the
+ * `limit` products actually shown — not the full catalog filtered down
+ * client-side. A fresh sample on every request since this is never cached.
+ */
+export async function getRandomProducts(limit = 12): Promise<Product[]> {
+  const res = await apiGet<ProductsResponse>("/products", {
+    status: "published",
+    random: "true",
+    limit,
+  });
+  return res.items;
+}
+
 export async function getProductBySlug(slug: string): Promise<Product | undefined> {
   const product = await apiGetOrUndefined<Product>(`/products/slug/${slug}`);
   return product && product.status === "published" ? product : undefined;

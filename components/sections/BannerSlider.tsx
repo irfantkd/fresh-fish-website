@@ -86,9 +86,9 @@ export function BannerSlider({ banners }: { banners: Banner[] }) {
                 {banner.eyebrow}
               </span>
 
-              <h1 className="text-balance font-heading text-3xl font-bold leading-[1.1] text-white sm:text-4xl lg:text-5xl">
+              <h2 className="text-balance font-heading text-3xl font-bold leading-[1.1] text-white sm:text-4xl lg:text-5xl">
                 {banner.title}
-              </h1>
+              </h2>
 
               <p className="max-w-md text-base leading-relaxed text-white/75 sm:text-lg">
                 {banner.subtitle}
@@ -128,7 +128,7 @@ export function BannerSlider({ banners }: { banners: Banner[] }) {
             type="button"
             onClick={prev}
             aria-label="Previous slide"
-            className="absolute left-3 top-1/2 z-20 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full bg-white/10 text-white backdrop-blur transition-colors hover:bg-white/20 sm:left-5 sm:h-12 sm:w-12"
+            className="absolute left-3 top-1/2 z-20 hidden h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full bg-white/10 text-white backdrop-blur transition-colors hover:bg-white/20 sm:left-5 sm:flex sm:h-12 sm:w-12"
           >
             <ChevronLeft className="h-5 w-5" />
           </button>
@@ -136,7 +136,7 @@ export function BannerSlider({ banners }: { banners: Banner[] }) {
             type="button"
             onClick={next}
             aria-label="Next slide"
-            className="absolute right-3 top-1/2 z-20 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full bg-white/10 text-white backdrop-blur transition-colors hover:bg-white/20 sm:right-5 sm:h-12 sm:w-12"
+            className="absolute right-3 top-1/2 z-20 hidden h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full bg-white/10 text-white backdrop-blur transition-colors hover:bg-white/20 sm:right-5 sm:flex sm:h-12 sm:w-12"
           >
             <ChevronRight className="h-5 w-5" />
           </button>

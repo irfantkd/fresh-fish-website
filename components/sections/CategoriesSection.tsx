@@ -17,6 +17,7 @@ export async function CategoriesSection() {
       <Container>
         <FadeIn>
           <SectionHeading
+            as="h1"
             eyebrow="Shop by Category"
             title="Shop Fresh Fish and Seafood in Dubai, UAE"
             description="Fresh or frozen, whole or cut to order. Pick a category."
