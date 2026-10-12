@@ -48,7 +48,7 @@ export function SearchBar({ className }: { className?: string }) {
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           onFocus={() => setIsFocused(true)}
-          placeholder="Search salmon, prawns, crab..."
+          placeholder="Search seafood..."
           aria-label="Search products"
           className="h-11 w-full rounded-full border border-gray-200 bg-gray-50 pl-10 pr-9 text-sm text-ocean-950 placeholder:text-gray-400 focus:border-aqua-400 focus:bg-white focus:outline-none"
         />

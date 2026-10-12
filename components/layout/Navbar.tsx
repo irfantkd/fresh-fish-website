@@ -210,7 +210,7 @@ export function Navbar() {
       >
         <div
           className={cn(
-            "mx-auto flex max-w-7xl items-center gap-4 px-4 transition-all duration-300 sm:px-6 lg:px-8",
+            "mx-auto flex max-w-360 items-center gap-3 px-4 transition-all duration-300 sm:px-6 lg:gap-4 lg:px-8",
             isScrolled ? "h-16" : "h-20",
           )}
         >
@@ -232,7 +232,7 @@ export function Navbar() {
             <Link
               href="/"
               className={cn(
-                "relative rounded-full px-4 py-2 font-heading text-sm font-semibold transition-colors",
+                "relative rounded-full px-3.5 py-2 font-heading text-sm font-semibold transition-colors",
                 pathname === "/"
                   ? "text-ocean-900"
                   : "text-gray-600 hover:text-ocean-900",
@@ -260,7 +260,7 @@ export function Navbar() {
                 aria-expanded={isCategoriesOpen}
                 aria-haspopup="true"
                 className={cn(
-                  "relative flex items-center gap-1 rounded-full px-4 py-2 font-heading text-sm font-semibold transition-colors",
+                  "relative flex items-center gap-1 rounded-full px-3.5 py-2 font-heading text-sm font-semibold transition-colors",
                   pathname.startsWith("/categor")
                     ? "text-ocean-900"
                     : "text-gray-600 hover:text-ocean-900",
@@ -342,7 +342,7 @@ export function Navbar() {
                 href="/blog"
                 onClick={() => setIsBlogOpen(false)}
                 className={cn(
-                  "relative flex items-center gap-1 rounded-full px-4 py-2 font-heading text-sm font-semibold transition-colors",
+                  "relative flex items-center gap-1 rounded-full px-3.5 py-2 font-heading text-sm font-semibold transition-colors",
                   pathname.startsWith("/blog")
                     ? "text-ocean-900"
                     : "text-gray-600 hover:text-ocean-900",
@@ -422,7 +422,7 @@ export function Navbar() {
                     key={link.href}
                     href={link.href}
                     className={cn(
-                      "relative whitespace-nowrap rounded-full px-4 py-2 font-heading text-sm font-semibold transition-colors",
+                      "relative whitespace-nowrap rounded-full px-3.5 py-2 font-heading text-sm font-semibold transition-colors",
                       isActive
                         ? "text-ocean-900"
                         : "text-gray-600 hover:text-ocean-900",
@@ -446,7 +446,7 @@ export function Navbar() {
             )}
           </nav>
 
-          <SearchBar className="relative ml-auto hidden max-w-xs flex-1 md:block" />
+          <SearchBar className="relative ml-auto hidden w-44 shrink-0 md:block lg:w-52 xl:w-64" />
 
           <div className="ml-auto flex items-center gap-2 md:ml-2">
             <Button
