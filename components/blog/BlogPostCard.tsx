@@ -3,12 +3,13 @@
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { Clock } from "lucide-react";
+import { memo } from "react";
 import { SeafoodImage } from "@/components/ui/SeafoodImage";
 import { Badge } from "@/components/ui/Badge";
 import { formatDate } from "@/lib/utils/format";
 import type { BlogPost } from "@/types";
 
-export function BlogPostCard({ post }: { post: BlogPost }) {
+export const BlogPostCard = memo(function BlogPostCard({ post }: { post: BlogPost }) {
   const readTime = post.readTimeOverride ?? post.readTimeMinutes;
 
   return (
@@ -58,4 +59,4 @@ export function BlogPostCard({ post }: { post: BlogPost }) {
       </div>
     </motion.div>
   );
-}
+});

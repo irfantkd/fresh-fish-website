@@ -3,11 +3,12 @@
 import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
 import { motion } from "framer-motion";
+import { memo } from "react";
 import { ParallaxScroll } from "@/components/animations/ParallaxScroll";
 import { SeafoodImage } from "@/components/ui/SeafoodImage";
 import type { Category } from "@/types";
 
-export function CategoryCard({ category }: { category: Category }) {
+export const CategoryCard = memo(function CategoryCard({ category }: { category: Category }) {
   return (
     <Link href={`/category/${category.slug}`} className="group block">
       <motion.div
@@ -44,4 +45,4 @@ export function CategoryCard({ category }: { category: Category }) {
       </motion.div>
     </Link>
   );
-}
+});

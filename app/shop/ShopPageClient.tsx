@@ -1,50 +1,48 @@
 "use client";
 
+import { useMemo } from "react";
 import { useSearchParams } from "next/navigation";
 import { Container } from "@/components/ui/Container";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { Breadcrumb } from "@/components/ui/Breadcrumb";
 import { ProductGrid } from "@/components/product/ProductGrid";
-import { GridSkeleton } from "@/components/ui/GridSkeleton";
 import { ShopFilters } from "@/components/shop/ShopFilters";
-import { useGetQuery } from "@/store/apiSlice";
 import { filterAndSortProducts } from "@/lib/utils/filterProducts";
 import type { Category, Product } from "@/types";
 
-interface ProductsResponse {
-  items: Product[];
-  total: number;
-  page: number;
-  limit: number;
-}
-
-export function ShopPageClient() {
+export function ShopPageClient({
+  allProducts,
+  categories,
+}: {
+  allProducts: Product[];
+  categories: Category[];
+}) {
   const searchParams = useSearchParams();
-  const { data: productsData, isLoading: isLoadingProducts } = useGetQuery({
-    path: "/products",
-    params: { status: "published" },
-  });
-  const { data: categoriesData } = useGetQuery({ path: "/categories" });
 
-  const allProducts = (productsData as ProductsResponse | undefined)?.items ?? [];
-  const categories = (categoriesData as Category[] | undefined) ?? [];
-
-  // A parent category's filter pill should match its own products plus its
-  // subcategories' — same aggregation the category detail page does.
   const activeCategorySlug = searchParams.get("category") ?? undefined;
-  const activeCategory = categories.find((c) => c.slug === activeCategorySlug);
-  const categorySlugs = activeCategory
-    ? [
-        activeCategory.slug,
-        ...categories.filter((c) => c.parentId === activeCategory.id).map((c) => c.slug),
-      ]
-    : activeCategorySlug;
+  const filterParam = searchParams.get("filter") ?? undefined;
+  const sortParam = searchParams.get("sort") ?? undefined;
 
-  const products = filterAndSortProducts(allProducts, {
-    filter: searchParams.get("filter") ?? undefined,
-    category: categorySlugs,
-    sort: searchParams.get("sort") ?? undefined,
-  });
+  // Re-filtering/sorting the full catalog on every render (e.g. unrelated
+  // parent re-renders) would be wasted work — only recompute when the data
+  // or the URL params driving the filter actually change.
+  const products = useMemo(() => {
+    // A parent category's filter pill should match its own products plus
+    // its subcategories' — same aggregation the category detail page does.
+    const activeCategory = categories.find((c) => c.slug === activeCategorySlug);
+    const categorySlugs = activeCategory
+      ? [
+          activeCategory.slug,
+          ...categories.filter((c) => c.parentId === activeCategory.id).map((c) => c.slug),
+        ]
+      : activeCategorySlug;
+
+    return filterAndSortProducts(allProducts, {
+      filter: filterParam,
+      category: categorySlugs,
+      sort: sortParam,
+    });
+  }, [allProducts, categories, activeCategorySlug, filterParam, sortParam]);
 
   return (
     <div className="py-12">
@@ -62,7 +60,7 @@ export function ShopPageClient() {
         </div>
 
         <div className="mt-10">
-          {isLoadingProducts ? <GridSkeleton count={8} /> : <ProductGrid products={products} />}
+          <ProductGrid products={products} />
         </div>
       </Container>
     </div>

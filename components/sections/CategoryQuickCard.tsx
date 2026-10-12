@@ -3,10 +3,15 @@
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { ArrowUpRight, Layers } from "lucide-react";
+import { memo } from "react";
 import { SeafoodImage } from "@/components/ui/SeafoodImage";
 import type { Category } from "@/types";
 
-export function CategoryQuickCard({ category }: { category: Category }) {
+export const CategoryQuickCard = memo(function CategoryQuickCard({
+  category,
+}: {
+  category: Category;
+}) {
   return (
     <Link href={`/category/${category.slug}`} className="group block">
       <motion.div
@@ -46,4 +51,4 @@ export function CategoryQuickCard({ category }: { category: Category }) {
       </motion.div>
     </Link>
   );
-}
+});

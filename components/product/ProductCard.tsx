@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { Eye, Heart } from "lucide-react";
-import { useState } from "react";
+import { memo, useState } from "react";
 import { Badge } from "@/components/ui/Badge";
 import { SeafoodImage } from "@/components/ui/SeafoodImage";
 import { StarRating } from "@/components/ui/StarRating";
@@ -12,7 +12,10 @@ import { getLowestSize } from "@/lib/utils/product";
 import { buildDirectOrderLink } from "@/lib/utils/whatsapp";
 import type { Product } from "@/types";
 
-export function ProductCard({ product }: { product: Product }) {
+// Memoized: these render in grids of 8-24+. Without this, a parent
+// re-render (e.g. the shop page's filter/sort changing) re-renders every
+// card even when a given product's own data hasn't changed.
+export const ProductCard = memo(function ProductCard({ product }: { product: Product }) {
   const [wishlisted, setWishlisted] = useState(false);
   const size = getLowestSize(product);
   const isOutOfStock = product.stockStatus === "out_of_stock";
@@ -120,4 +123,4 @@ export function ProductCard({ product }: { product: Product }) {
       </div>
     </motion.div>
   );
-}
+});
