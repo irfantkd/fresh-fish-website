@@ -551,159 +551,165 @@ export function Navbar() {
         </div>
 
         <ScrollProgressBar />
+      </header>
 
-        <AnimatePresence>
-          {isMobileOpen && (
-            <>
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                className="fixed inset-0 z-50 bg-navy-950/50 backdrop-blur-sm lg:hidden"
-                onClick={() => setIsMobileOpen(false)}
-              />
-              <motion.div
-                initial={{ x: "100%" }}
-                animate={{ x: 0 }}
-                exit={{ x: "100%" }}
-                transition={{ type: "spring", damping: 30, stiffness: 300 }}
-                className="fixed right-0 top-0 z-50 flex h-full w-full max-w-xs flex-col gap-6 overflow-y-auto bg-white p-6 shadow-2xl lg:hidden"
-              >
-                <div className="flex items-center justify-between">
-                  <span className="font-heading text-lg font-bold text-ocean-950">
-                    Menu
-                  </span>
-                  <button
-                    onClick={() => setIsMobileOpen(false)}
-                    aria-label="Close menu"
-                    className="rounded-full p-2 text-gray-400 hover:bg-gray-100"
-                  >
-                    <X className="h-5 w-5" />
-                  </button>
-                </div>
+      {/* Rendered as a sibling of <header>, not inside it: header gains
+          backdrop-blur (a CSS filter) once scrolled, and a filtered ancestor
+          becomes the containing block for its position:fixed descendants —
+          so this panel's "fixed inset-0"/"h-full" was resolving against the
+          ~64px-tall scrolled header instead of the viewport, squashing the
+          whole mobile menu into a sliver instead of a full-screen drawer. */}
+      <AnimatePresence>
+        {isMobileOpen && (
+          <>
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="fixed inset-0 z-50 bg-navy-950/50 backdrop-blur-sm lg:hidden"
+              onClick={() => setIsMobileOpen(false)}
+            />
+            <motion.div
+              initial={{ x: "100%" }}
+              animate={{ x: 0 }}
+              exit={{ x: "100%" }}
+              transition={{ type: "spring", damping: 30, stiffness: 300 }}
+              className="fixed right-0 top-0 z-50 flex h-full w-full max-w-xs flex-col gap-6 overflow-y-auto bg-white p-6 shadow-2xl lg:hidden"
+            >
+              <div className="flex items-center justify-between">
+                <span className="font-heading text-lg font-bold text-ocean-950">
+                  Menu
+                </span>
+                <button
+                  onClick={() => setIsMobileOpen(false)}
+                  aria-label="Close menu"
+                  className="rounded-full p-2 text-gray-400 hover:bg-gray-100"
+                >
+                  <X className="h-5 w-5" />
+                </button>
+              </div>
 
-                <SearchBar className="relative" />
+              <SearchBar className="relative" />
 
-                <nav className="flex flex-col gap-1">
+              <nav className="flex flex-col gap-1">
+                <Link
+                  href="/"
+                  className={cn(
+                    "rounded-xl px-4 py-3 text-sm font-medium text-gray-600 hover:bg-ocean-50 hover:text-ocean-900",
+                    pathname === "/" && "bg-ocean-50 text-ocean-900",
+                  )}
+                >
+                  Home
+                </Link>
+
+                <button
+                  type="button"
+                  onClick={() => setIsMobileCategoriesOpen((open) => !open)}
+                  aria-expanded={isMobileCategoriesOpen}
+                  className={cn(
+                    "flex items-center justify-between rounded-xl px-4 py-3 text-sm font-medium text-gray-600 hover:bg-ocean-50 hover:text-ocean-900",
+                    pathname.startsWith("/categor") &&
+                      "bg-ocean-50 text-ocean-900",
+                  )}
+                >
+                  Categories
+                  <ChevronDown
+                    className={cn(
+                      "h-4 w-4 transition-transform",
+                      isMobileCategoriesOpen && "rotate-180",
+                    )}
+                  />
+                </button>
+                <AnimatePresence>
+                  {isMobileCategoriesOpen && (
+                    <motion.div
+                      initial={{ height: 0, opacity: 0 }}
+                      animate={{ height: "auto", opacity: 1 }}
+                      exit={{ height: 0, opacity: 0 }}
+                      transition={{ duration: 0.2 }}
+                      className="overflow-hidden pl-2"
+                    >
+                      <div className="flex flex-col gap-1 py-1">
+                        {categoryList.map((category) => (
+                          <Link
+                            key={category.id}
+                            href={`/category/${category.slug}`}
+                            className="rounded-xl px-4 py-2 text-sm text-gray-500 hover:bg-ocean-50 hover:text-ocean-900"
+                          >
+                            {category.name}
+                          </Link>
+                        ))}
+                        <Link
+                          href="/categories"
+                          className="rounded-xl px-4 py-2 text-sm font-semibold text-aqua-600 hover:text-aqua-700"
+                        >
+                          View All Categories
+                        </Link>
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+
+                {NAV_LINKS.filter((link) => link.href !== "/").map((link) => (
                   <Link
-                    href="/"
+                    key={link.href}
+                    href={link.href}
                     className={cn(
                       "rounded-xl px-4 py-3 text-sm font-medium text-gray-600 hover:bg-ocean-50 hover:text-ocean-900",
-                      pathname === "/" && "bg-ocean-50 text-ocean-900",
+                      pathname === link.href && "bg-ocean-50 text-ocean-900",
                     )}
                   >
-                    Home
+                    {link.label}
                   </Link>
+                ))}
 
-                  <button
-                    type="button"
-                    onClick={() => setIsMobileCategoriesOpen((open) => !open)}
-                    aria-expanded={isMobileCategoriesOpen}
-                    className={cn(
-                      "flex items-center justify-between rounded-xl px-4 py-3 text-sm font-medium text-gray-600 hover:bg-ocean-50 hover:text-ocean-900",
-                      pathname.startsWith("/categor") &&
-                        "bg-ocean-50 text-ocean-900",
-                    )}
-                  >
-                    Categories
-                    <ChevronDown
-                      className={cn(
-                        "h-4 w-4 transition-transform",
-                        isMobileCategoriesOpen && "rotate-180",
-                      )}
-                    />
-                  </button>
-                  <AnimatePresence>
-                    {isMobileCategoriesOpen && (
-                      <motion.div
-                        initial={{ height: 0, opacity: 0 }}
-                        animate={{ height: "auto", opacity: 1 }}
-                        exit={{ height: 0, opacity: 0 }}
-                        transition={{ duration: 0.2 }}
-                        className="overflow-hidden pl-2"
-                      >
-                        <div className="flex flex-col gap-1 py-1">
-                          {categoryList.map((category) => (
-                            <Link
-                              key={category.id}
-                              href={`/category/${category.slug}`}
-                              className="rounded-xl px-4 py-2 text-sm text-gray-500 hover:bg-ocean-50 hover:text-ocean-900"
-                            >
-                              {category.name}
-                            </Link>
-                          ))}
-                          <Link
-                            href="/categories"
-                            className="rounded-xl px-4 py-2 text-sm font-semibold text-aqua-600 hover:text-aqua-700"
-                          >
-                            View All Categories
-                          </Link>
-                        </div>
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
+                <div className="my-1 border-t border-gray-100" />
 
-                  {NAV_LINKS.filter((link) => link.href !== "/").map((link) => (
+                {isAuthenticated ? (
+                  <>
                     <Link
-                      key={link.href}
-                      href={link.href}
-                      className={cn(
-                        "rounded-xl px-4 py-3 text-sm font-medium text-gray-600 hover:bg-ocean-50 hover:text-ocean-900",
-                        pathname === link.href && "bg-ocean-50 text-ocean-900",
-                      )}
-                    >
-                      {link.label}
-                    </Link>
-                  ))}
-
-                  <div className="my-1 border-t border-gray-100" />
-
-                  {isAuthenticated ? (
-                    <>
-                      <Link
-                        href="/account"
-                        className="flex items-center gap-2 rounded-xl px-4 py-3 text-sm font-medium text-gray-600 hover:bg-ocean-50 hover:text-ocean-900"
-                      >
-                        <User className="h-4 w-4" /> My Account
-                      </Link>
-                      <Link
-                        href="/account/orders"
-                        className="flex items-center gap-2 rounded-xl px-4 py-3 text-sm font-medium text-gray-600 hover:bg-ocean-50 hover:text-ocean-900"
-                      >
-                        <Package className="h-4 w-4" /> My Orders
-                      </Link>
-                      <button
-                        type="button"
-                        onClick={() => logout()}
-                        className="flex items-center gap-2 rounded-xl px-4 py-3 text-left text-sm font-medium text-red-600 hover:bg-red-50"
-                      >
-                        <LogOut className="h-4 w-4" /> Log Out
-                      </button>
-                    </>
-                  ) : (
-                    <Link
-                      href="/account/login"
+                      href="/account"
                       className="flex items-center gap-2 rounded-xl px-4 py-3 text-sm font-medium text-gray-600 hover:bg-ocean-50 hover:text-ocean-900"
                     >
-                      <User className="h-4 w-4" /> Log In / Register
+                      <User className="h-4 w-4" /> My Account
                     </Link>
-                  )}
-                </nav>
+                    <Link
+                      href="/account/orders"
+                      className="flex items-center gap-2 rounded-xl px-4 py-3 text-sm font-medium text-gray-600 hover:bg-ocean-50 hover:text-ocean-900"
+                    >
+                      <Package className="h-4 w-4" /> My Orders
+                    </Link>
+                    <button
+                      type="button"
+                      onClick={() => logout()}
+                      className="flex items-center gap-2 rounded-xl px-4 py-3 text-left text-sm font-medium text-red-600 hover:bg-red-50"
+                    >
+                      <LogOut className="h-4 w-4" /> Log Out
+                    </button>
+                  </>
+                ) : (
+                  <Link
+                    href="/account/login"
+                    className="flex items-center gap-2 rounded-xl px-4 py-3 text-sm font-medium text-gray-600 hover:bg-ocean-50 hover:text-ocean-900"
+                  >
+                    <User className="h-4 w-4" /> Log In / Register
+                  </Link>
+                )}
+              </nav>
 
-                <Button
-                  href={`https://wa.me/${SITE_CONFIG.whatsappNumber}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  variant="whatsapp"
-                  className="mt-auto w-full"
-                >
-                  <MessageCircle className="h-4 w-4" /> Chat on WhatsApp
-                </Button>
-              </motion.div>
-            </>
-          )}
-        </AnimatePresence>
-      </header>
+              <Button
+                href={`https://wa.me/${SITE_CONFIG.whatsappNumber}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                variant="whatsapp"
+                className="mt-auto w-full"
+              >
+                <MessageCircle className="h-4 w-4" /> Chat on WhatsApp
+              </Button>
+            </motion.div>
+          </>
+        )}
+      </AnimatePresence>
     </>
   );
 }
