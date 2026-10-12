@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
-import { Mail, MapPin, MessageCircle, Phone } from "lucide-react";
+import { Mail, MapPin, Phone } from "lucide-react";
+import { FaWhatsapp } from "react-icons/fa";
 import { Container } from "@/components/ui/Container";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { Breadcrumb } from "@/components/ui/Breadcrumb";
@@ -39,7 +40,7 @@ export default function ContactPage() {
               className="flex items-center gap-4 rounded-3xl border border-gray-100 bg-gray-50/60 p-6 transition-colors hover:border-fresh-green-300"
             >
               <span className="flex h-12 w-12 items-center justify-center rounded-2xl bg-fresh-green-500/10 text-fresh-green-600">
-                <MessageCircle className="h-5 w-5" />
+                <FaWhatsapp className="h-5 w-5" />
               </span>
               <div>
                 <p className="font-heading font-bold text-ocean-950">WhatsApp</p>
@@ -96,7 +97,7 @@ export default function ContactPage() {
               size="lg"
               className="mt-2"
             >
-              <MessageCircle className="h-4.5 w-4.5" /> Chat on WhatsApp
+              <FaWhatsapp className="h-4.5 w-4.5" /> Chat on WhatsApp
             </Button>
           </FadeIn>
 

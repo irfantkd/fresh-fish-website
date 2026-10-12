@@ -1,6 +1,7 @@
 "use client";
 
-import { Minus, Plus, ShoppingCart, Snowflake, MessageCircle } from "lucide-react";
+import { Minus, Plus, ShoppingCart, Snowflake } from "lucide-react";
+import { FaWhatsapp } from "react-icons/fa";
 import { useState } from "react";
 import { Badge } from "@/components/ui/Badge";
 import { StarRating } from "@/components/ui/StarRating";
@@ -212,7 +213,7 @@ export function ProductPurchasePanel({ product }: { product: Product }) {
         </Button>
         {isOutOfStock ? (
           <Button variant="whatsapp" size="lg" className="flex-1" disabled>
-            <MessageCircle className="h-4.5 w-4.5" /> Order on WhatsApp
+            <FaWhatsapp className="h-4.5 w-4.5" /> Order on WhatsApp
           </Button>
         ) : (
           <Button
@@ -234,7 +235,7 @@ export function ProductPurchasePanel({ product }: { product: Product }) {
             size="lg"
             className="flex-1"
           >
-            <MessageCircle className="h-4.5 w-4.5" /> Order on WhatsApp
+            <FaWhatsapp className="h-4.5 w-4.5" /> Order on WhatsApp
           </Button>
         )}
       </div>
@@ -271,7 +272,7 @@ export function ProductPurchasePanel({ product }: { product: Product }) {
               aria-label="Order on WhatsApp"
               disabled
             >
-              <MessageCircle className="h-4 w-4" />
+              <FaWhatsapp className="h-4 w-4" />
             </Button>
           ) : (
             <Button
@@ -290,7 +291,7 @@ export function ProductPurchasePanel({ product }: { product: Product }) {
               className="shrink-0 px-3"
               aria-label="Order on WhatsApp"
             >
-              <MessageCircle className="h-4 w-4" />
+              <FaWhatsapp className="h-4 w-4" />
             </Button>
           )}
         </div>

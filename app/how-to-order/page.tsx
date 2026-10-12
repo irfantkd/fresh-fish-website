@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Image from "next/image";
-import { MessageCircle, ShoppingBag, ShoppingCart, CreditCard, Truck } from "lucide-react";
+import { ShoppingBag, ShoppingCart, CreditCard, Truck } from "lucide-react";
+import { FaWhatsapp } from "react-icons/fa";
 import { Container } from "@/components/ui/Container";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { Breadcrumb } from "@/components/ui/Breadcrumb";
@@ -109,7 +110,7 @@ export default function HowToOrderPage() {
         </div>
 
         <FadeIn className="mx-auto mt-20 max-w-2xl rounded-3xl border border-gray-100 bg-gray-50/60 p-8 text-center">
-          <MessageCircle className="mx-auto h-8 w-8 text-fresh-green-500" />
+          <FaWhatsapp className="mx-auto h-8 w-8 text-fresh-green-500" />
           <h2 className="mt-3 font-heading text-xl font-bold text-ocean-950">
             Prefer to Order on WhatsApp?
           </h2>
@@ -129,7 +130,7 @@ export default function HowToOrderPage() {
               variant="whatsapp"
               size="lg"
             >
-              <MessageCircle className="h-4.5 w-4.5" /> Order on WhatsApp
+              <FaWhatsapp className="h-4.5 w-4.5" /> Order on WhatsApp
             </Button>
           </div>
         </FadeIn>

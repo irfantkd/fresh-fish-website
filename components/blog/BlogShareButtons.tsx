@@ -1,7 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { Check, Link2, Mail, MessageCircle, Share2 } from "lucide-react";
+import { Check, Link2, Mail, Share2 } from "lucide-react";
+import { FaWhatsapp } from "react-icons/fa";
 import { cn } from "@/lib/utils/cn";
 
 export function BlogShareButtons({ url, title }: { url: string; title: string }) {
@@ -34,7 +35,7 @@ export function BlogShareButtons({ url, title }: { url: string; title: string })
         aria-label="Share on WhatsApp"
         className={buttonClasses}
       >
-        <MessageCircle className="h-4 w-4" />
+        <FaWhatsapp className="h-4 w-4" />
       </a>
       <a
         href={facebookHref}

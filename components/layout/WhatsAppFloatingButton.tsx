@@ -1,7 +1,7 @@
 "use client";
 
 import { usePathname } from "next/navigation";
-import { MessageCircle } from "lucide-react";
+import { FaWhatsapp } from "react-icons/fa";
 import { SITE_CONFIG } from "@/constants/site";
 
 // Cart and checkout already have their own prominent, better-positioned
@@ -33,7 +33,7 @@ export function WhatsAppFloatingButton() {
       }`}
     >
       <span className="absolute inset-0 animate-ping rounded-full bg-fresh-green-500/50 group-hover:animate-none" />
-      <MessageCircle className="relative h-6 w-6" />
+      <FaWhatsapp className="relative h-7 w-7" />
     </a>
   );
 }

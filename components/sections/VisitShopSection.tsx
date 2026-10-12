@@ -1,4 +1,5 @@
-import { MessageCircle, Phone } from "lucide-react";
+import { Phone } from "lucide-react";
+import { FaWhatsapp } from "react-icons/fa";
 import Link from "next/link";
 import { Container } from "@/components/ui/Container";
 import { SectionHeading } from "@/components/ui/SectionHeading";
@@ -50,7 +51,7 @@ export function VisitShopSection() {
                   rel="noopener noreferrer"
                   variant="whatsapp"
                 >
-                  <MessageCircle className="h-4 w-4" /> Order on WhatsApp
+                  <FaWhatsapp className="h-4 w-4" /> Order on WhatsApp
                 </Button>
               </div>
 

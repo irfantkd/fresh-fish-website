@@ -1,4 +1,4 @@
-import { MessageCircle } from "lucide-react";
+import { FaWhatsapp } from "react-icons/fa";
 import { Container } from "@/components/ui/Container";
 import { Button } from "@/components/ui/Button";
 import { FadeIn } from "@/components/animations/FadeIn";
@@ -30,7 +30,7 @@ export async function FinalCtaSection() {
               variant="whatsapp"
               size="lg"
             >
-              <MessageCircle className="h-4.5 w-4.5" /> Order on WhatsApp
+              <FaWhatsapp className="h-4.5 w-4.5" /> Order on WhatsApp
             </Button>
           </div>
         </FadeIn>

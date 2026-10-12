@@ -7,14 +7,13 @@ import {
   LogOut,
   Mail,
   Menu,
-  MessageCircle,
   Package,
   Phone,
   ShoppingBag,
   User,
   X,
 } from "lucide-react";
-import { FaFacebook, FaInstagram, FaTiktok } from "react-icons/fa";
+import { FaFacebook, FaInstagram, FaTiktok, FaWhatsapp } from "react-icons/fa";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -457,7 +456,7 @@ export function Navbar() {
               size="sm"
               className="hidden sm:inline-flex"
             >
-              <MessageCircle className="h-4 w-4" /> WhatsApp
+              <FaWhatsapp className="h-4 w-4" /> WhatsApp
             </Button>
 
             {isAuthenticated ? (
@@ -704,7 +703,7 @@ export function Navbar() {
                 variant="whatsapp"
                 className="mt-auto w-full"
               >
-                <MessageCircle className="h-4 w-4" /> Chat on WhatsApp
+                <FaWhatsapp className="h-4 w-4" /> Chat on WhatsApp
               </Button>
             </motion.div>
           </>
