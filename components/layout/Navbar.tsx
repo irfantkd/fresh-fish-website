@@ -232,7 +232,7 @@ export function Navbar() {
             <Link
               href="/"
               className={cn(
-                "relative rounded-full px-4 py-2 text-sm font-medium transition-colors",
+                "relative rounded-full px-4 py-2 font-heading text-sm font-semibold transition-colors",
                 pathname === "/"
                   ? "text-ocean-900"
                   : "text-gray-600 hover:text-ocean-900",
@@ -260,7 +260,7 @@ export function Navbar() {
                 aria-expanded={isCategoriesOpen}
                 aria-haspopup="true"
                 className={cn(
-                  "relative flex items-center gap-1 rounded-full px-4 py-2 text-sm font-medium transition-colors",
+                  "relative flex items-center gap-1 rounded-full px-4 py-2 font-heading text-sm font-semibold transition-colors",
                   pathname.startsWith("/categor")
                     ? "text-ocean-900"
                     : "text-gray-600 hover:text-ocean-900",
@@ -342,7 +342,7 @@ export function Navbar() {
                 href="/blog"
                 onClick={() => setIsBlogOpen(false)}
                 className={cn(
-                  "relative flex items-center gap-1 rounded-full px-4 py-2 text-sm font-medium transition-colors",
+                  "relative flex items-center gap-1 rounded-full px-4 py-2 font-heading text-sm font-semibold transition-colors",
                   pathname.startsWith("/blog")
                     ? "text-ocean-900"
                     : "text-gray-600 hover:text-ocean-900",
@@ -422,7 +422,7 @@ export function Navbar() {
                     key={link.href}
                     href={link.href}
                     className={cn(
-                      "relative rounded-full px-4 py-2 text-sm font-medium transition-colors",
+                      "relative whitespace-nowrap rounded-full px-4 py-2 font-heading text-sm font-semibold transition-colors",
                       isActive
                         ? "text-ocean-900"
                         : "text-gray-600 hover:text-ocean-900",
@@ -521,7 +521,7 @@ export function Navbar() {
             ) : (
               <Link
                 href="/account/login"
-                className="hidden h-10 items-center rounded-full px-3.5 text-sm font-medium text-ocean-900 hover:bg-ocean-50 sm:flex"
+                className="hidden h-10 items-center whitespace-nowrap rounded-full px-3.5 font-heading text-sm font-semibold text-ocean-900 hover:bg-ocean-50 sm:flex"
               >
                 Log In
               </Link>
