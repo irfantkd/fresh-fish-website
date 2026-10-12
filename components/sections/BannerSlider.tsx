@@ -1,6 +1,6 @@
 "use client";
 
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence, motion, type PanInfo } from "framer-motion";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/Button";
@@ -31,6 +31,19 @@ export function BannerSlider({ banners }: { banners: Banner[] }) {
 
   const next = useCallback(() => goTo(index + 1, 1), [goTo, index]);
   const prev = useCallback(() => goTo(index - 1, -1), [goTo, index]);
+
+  // Swipe to change slides (mobile touch, and mouse-drag on desktop). Uses
+  // Framer's pan gesture rather than "drag" so it only ever reports offset —
+  // it never applies its own transform to the slide, which would otherwise
+  // fight the enter/exit animation's own x transform.
+  const SWIPE_THRESHOLD = 50;
+  const handlePanEnd = useCallback(
+    (_event: unknown, info: PanInfo) => {
+      if (info.offset.x <= -SWIPE_THRESHOLD) next();
+      else if (info.offset.x >= SWIPE_THRESHOLD) prev();
+    },
+    [next, prev]
+  );
 
   useEffect(() => {
     if (isPaused || banners.length <= 1) return;
@@ -66,7 +79,13 @@ export function BannerSlider({ banners }: { banners: Banner[] }) {
           animate="center"
           exit="exit"
           transition={{ duration: 0.6, ease: [0.21, 0.47, 0.32, 0.98] }}
-          className="absolute inset-0"
+          onPanStart={() => setIsPaused(true)}
+          onPanEnd={(event, info) => {
+            handlePanEnd(event, info);
+            setIsPaused(false);
+          }}
+          style={{ touchAction: "pan-y" }}
+          className="absolute inset-0 cursor-grab active:cursor-grabbing"
         >
           <SeafoodImage
             src={banner.image}
