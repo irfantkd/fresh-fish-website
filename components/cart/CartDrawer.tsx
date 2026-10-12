@@ -55,7 +55,19 @@ export function CartDrawer() {
               </button>
             </div>
 
-            <div className="flex-1 overflow-y-auto px-5 py-4">
+            {/* Capped height (not flex-1) when there are items — a sparse
+                cart (1-2 items) would otherwise stretch to fill the whole
+                drawer, leaving a large dead gap before the total/checkout
+                section. Still scrolls internally once a cart has enough
+                items to exceed the cap. The empty state keeps flex-1 so its
+                "cart is empty" message stays vertically centered. */}
+            <div
+              className={
+                items.length === 0
+                  ? "flex-1 overflow-y-auto px-5 py-4"
+                  : "max-h-[50vh] overflow-y-auto px-5 py-4"
+              }
+            >
               {items.length === 0 ? (
                 <div className="flex h-full flex-col items-center justify-center gap-3 text-center text-gray-400">
                   <ShoppingBag className="h-10 w-10" />

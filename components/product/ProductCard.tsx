@@ -45,7 +45,7 @@ export const ProductCard = memo(function ProductCard({ product }: { product: Pro
           )}
           {product.isFreshToday && (
             <Badge variant="fresh" className="text-[10px] sm:text-xs">
-              Live · Fresh Today
+              Fresh Today
             </Badge>
           )}
           {product.isPremium && (

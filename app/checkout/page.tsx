@@ -392,11 +392,14 @@ export default function CheckoutPage() {
 
             {formError && <p className="text-sm font-medium text-red-600">{formError}</p>}
 
+            {/* Desktop/tablet only — mobile uses the sticky bar below instead,
+                so "Place Order" stays reachable without scrolling back up
+                past Delivery Details and Payment Method. */}
             <Button
               type="submit"
               variant="aqua"
               size="lg"
-              className="w-full"
+              className="hidden w-full sm:flex"
               disabled={isPlacingOrder || isUploading}
             >
               {isPlacingOrder ? "Placing Order..." : "Place Order"}
@@ -409,6 +412,29 @@ export default function CheckoutPage() {
               &larr; Back to Cart
             </Link>
           </div>
+
+          {/* Mobile-only sticky submit bar. Still a descendant of the same
+              <form>, so this button submits it exactly like the one above. */}
+          <div className="fixed inset-x-0 bottom-0 z-30 flex items-center gap-3 border-t border-gray-100 bg-white/95 p-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] shadow-[0_-4px_16px_rgba(0,0,0,0.06)] backdrop-blur sm:hidden">
+            <div className="shrink-0">
+              <span className="block text-[11px] text-gray-400">Total</span>
+              <span className="block font-heading text-base font-bold text-ocean-900">
+                {formatAED(totalPrice)}
+              </span>
+            </div>
+            <Button
+              type="submit"
+              variant="aqua"
+              size="md"
+              className="flex-1"
+              disabled={isPlacingOrder || isUploading}
+            >
+              {isPlacingOrder ? "Placing Order..." : "Place Order"}
+            </Button>
+          </div>
+          {/* Reserve space so the sticky bar never covers the "Back to Cart"
+              link above it. */}
+          <div className="h-20 sm:hidden" aria-hidden />
         </form>
       </Container>
     </div>

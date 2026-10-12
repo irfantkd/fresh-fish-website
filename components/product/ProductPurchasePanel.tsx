@@ -195,7 +195,11 @@ export function ProductPurchasePanel({ product }: { product: Product }) {
         </div>
       )}
 
-      <div className="flex flex-col gap-3 sm:flex-row">
+      {/* Desktop/tablet: inline buttons. On mobile these move into a sticky
+          bottom bar instead (below), so the primary action stays reachable
+          while scrolling the description/reviews without a fixed button
+          permanently eating into the content's visible height. */}
+      <div className="hidden gap-3 sm:flex">
         <Button
           onClick={handleAddToCart}
           variant="primary"
@@ -239,6 +243,61 @@ export function ProductPurchasePanel({ product }: { product: Product }) {
         <Snowflake className="mt-0.5 h-4 w-4 shrink-0" />
         <p>{product.storageInstructions}</p>
       </div>
+
+      {/* Mobile-only sticky action bar. */}
+      {size && (
+        <div className="fixed inset-x-0 bottom-0 z-30 flex items-center gap-3 border-t border-gray-100 bg-white/95 p-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] shadow-[0_-4px_16px_rgba(0,0,0,0.06)] backdrop-blur sm:hidden">
+          <div className="shrink-0">
+            <span className="block font-heading text-base font-bold text-ocean-900">
+              {formatAED(size.price * quantity)}
+            </span>
+            <span className="block text-[11px] text-gray-400">{quantity} item(s)</span>
+          </div>
+          <Button
+            onClick={handleAddToCart}
+            variant="primary"
+            size="md"
+            className="flex-1"
+            disabled={isOutOfStock}
+          >
+            <ShoppingCart className="h-4 w-4" />
+            {isOutOfStock ? "Out of Stock" : "Add to Cart"}
+          </Button>
+          {isOutOfStock ? (
+            <Button
+              variant="whatsapp"
+              size="md"
+              className="shrink-0 px-3"
+              aria-label="Order on WhatsApp"
+              disabled
+            >
+              <MessageCircle className="h-4 w-4" />
+            </Button>
+          ) : (
+            <Button
+              href={buildDirectOrderLink({
+                productName: product.name,
+                type: size.type || undefined,
+                sizeLabel: size.label,
+                weightGrams: size.weightGrams,
+                price: size.price,
+                quantity,
+              })}
+              target="_blank"
+              rel="noopener noreferrer"
+              variant="whatsapp"
+              size="md"
+              className="shrink-0 px-3"
+              aria-label="Order on WhatsApp"
+            >
+              <MessageCircle className="h-4 w-4" />
+            </Button>
+          )}
+        </div>
+      )}
+      {/* Reserve space at the bottom of the page so the sticky bar above
+          never covers the storage-instructions note or anything after it. */}
+      {size && <div className="h-20 sm:hidden" aria-hidden />}
     </div>
   );
 }
