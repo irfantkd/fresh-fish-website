@@ -26,7 +26,11 @@ export async function getAllProducts(): Promise<Product[]> {
  * can go stale or become false as the catalog changes.
  */
 export async function getProductCount(): Promise<number> {
-  const res = await apiGet<ProductsResponse>("/products", { status: "published", limit: 1 });
+  const res = await apiGet<ProductsResponse>(
+    "/products",
+    { status: "published", limit: 1 },
+    60
+  );
   return res.total;
 }
 

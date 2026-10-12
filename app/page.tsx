@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import type { Metadata } from "next";
 import { Hero } from "@/components/sections/Hero";
 import { TrustHighlights } from "@/components/sections/TrustHighlights";
@@ -14,6 +15,7 @@ import { CustomerReviews } from "@/components/sections/CustomerReviews";
 import { LatestBlogSection } from "@/components/sections/LatestBlogSection";
 import { FaqSection } from "@/components/sections/FaqSection";
 import { FinalCtaSection } from "@/components/sections/FinalCtaSection";
+import { SectionSkeleton, DarkSectionSkeleton, HeroSkeleton } from "@/components/ui/SectionSkeleton";
 import { getProductCount, formatProductCountClaim } from "@/lib/services/products.service";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -25,24 +27,49 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 
+// Each data-fetching section gets its own Suspense boundary so the page
+// streams progressively — a slow section (e.g. one waiting on the backend)
+// no longer blocks everything else from appearing. Static sections (Cuts,
+// Sourcing, HowItWorks, Fishmonger, VisitShop) need no boundary; they render
+// immediately regardless.
 export default function HomePage() {
   return (
     <>
-      <Hero />
-      <TrustHighlights />
-      <CategoriesSection />
-      <ShopSection />
+      <Suspense fallback={<HeroSkeleton />}>
+        <Hero />
+      </Suspense>
+      <Suspense fallback={<SectionSkeleton rows={4} />}>
+        <TrustHighlights />
+      </Suspense>
+      <Suspense fallback={<SectionSkeleton rows={6} />}>
+        <CategoriesSection />
+      </Suspense>
+      <Suspense fallback={<SectionSkeleton rows={4} />}>
+        <ShopSection />
+      </Suspense>
       <CutsSection />
       <SourcingSection />
-      <WhyChooseUs />
-      <DeliveryAreasSection />
+      <Suspense fallback={<DarkSectionSkeleton />}>
+        <WhyChooseUs />
+      </Suspense>
+      <Suspense fallback={<SectionSkeleton rows={5} />}>
+        <DeliveryAreasSection />
+      </Suspense>
       <HowItWorks />
       <FishmongerSection />
-      <CustomerReviews />
-      <LatestBlogSection />
-      <FaqSection />
+      <Suspense fallback={null}>
+        <CustomerReviews />
+      </Suspense>
+      <Suspense fallback={<SectionSkeleton rows={4} />}>
+        <LatestBlogSection />
+      </Suspense>
+      <Suspense fallback={<SectionSkeleton rows={1} />}>
+        <FaqSection />
+      </Suspense>
       <VisitShopSection />
-      <FinalCtaSection />
+      <Suspense fallback={<DarkSectionSkeleton />}>
+        <FinalCtaSection />
+      </Suspense>
     </>
   );
 }
