@@ -7,8 +7,6 @@ import { Container } from "@/components/ui/Container";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { Button } from "@/components/ui/Button";
 import { SeafoodImage } from "@/components/ui/SeafoodImage";
-import { LoginForm } from "@/components/account/LoginForm";
-import { RegisterForm } from "@/components/account/RegisterForm";
 import { useCart } from "@/hooks/useCart";
 import { useCustomerAuth } from "@/hooks/useCustomerAuth";
 import { formatAED } from "@/lib/utils/format";
@@ -37,7 +35,6 @@ export default function CheckoutPage() {
   const { items, totalPrice, clearCart } = useCart();
   const { isAuthenticated, customer } = useCustomerAuth();
 
-  const [authMode, setAuthMode] = useState<"login" | "register">("login");
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
   const [email, setEmail] = useState("");
@@ -170,43 +167,20 @@ export default function CheckoutPage() {
     );
   }
 
-  if (!isAuthenticated) {
-    return (
-      <div className="py-16">
-        <Container className="max-w-md">
-          <SectionHeading
-            eyebrow="Checkout"
-            title={authMode === "login" ? "Log In to Continue" : "Create Your Account"}
-            align="center"
-            className="mx-auto"
-          />
-          <p className="mt-3 text-center text-sm text-gray-500">
-            {authMode === "login"
-              ? "Log in to place your order and track it from your account."
-              : "Create an account to place your order and track it any time."}
-          </p>
-          <div className="mt-8 rounded-3xl border border-gray-100 p-8">
-            {authMode === "login" ? (
-              <LoginForm onSwitchToRegister={() => setAuthMode("register")} />
-            ) : (
-              <RegisterForm onSwitchToLogin={() => setAuthMode("login")} />
-            )}
-          </div>
-          <Link
-            href="/cart"
-            className="mt-4 block text-center text-xs font-medium text-ocean-600 hover:underline"
-          >
-            &larr; Back to Cart
-          </Link>
-        </Container>
-      </div>
-    );
-  }
-
   return (
     <div className="py-12">
       <Container>
-        <SectionHeading eyebrow="Checkout" title="Complete Your Order" />
+        <div className="flex flex-wrap items-center justify-between gap-3">
+          <SectionHeading eyebrow="Checkout" title="Complete Your Order" />
+          {!isAuthenticated && (
+            <Link
+              href="/account/login"
+              className="text-sm font-medium text-aqua-700 hover:underline"
+            >
+              Have an account? Log in for faster checkout &rarr;
+            </Link>
+          )}
+        </div>
 
         <form onSubmit={handleSubmit} className="mt-10 grid gap-10 lg:grid-cols-[2fr_1fr]">
           <div className="flex flex-col gap-8">

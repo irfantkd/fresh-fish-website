@@ -37,6 +37,7 @@ export const BANK_TRANSFER_DETAILS = {
 export const NAV_LINKS = [
   { label: "Home", href: "/" },
   { label: "Shop", href: "/shop" },
+  { label: "How to Order", href: "/how-to-order" },
   { label: "Blog", href: "/blog" },
   { label: "About", href: "/about" },
   { label: "Contact", href: "/contact" },
@@ -57,7 +58,7 @@ export const FOOTER_LINKS = {
     { label: "Contact", href: "/contact" },
   ],
   help: [
-    { label: "How It Works", href: "/#how-it-works" },
+    { label: "How to Order", href: "/how-to-order" },
     { label: "Custom Orders", href: "/contact" },
     { label: "WhatsApp Order", href: "/contact" },
   ],
