@@ -9,6 +9,7 @@ import { SeafoodImage } from "@/components/ui/SeafoodImage";
 import { useCart } from "@/hooks/useCart";
 import { formatAED } from "@/lib/utils/format";
 import { buildCartOrderLink } from "@/lib/utils/whatsapp";
+import { DELIVERY } from "@/constants/site";
 
 export function CartDrawer() {
   const { items, isDrawerOpen, closeDrawer, removeItem, updateQuantity, totalPrice } =
@@ -154,10 +155,21 @@ export function CartDrawer() {
 
             {items.length > 0 && (
               <div className="flex flex-col gap-3 border-t border-gray-100 px-5 py-4">
+                <div className="flex flex-col gap-1 text-sm text-gray-500">
+                  <div className="flex items-center justify-between">
+                    <span>Subtotal</span>
+                    <span>{formatAED(totalPrice)}</span>
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <span>Delivery Fee</span>
+                    <span>{formatAED(DELIVERY.dubaiFeeAED)}</span>
+                  </div>
+                </div>
                 <div className="flex items-center justify-between font-heading text-base font-bold text-ocean-950">
                   <span>Total</span>
-                  <span>{formatAED(totalPrice)}</span>
+                  <span>{formatAED(totalPrice + DELIVERY.dubaiFeeAED)}</span>
                 </div>
+                <p className="text-[11px] text-gray-400">{DELIVERY.note}</p>
                 <input
                   value={name}
                   onChange={(e) => setName(e.target.value)}

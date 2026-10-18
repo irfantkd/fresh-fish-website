@@ -94,9 +94,14 @@ export default function AccountOrdersPage() {
                 </span>
               )}
             </span>
-            <span className="font-heading text-base font-bold text-ocean-900">
-              {formatAED(order.total)}
-            </span>
+            <div className="text-right">
+              <span className="block text-xs text-gray-400">
+                {formatAED(order.subtotal)} + {formatAED(order.deliveryFee)} delivery
+              </span>
+              <span className="font-heading text-base font-bold text-ocean-900">
+                {formatAED(order.total)}
+              </span>
+            </div>
           </div>
         </div>
       ))}

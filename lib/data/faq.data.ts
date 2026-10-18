@@ -23,7 +23,7 @@ export const FAQS: FaqItem[] = [
     id: "f-4",
     question: "What are the delivery charges and minimum order?",
     answer:
-      "Delivery charges and the minimum order depend on your area. We confirm both on WhatsApp when you order. Details are on our delivery policy page.",
+      "A flat AED 30 delivery fee applies to all orders within Dubai, added automatically at checkout. Outside Dubai, the delivery charge increases depending on distance — we confirm the exact amount on WhatsApp before dispatch. Details are on our delivery policy page.",
   },
   {
     id: "f-5",

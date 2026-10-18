@@ -12,7 +12,7 @@ import { useCustomerAuth } from "@/hooks/useCustomerAuth";
 import { formatAED } from "@/lib/utils/format";
 import { usePostMutation } from "@/store/apiSlice";
 import { cn } from "@/lib/utils/cn";
-import { BANK_TRANSFER_DETAILS } from "@/constants/site";
+import { BANK_TRANSFER_DETAILS, DELIVERY } from "@/constants/site";
 
 interface Receipt {
   url: string;
@@ -22,6 +22,8 @@ interface Receipt {
 interface PlacedOrder {
   id: string;
   orderNumber: string;
+  subtotal: number;
+  deliveryFee: number;
   total: number;
   paymentMethod: "cod" | "bank_transfer";
 }
@@ -33,6 +35,7 @@ const inputClasses =
 
 export default function CheckoutPage() {
   const { items, totalPrice, clearCart } = useCart();
+  const grandTotal = totalPrice + DELIVERY.dubaiFeeAED;
   const { isAuthenticated, customer } = useCustomerAuth();
 
   const [name, setName] = useState("");
@@ -136,12 +139,26 @@ export default function CheckoutPage() {
             <CheckCircle2 className="h-14 w-14 text-fresh-green-500" />
             <h1 className="font-heading text-2xl font-bold text-ocean-950">Order Placed!</h1>
             <p className="text-gray-500">
-              Thank you — your order <span className="font-semibold text-ocean-900">{placedOrder.orderNumber}</span> for{" "}
-              <span className="font-semibold text-ocean-900">{formatAED(placedOrder.total)}</span> has been received.
+              Thank you — your order <span className="font-semibold text-ocean-900">{placedOrder.orderNumber}</span> has been received.
               {placedOrder.paymentMethod === "bank_transfer"
                 ? " We'll verify your payment and confirm your order shortly."
                 : " Please have the amount ready for cash on delivery."}
             </p>
+            <div className="flex w-full flex-col gap-1.5 rounded-2xl bg-gray-50/60 p-4 text-sm">
+              <div className="flex justify-between text-gray-500">
+                <span>Subtotal</span>
+                <span>{formatAED(placedOrder.subtotal)}</span>
+              </div>
+              <div className="flex justify-between text-gray-500">
+                <span>Delivery Fee</span>
+                <span>{formatAED(placedOrder.deliveryFee)}</span>
+              </div>
+              <div className="flex justify-between border-t border-gray-200 pt-1.5 font-heading font-bold text-ocean-950">
+                <span>Total</span>
+                <span>{formatAED(placedOrder.total)}</span>
+              </div>
+            </div>
+            <p className="text-xs text-gray-400">{DELIVERY.note}</p>
             <Button href="/shop" variant="aqua" size="lg" className="mt-2">
               Continue Shopping
             </Button>
@@ -385,10 +402,23 @@ export default function CheckoutPage() {
                 </li>
               ))}
             </ul>
+            <div className="flex flex-col gap-1.5 border-t border-gray-200 pt-3 text-sm">
+              <div className="flex items-center justify-between text-gray-500">
+                <span>Subtotal</span>
+                <span className="font-semibold text-ocean-900">{formatAED(totalPrice)}</span>
+              </div>
+              <div className="flex items-center justify-between text-gray-500">
+                <span>Delivery Fee</span>
+                <span className="font-semibold text-ocean-900">
+                  {formatAED(DELIVERY.dubaiFeeAED)}
+                </span>
+              </div>
+            </div>
             <div className="flex items-center justify-between border-t border-gray-200 pt-3 font-heading text-base font-bold text-ocean-950">
               <span>Total</span>
-              <span>{formatAED(totalPrice)}</span>
+              <span>{formatAED(grandTotal)}</span>
             </div>
+            <p className="text-xs text-gray-400">{DELIVERY.note}</p>
 
             {formError && <p className="text-sm font-medium text-red-600">{formError}</p>}
 
@@ -417,9 +447,9 @@ export default function CheckoutPage() {
               <form>, so this button submits it exactly like the one above. */}
           <div className="fixed inset-x-0 bottom-0 z-30 flex items-center gap-3 border-t border-gray-100 bg-white/95 p-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] shadow-[0_-4px_16px_rgba(0,0,0,0.06)] backdrop-blur sm:hidden">
             <div className="shrink-0">
-              <span className="block text-[11px] text-gray-400">Total</span>
+              <span className="block text-[11px] text-gray-400">Total (incl. delivery)</span>
               <span className="block font-heading text-base font-bold text-ocean-900">
-                {formatAED(totalPrice)}
+                {formatAED(grandTotal)}
               </span>
             </div>
             <Button

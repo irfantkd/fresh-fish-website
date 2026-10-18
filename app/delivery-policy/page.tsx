@@ -30,8 +30,11 @@ export default function DeliveryPolicyPage() {
 
       <h2>2. Delivery Charges</h2>
       <p>
-        Delivery charges and the minimum order value depend on your area. We confirm both on
-        WhatsApp when you place your order.
+        A flat delivery fee of <strong>AED 30</strong> applies to all orders delivered within
+        Dubai, and is added automatically at checkout. For deliveries outside Dubai (other
+        emirates), the delivery charge increases depending on the distance to your address — we
+        will confirm the exact additional charge with you on WhatsApp before your order is
+        dispatched.
       </p>
 
       <h2>3. Order Placement and Delivery Hours</h2>

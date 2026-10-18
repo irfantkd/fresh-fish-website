@@ -1,4 +1,4 @@
-import { SITE_CONFIG } from "@/constants/site";
+import { DELIVERY, SITE_CONFIG } from "@/constants/site";
 import { formatWeight } from "@/lib/utils/format";
 import type { CartItem } from "@/types";
 
@@ -16,14 +16,19 @@ interface DirectOrderItem {
 // already selected, instead of a generic "tell me more" inquiry.
 export function buildDirectOrderLink(item: DirectOrderItem): string {
   const variant = item.type ? `${item.type}, ${item.sizeLabel}` : item.sizeLabel;
-  const total = item.price * item.quantity;
+  const subtotal = item.price * item.quantity;
+  const grandTotal = subtotal + DELIVERY.dubaiFeeAED;
 
   const lines = [
     `*New Order - Fresh Fish Dubai*`,
     "",
-    `${item.productName} (${variant}, ${formatWeight(item.weightGrams)}) x${item.quantity} — ${total} AED`,
+    `${item.productName} (${variant}, ${formatWeight(item.weightGrams)}) x${item.quantity} — ${subtotal} AED`,
     "",
-    `*Order Total:* ${total} AED`,
+    `*Subtotal:* ${subtotal} AED`,
+    `*Delivery Fee (within Dubai):* ${DELIVERY.dubaiFeeAED} AED`,
+    `*Order Total:* ${grandTotal} AED`,
+    "",
+    "Note: AED 30 delivery applies within Dubai. If my delivery address is outside Dubai, I understand the fee may increase depending on distance.",
     "",
     "Please confirm this order and let me know how to share my delivery details.",
   ];
@@ -35,7 +40,8 @@ export function buildCartOrderLink(
   items: CartItem[],
   customer: { name: string; phone: string; address: string; deliveryTime?: string; notes?: string }
 ): string {
-  const total = items.reduce((sum, item) => sum + item.price * item.quantity, 0);
+  const subtotal = items.reduce((sum, item) => sum + item.price * item.quantity, 0);
+  const grandTotal = subtotal + DELIVERY.dubaiFeeAED;
 
   const lines = [
     `*New Order - Fresh Fish Dubai*`,
@@ -47,7 +53,11 @@ export function buildCartOrderLink(
       return `${i + 1}. ${item.productName} (${variant}) x${item.quantity} — ${item.price * item.quantity} AED${item.notes ? `\n   Note: ${item.notes}` : ""}`;
     }),
     "",
-    `*Order Total:* ${total} AED`,
+    `*Subtotal:* ${subtotal} AED`,
+    `*Delivery Fee (within Dubai):* ${DELIVERY.dubaiFeeAED} AED`,
+    `*Order Total:* ${grandTotal} AED`,
+    "",
+    "Note: AED 30 delivery applies within Dubai. If my delivery address is outside Dubai, I understand the fee may increase depending on distance.",
     "",
     `*Customer:* ${customer.name}`,
     `*Phone:* ${customer.phone}`,

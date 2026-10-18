@@ -5,7 +5,7 @@ import { SectionHeading } from "@/components/ui/SectionHeading";
 import { Breadcrumb } from "@/components/ui/Breadcrumb";
 import { Stagger, StaggerItem } from "@/components/animations/FadeIn";
 import { getDeliveryAreas } from "@/lib/services/delivery-areas.service";
-import { SITE_CONFIG } from "@/constants/site";
+import { DELIVERY, SITE_CONFIG } from "@/constants/site";
 
 export const metadata: Metadata = {
   title: `Delivery Areas | ${SITE_CONFIG.name}`,
@@ -27,6 +27,9 @@ export default async function DeliveryAreasPage() {
           description="We currently deliver across the following Dubai areas. Don't see yours? Message us on WhatsApp to check availability."
           className="mt-6 max-w-2xl"
         />
+        <p className="mt-4 max-w-2xl rounded-2xl bg-aqua-50 px-5 py-3 text-sm text-ocean-800">
+          {DELIVERY.note}
+        </p>
         <Stagger className="mt-10 grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-5">
           {areas.map((area) => (
             <StaggerItem

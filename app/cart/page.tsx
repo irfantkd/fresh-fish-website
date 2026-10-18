@@ -10,6 +10,7 @@ import { SeafoodImage } from "@/components/ui/SeafoodImage";
 import { useCart } from "@/hooks/useCart";
 import { formatAED } from "@/lib/utils/format";
 import { buildCartOrderLink } from "@/lib/utils/whatsapp";
+import { DELIVERY } from "@/constants/site";
 
 export default function CartPage() {
   const { items, removeItem, updateQuantity, totalPrice } = useCart();
@@ -122,9 +123,17 @@ export default function CartPage() {
                 <span>Subtotal</span>
                 <span className="font-semibold text-ocean-900">{formatAED(totalPrice)}</span>
               </div>
-              <p className="text-xs text-gray-400">
-                Delivery fee confirmed via WhatsApp based on your area.
-              </p>
+              <div className="flex items-center justify-between text-sm text-gray-500">
+                <span>Delivery Fee</span>
+                <span className="font-semibold text-ocean-900">
+                  {formatAED(DELIVERY.dubaiFeeAED)}
+                </span>
+              </div>
+              <div className="flex items-center justify-between border-t border-gray-200 pt-2 font-heading text-base font-bold text-ocean-950">
+                <span>Total</span>
+                <span>{formatAED(totalPrice + DELIVERY.dubaiFeeAED)}</span>
+              </div>
+              <p className="text-xs text-gray-400">{DELIVERY.note}</p>
 
               <div className="mt-2 flex flex-col gap-3">
                 <input

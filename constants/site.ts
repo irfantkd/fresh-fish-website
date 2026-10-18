@@ -21,6 +21,17 @@ export const SITE_CONFIG = {
   },
 } as const;
 
+// Flat delivery fee for all Dubai addresses. Must match DUBAI_DELIVERY_FEE in
+// the backend's order.controller.js — this is only used for display here
+// (cart/checkout previews, WhatsApp order messages); the backend always
+// computes the authoritative charge itself rather than trusting a client
+// value. Deliveries outside Dubai cost more depending on distance and are
+// confirmed with the customer directly, not calculated automatically.
+export const DELIVERY = {
+  dubaiFeeAED: 30,
+  note: "AED 30 flat delivery fee within Dubai. Delivering outside Dubai? The fee increases depending on distance — we'll confirm the exact amount with you before dispatch.",
+} as const;
+
 // Shown to customers on the Bank Transfer step of checkout. Hardcoded here
 // (not editable from the dashboard/backend) — update these values directly
 // when the account details change.

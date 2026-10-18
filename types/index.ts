@@ -172,6 +172,7 @@ export interface Order {
   paymentReceiptImage?: { url: string; publicId: string };
   status: OrderStatus;
   subtotal: number;
+  deliveryFee: number;
   total: number;
   createdAt: string;
   updatedAt: string;
