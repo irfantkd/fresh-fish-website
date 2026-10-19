@@ -21,16 +21,49 @@ export const SITE_CONFIG = {
   },
 } as const;
 
-// Flat delivery fee for all Dubai addresses. Must match DUBAI_DELIVERY_FEE in
-// the backend's order.controller.js — this is only used for display here
-// (cart/checkout previews, WhatsApp order messages); the backend always
-// computes the authoritative charge itself rather than trusting a client
-// value. Deliveries outside Dubai cost more depending on distance and are
-// confirmed with the customer directly, not calculated automatically.
+// Straight-line ("as the crow flies") distance tiers from the shop, not real
+// driving distance — there's no routing API wired up. Must stay in sync with
+// DELIVERY_TIERS in the backend's order.controller.js, which is the
+// authoritative calculation; everything here is for display/preview only
+// (the backend never trusts a client-sent fee).
+export const DELIVERY_TIERS = [
+  { upToKm: 20, fee: 30 },
+  { upToKm: 30, fee: 35 },
+  { upToKm: 40, fee: 45 },
+  { upToKm: 50, fee: 60 },
+  { upToKm: 70, fee: 80 },
+  { upToKm: 100, fee: 100 },
+] as const;
+
 export const DELIVERY = {
-  dubaiFeeAED: 30,
-  note: "AED 30 flat delivery fee within Dubai. Delivering outside Dubai? The fee increases depending on distance — we'll confirm the exact amount with you before dispatch.",
+  // Default/base fee shown before a customer shares a delivery pin.
+  dubaiFeeAED: DELIVERY_TIERS[0].fee,
+  note: "AED 30 delivery within 20km of our shop. Delivery fees increase for farther distances — share your pin at checkout for an exact quote, or we'll confirm it with you before dispatch.",
 } as const;
+
+// Returns the AED fee for a given straight-line distance, or null if the pin
+// is beyond our last tier (100km) and needs manual confirmation instead.
+export function getDeliveryFeeForDistance(distanceKm: number): number | null {
+  const tier = DELIVERY_TIERS.find((t) => distanceKm <= t.upToKm);
+  return tier ? tier.fee : null;
+}
+
+// Haversine formula — straight-line distance in km between two lat/lng
+// points. Mirrors the backend's own implementation exactly (see
+// haversineDistanceKm in order.controller.js) so the client-side preview
+// matches what the server will actually charge.
+export function haversineDistanceKm(
+  a: { lat: number; lng: number },
+  b: { lat: number; lng: number }
+): number {
+  const R = 6371;
+  const dLat = ((b.lat - a.lat) * Math.PI) / 180;
+  const dLng = ((b.lng - a.lng) * Math.PI) / 180;
+  const lat1 = (a.lat * Math.PI) / 180;
+  const lat2 = (b.lat * Math.PI) / 180;
+  const h = Math.sin(dLat / 2) ** 2 + Math.cos(lat1) * Math.cos(lat2) * Math.sin(dLng / 2) ** 2;
+  return 2 * R * Math.asin(Math.sqrt(h));
+}
 
 // Shown to customers on the Bank Transfer step of checkout. Hardcoded here
 // (not editable from the dashboard/backend) — update these values directly

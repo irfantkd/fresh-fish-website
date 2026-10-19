@@ -23,7 +23,7 @@ export const FAQS: FaqItem[] = [
     id: "f-4",
     question: "What are the delivery charges and minimum order?",
     answer:
-      "A flat AED 30 delivery fee applies to all orders within Dubai, added automatically at checkout. Outside Dubai, the delivery charge increases depending on distance — we confirm the exact amount on WhatsApp before dispatch. Details are on our delivery policy page.",
+      "Delivery is AED 30 for up to 20km from our shop, rising in tiers up to AED 100 for 70-100km — added automatically at checkout. Drop a pin at checkout for an exact quote, or we'll confirm it on WhatsApp using your address. Full tiers are on our delivery policy page.",
   },
   {
     id: "f-5",

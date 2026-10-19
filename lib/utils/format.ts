@@ -1,3 +1,13 @@
+const PAYMENT_METHOD_LABEL: Record<string, string> = {
+  cod: "Cash on Delivery",
+  pos: "POS (Card on Delivery)",
+  bank_transfer: "Bank Transfer",
+};
+
+export function formatPaymentMethod(method: string): string {
+  return PAYMENT_METHOD_LABEL[method] ?? method;
+}
+
 export function formatAED(amount: number): string {
   return new Intl.NumberFormat("en-AE", {
     style: "currency",

@@ -3,7 +3,7 @@
 import { ShoppingBag } from "lucide-react";
 import { useGetQuery } from "@/store/apiSlice";
 import { OrderStatusTracker } from "@/components/account/OrderStatusTracker";
-import { formatAED, formatDateTime } from "@/lib/utils/format";
+import { formatAED, formatDateTime, formatPaymentMethod } from "@/lib/utils/format";
 import { cn } from "@/lib/utils/cn";
 import type { Order, OrderStatus } from "@/types";
 
@@ -87,7 +87,7 @@ export default function AccountOrdersPage() {
 
           <div className="mt-4 flex flex-wrap items-center justify-between gap-2 border-t border-gray-100 pt-4">
             <span className="text-sm text-gray-500">
-              {order.paymentMethod === "cod" ? "Cash on Delivery" : "Bank Transfer"}
+              {formatPaymentMethod(order.paymentMethod)}
               {order.paymentMethod === "bank_transfer" && (
                 <span className="ml-2 text-xs text-gray-400">
                   ({order.paymentStatus.replace(/_/g, " ")})

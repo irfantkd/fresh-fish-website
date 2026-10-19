@@ -146,7 +146,7 @@ export type OrderStatus =
   | "out_for_delivery"
   | "delivered"
   | "cancelled";
-export type PaymentMethod = "cod" | "bank_transfer";
+export type PaymentMethod = "cod" | "pos" | "bank_transfer";
 export type PaymentStatus = "unpaid" | "pending_verification" | "verified" | "rejected";
 
 export interface OrderItem {
@@ -166,6 +166,8 @@ export interface Order {
   customerId?: string | null;
   items: OrderItem[];
   customer: { name: string; phone: string; email?: string; address: string };
+  deliveryLocation?: { lat: number; lng: number };
+  distanceKm?: number | null;
   notes?: string;
   paymentMethod: PaymentMethod;
   paymentStatus: PaymentStatus;

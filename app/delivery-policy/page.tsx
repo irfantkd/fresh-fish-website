@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { LegalPageLayout } from "@/components/legal/LegalPageLayout";
-import { SITE_CONFIG } from "@/constants/site";
+import { DELIVERY_TIERS, SITE_CONFIG } from "@/constants/site";
+import { formatAED } from "@/lib/utils/format";
 
 export const metadata: Metadata = {
   title: `Delivery Policy | ${SITE_CONFIG.name}`,
@@ -30,11 +31,22 @@ export default function DeliveryPolicyPage() {
 
       <h2>2. Delivery Charges</h2>
       <p>
-        A flat delivery fee of <strong>AED 30</strong> applies to all orders delivered within
-        Dubai, and is added automatically at checkout. For deliveries outside Dubai (other
-        emirates), the delivery charge increases depending on the distance to your address — we
-        will confirm the exact additional charge with you on WhatsApp before your order is
-        dispatched.
+        Delivery charges are calculated based on straight-line distance from our shop to your
+        delivery address, and are added automatically at checkout:
+      </p>
+      <ul>
+        {DELIVERY_TIERS.map((tier, i) => (
+          <li key={tier.upToKm}>
+            {i === 0 ? "Up to" : `${DELIVERY_TIERS[i - 1].upToKm}km to`} {tier.upToKm}km ={" "}
+            <strong>{formatAED(tier.fee)}</strong>
+          </li>
+        ))}
+      </ul>
+      <p>
+        You can drop a pin at checkout for an exact quote based on your distance, or we will
+        confirm the fee with you on WhatsApp using your delivery address. Deliveries beyond 100km
+        are handled case-by-case — contact us on WhatsApp at {SITE_CONFIG.phone} to confirm
+        availability and pricing.
       </p>
 
       <h2>3. Order Placement and Delivery Hours</h2>

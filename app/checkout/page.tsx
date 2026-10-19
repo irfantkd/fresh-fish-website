@@ -1,8 +1,16 @@
 "use client";
 
 import Link from "next/link";
-import { useState, type ChangeEvent, type FormEvent } from "react";
-import { Banknote, CheckCircle2, Landmark, ShoppingBag, UploadCloud } from "lucide-react";
+import dynamic from "next/dynamic";
+import { useMemo, useState, type ChangeEvent, type FormEvent } from "react";
+import {
+  Banknote,
+  CheckCircle2,
+  CreditCard,
+  Landmark,
+  ShoppingBag,
+  UploadCloud,
+} from "lucide-react";
 import { Container } from "@/components/ui/Container";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { Button } from "@/components/ui/Button";
@@ -12,7 +20,19 @@ import { useCustomerAuth } from "@/hooks/useCustomerAuth";
 import { formatAED } from "@/lib/utils/format";
 import { usePostMutation } from "@/store/apiSlice";
 import { cn } from "@/lib/utils/cn";
-import { BANK_TRANSFER_DETAILS, DELIVERY } from "@/constants/site";
+import {
+  BANK_TRANSFER_DETAILS,
+  DELIVERY,
+  DELIVERY_TIERS,
+  SITE_CONFIG,
+  getDeliveryFeeForDistance,
+  haversineDistanceKm,
+} from "@/constants/site";
+
+const DeliveryMapPicker = dynamic(() => import("@/components/checkout/DeliveryMapPicker"), {
+  ssr: false,
+  loading: () => <div className="h-56 animate-pulse rounded-2xl bg-gray-100" />,
+});
 
 interface Receipt {
   url: string;
@@ -25,17 +45,17 @@ interface PlacedOrder {
   subtotal: number;
   deliveryFee: number;
   total: number;
-  paymentMethod: "cod" | "bank_transfer";
+  paymentMethod: "cod" | "pos" | "bank_transfer";
 }
 
-type PaymentMethod = "cod" | "bank_transfer";
+type PaymentMethod = "cod" | "pos" | "bank_transfer";
+type LatLng = { lat: number; lng: number };
 
 const inputClasses =
   "h-11 w-full rounded-xl border border-gray-200 px-4 text-sm focus:border-aqua-400 focus:outline-none";
 
 export default function CheckoutPage() {
   const { items, totalPrice, clearCart } = useCart();
-  const grandTotal = totalPrice + DELIVERY.dubaiFeeAED;
   const { isAuthenticated, customer } = useCustomerAuth();
 
   const [name, setName] = useState("");
@@ -44,6 +64,28 @@ export default function CheckoutPage() {
   const [address, setAddress] = useState("");
   const [notes, setNotes] = useState("");
   const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>("cod");
+  const [location, setLocation] = useState<LatLng | null>(null);
+
+  // Preview only — the backend runs the exact same calculation and is the
+  // only source that actually charges the order. Beyond the last tier
+  // (100km) there's no flat answer, so we fall back to the base fee and
+  // let the note explain it'll be confirmed directly.
+  const { deliveryFee, distanceKm, beyondCoverage } = useMemo(() => {
+    if (!location) {
+      return { deliveryFee: DELIVERY.dubaiFeeAED, distanceKm: null, beyondCoverage: false };
+    }
+    const km = haversineDistanceKm(
+      { lat: SITE_CONFIG.latitude, lng: SITE_CONFIG.longitude },
+      location
+    );
+    const fee = getDeliveryFeeForDistance(km);
+    return {
+      deliveryFee: fee ?? DELIVERY_TIERS[DELIVERY_TIERS.length - 1].fee,
+      distanceKm: Math.round(km * 10) / 10,
+      beyondCoverage: fee === null,
+    };
+  }, [location]);
+  const grandTotal = totalPrice + deliveryFee;
   const [receipt, setReceipt] = useState<Receipt | null>(null);
   const [formError, setFormError] = useState<string | null>(null);
   const [placedOrder, setPlacedOrder] = useState<PlacedOrder | null>(null);
@@ -118,6 +160,7 @@ export default function CheckoutPage() {
       customer: { name, phone, email, address },
       notes,
       paymentMethod,
+      ...(location ? { location } : {}),
       ...(paymentMethod === "bank_transfer" && receipt ? { paymentReceiptImage: receipt } : {}),
     };
 
@@ -142,7 +185,9 @@ export default function CheckoutPage() {
               Thank you — your order <span className="font-semibold text-ocean-900">{placedOrder.orderNumber}</span> has been received.
               {placedOrder.paymentMethod === "bank_transfer"
                 ? " We'll verify your payment and confirm your order shortly."
-                : " Please have the amount ready for cash on delivery."}
+                : placedOrder.paymentMethod === "pos"
+                  ? " Our rider will bring a card machine for payment on delivery."
+                  : " Please have the amount ready for cash on delivery."}
             </p>
             <div className="flex w-full flex-col gap-1.5 rounded-2xl bg-gray-50/60 p-4 text-sm">
               <div className="flex justify-between text-gray-500">
@@ -246,11 +291,28 @@ export default function CheckoutPage() {
                   className={cn(inputClasses, "h-auto py-3 sm:col-span-2")}
                 />
               </div>
+
+              <div className="mt-5">
+                <p className="text-sm font-semibold text-ocean-950">
+                  Share Delivery Pin <span className="font-normal text-gray-400">(optional)</span>
+                </p>
+                <p className="mt-0.5 text-xs text-gray-400">
+                  Drop a pin for an exact delivery fee quote based on distance — otherwise
+                  we&apos;ll use the address above and confirm the fee with you.
+                </p>
+                <div className="mt-3">
+                  <DeliveryMapPicker
+                    value={location}
+                    defaultCenter={{ lat: SITE_CONFIG.latitude, lng: SITE_CONFIG.longitude }}
+                    onChange={setLocation}
+                  />
+                </div>
+              </div>
             </div>
 
             <div className="rounded-3xl border border-gray-100 p-6">
               <h2 className="font-heading text-lg font-bold text-ocean-950">Payment Method</h2>
-              <div className="mt-4 grid gap-3 sm:grid-cols-2">
+              <div className="mt-4 grid gap-3 sm:grid-cols-3">
                 <button
                   type="button"
                   onClick={() => setPaymentMethod("cod")}
@@ -264,7 +326,23 @@ export default function CheckoutPage() {
                   <Banknote className="h-6 w-6 text-ocean-700" />
                   <div>
                     <p className="text-sm font-semibold text-ocean-950">Cash on Delivery</p>
-                    <p className="text-xs text-gray-400">Pay when your order arrives</p>
+                    <p className="text-xs text-gray-400">Pay cash when your order arrives</p>
+                  </div>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setPaymentMethod("pos")}
+                  className={cn(
+                    "flex items-center gap-3 rounded-2xl border-2 p-4 text-left transition-colors",
+                    paymentMethod === "pos"
+                      ? "border-aqua-400 bg-aqua-50"
+                      : "border-gray-200 hover:border-gray-300"
+                  )}
+                >
+                  <CreditCard className="h-6 w-6 text-ocean-700" />
+                  <div>
+                    <p className="text-sm font-semibold text-ocean-950">POS on Delivery</p>
+                    <p className="text-xs text-gray-400">Card machine when your order arrives</p>
                   </div>
                 </button>
                 <button
@@ -408,17 +486,42 @@ export default function CheckoutPage() {
                 <span className="font-semibold text-ocean-900">{formatAED(totalPrice)}</span>
               </div>
               <div className="flex items-center justify-between text-gray-500">
-                <span>Delivery Fee</span>
-                <span className="font-semibold text-ocean-900">
-                  {formatAED(DELIVERY.dubaiFeeAED)}
+                <span>
+                  Delivery Fee
+                  {distanceKm != null && (
+                    <span className="ml-1 text-xs text-gray-400">({distanceKm} km)</span>
+                  )}
                 </span>
+                <span className="font-semibold text-ocean-900">{formatAED(deliveryFee)}</span>
               </div>
             </div>
             <div className="flex items-center justify-between border-t border-gray-200 pt-3 font-heading text-base font-bold text-ocean-950">
               <span>Total</span>
               <span>{formatAED(grandTotal)}</span>
             </div>
-            <p className="text-xs text-gray-400">{DELIVERY.note}</p>
+            <p className="text-xs text-gray-400">
+              {beyondCoverage
+                ? "Your pin is beyond our standard 100km coverage — we'll confirm the final delivery fee with you directly."
+                : location
+                  ? "Fee calculated from your shared pin. Final amount is confirmed when your order is placed."
+                  : DELIVERY.note}
+            </p>
+            <details className="text-xs text-gray-400">
+              <summary className="cursor-pointer font-medium text-aqua-700 hover:underline">
+                View delivery fee by distance
+              </summary>
+              <ul className="mt-2 flex flex-col gap-1">
+                {DELIVERY_TIERS.map((tier, i) => (
+                  <li key={tier.upToKm} className="flex justify-between">
+                    <span>
+                      {i === 0 ? "Up to" : `${DELIVERY_TIERS[i - 1].upToKm}–`}
+                      {tier.upToKm} km
+                    </span>
+                    <span className="font-semibold text-ocean-900">{formatAED(tier.fee)}</span>
+                  </li>
+                ))}
+              </ul>
+            </details>
 
             {formError && <p className="text-sm font-medium text-red-600">{formError}</p>}
 
