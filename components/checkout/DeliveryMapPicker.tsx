@@ -1,10 +1,11 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { MapContainer, TileLayer, Marker, useMapEvents } from "react-leaflet";
+import { MapContainer, TileLayer, Marker, Polygon, useMapEvents } from "react-leaflet";
 import L from "leaflet";
 import { Crosshair, Loader2, MapPin, Search, X } from "lucide-react";
 import { useDebouncedValue } from "@/hooks/useDebouncedValue";
+import { MASK_OUTER_RING, UAE_BOUNDARY } from "@/lib/data/uae-boundary";
 import "leaflet/dist/leaflet.css";
 
 // Leaflet's default marker icon references relative image paths that break
@@ -203,8 +204,14 @@ export default function DeliveryMapPicker({
 
       <div className="relative h-64 overflow-hidden rounded-2xl border border-gray-200">
         <MapContainer
-          center={[center.lat, center.lng]}
-          zoom={value ? ZOOM_WHEN_PICKED : 9}
+          // No pin yet: fit the whole UAE so it reads as a proper
+          // "service area" map from the first render. Once a pin exists,
+          // center/zoom on it instead — bounds/center+zoom only apply at
+          // mount, same as any react-leaflet initial-view prop; the
+          // imperative effect above takes over for every change after that.
+          {...(value
+            ? { center: [center.lat, center.lng] as [number, number], zoom: ZOOM_WHEN_PICKED }
+            : { bounds: UAE_BOUNDS })}
           minZoom={UAE_MIN_ZOOM}
           maxBounds={UAE_BOUNDS}
           maxBoundsViscosity={1.0}
@@ -214,6 +221,23 @@ export default function DeliveryMapPicker({
           <TileLayer
             attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+          />
+          {/* Dims everything outside the UAE so the map visually reads as
+              "UAE only" — Leaflet's default evenodd fill-rule punches a
+              transparent hole wherever UAE_BOUNDARY is nested inside the
+              outer ring, regardless of either ring's winding direction.
+              interactive={false} so clicks still reach the base map/pin
+              placement underneath; this is a visual cue, not a hard
+              boundary — an address just across the border still works. */}
+          <Polygon
+            positions={[MASK_OUTER_RING, UAE_BOUNDARY]}
+            pathOptions={{ stroke: false, fillColor: "#040f1c", fillOpacity: 0.75 }}
+            interactive={false}
+          />
+          <Polygon
+            positions={[UAE_BOUNDARY]}
+            pathOptions={{ color: "#2cd9de", weight: 2, fill: false, opacity: 0.8 }}
+            interactive={false}
           />
           <ClickToPlace
             onPick={(coords) => {
