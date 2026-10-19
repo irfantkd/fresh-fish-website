@@ -35,6 +35,10 @@ const UAE_BOUNDS: L.LatLngBoundsExpression = [
 ];
 const UAE_MIN_ZOOM = 7;
 const ZOOM_WHEN_PICKED = 15;
+// Opens on Dubai (where the shop and most customers are) rather than the
+// whole, zoomed-out UAE — the dimming mask already makes the UAE-only
+// framing obvious without needing to start zoomed all the way out.
+const INITIAL_ZOOM = 11;
 
 interface LatLng {
   lat: number;
@@ -63,7 +67,7 @@ export default function DeliveryMapPicker({
 }: {
   value: LatLng | null;
   defaultCenter: LatLng;
-  onChange: (coords: LatLng) => void;
+  onChange: (coords: LatLng | null) => void;
 }) {
   const [locating, setLocating] = useState(false);
   const [geoError, setGeoError] = useState<string | null>(null);
@@ -72,6 +76,11 @@ export default function DeliveryMapPicker({
 
   const [query, setQuery] = useState("");
   const [results, setResults] = useState<SearchResult[]>([]);
+  // Set once a search for this exact term has actually completed (inside
+  // the effect's .then()/.catch(), never synchronously in the effect body)
+  // — lets the "no matches" message show only once we truly know there are
+  // none, not while still debouncing or waiting on the network.
+  const [lastSearchedTerm, setLastSearchedTerm] = useState<string | null>(null);
   const [showResults, setShowResults] = useState(false);
   const debouncedQuery = useDebouncedValue(query, 450);
 
@@ -93,17 +102,24 @@ export default function DeliveryMapPicker({
   // shortened back below 3 characters just hides the (now stale) results
   // instead of needing a synchronous setState inside the effect body.
   const visibleResults = debouncedQuery.trim().length >= 3 ? results : [];
+  const noResultsFound =
+    debouncedQuery.trim().length >= 3 &&
+    lastSearchedTerm === debouncedQuery.trim() &&
+    visibleResults.length === 0;
 
   // Recenters on every pin change (click, drag, search, or "use my
   // location"), but only zooms IN if the current view is too wide to
   // actually see the pin clearly — a drag at an already-close zoom just
   // recenters without a jarring zoom jump.
   useEffect(() => {
-    if (value && mapRef.current) {
+    if (!mapRef.current) return;
+    if (value) {
       const targetZoom = Math.max(mapRef.current.getZoom(), ZOOM_WHEN_PICKED);
       mapRef.current.setView([value.lat, value.lng], targetZoom);
+    } else {
+      mapRef.current.setView([defaultCenter.lat, defaultCenter.lng], INITIAL_ZOOM);
     }
-  }, [value]);
+  }, [value, defaultCenter]);
 
   useEffect(() => {
     const term = debouncedQuery.trim();
@@ -112,7 +128,7 @@ export default function DeliveryMapPicker({
     }
     let active = true;
     fetch(
-      `https://nominatim.openstreetmap.org/search?format=json&countrycodes=ae&limit=5&q=${encodeURIComponent(term)}`
+      `https://nominatim.openstreetmap.org/search?format=json&accept-language=en&countrycodes=ae&limit=5&q=${encodeURIComponent(term)}`
     )
       .then((res) => res.json())
       .then((data: Array<{ lat: string; lon: string; display_name: string }>) => {
@@ -120,9 +136,12 @@ export default function DeliveryMapPicker({
         setResults(
           data.map((d) => ({ lat: Number(d.lat), lng: Number(d.lon), label: d.display_name }))
         );
+        setLastSearchedTerm(term);
       })
       .catch(() => {
-        if (active) setResults([]);
+        if (!active) return;
+        setResults([]);
+        setLastSearchedTerm(term);
       });
     return () => {
       active = false;
@@ -185,7 +204,7 @@ export default function DeliveryMapPicker({
         )}
 
         {showResults && visibleResults.length > 0 && (
-          <ul className="absolute z-[1000] mt-2 max-h-56 w-full overflow-y-auto rounded-2xl border border-gray-100 bg-white p-1.5 shadow-xl">
+          <ul className="absolute z-[1500] mt-2 max-h-56 w-full overflow-y-auto rounded-2xl border border-gray-100 bg-white p-1.5 shadow-xl">
             {visibleResults.map((result, i) => (
               <li key={i}>
                 <button
@@ -200,18 +219,23 @@ export default function DeliveryMapPicker({
             ))}
           </ul>
         )}
+
+        {showResults && noResultsFound && (
+          <div className="absolute z-[1500] mt-2 w-full rounded-2xl border border-gray-100 bg-white p-3.5 shadow-xl">
+            <p className="text-sm text-gray-500">
+              No matches for &ldquo;{debouncedQuery.trim()}&rdquo;. Exact unit/building numbers
+              often don&apos;t match — try just the area or community name (e.g.{" "}
+              <span className="font-medium text-gray-700">&ldquo;Discovery Gardens, Dubai&rdquo;</span>
+              ), then fine-tune by dragging the pin.
+            </p>
+          </div>
+        )}
       </div>
 
       <div className="relative h-64 overflow-hidden rounded-2xl border border-gray-200">
         <MapContainer
-          // No pin yet: fit the whole UAE so it reads as a proper
-          // "service area" map from the first render. Once a pin exists,
-          // center/zoom on it instead — bounds/center+zoom only apply at
-          // mount, same as any react-leaflet initial-view prop; the
-          // imperative effect above takes over for every change after that.
-          {...(value
-            ? { center: [center.lat, center.lng] as [number, number], zoom: ZOOM_WHEN_PICKED }
-            : { bounds: UAE_BOUNDS })}
+          center={[center.lat, center.lng]}
+          zoom={value ? ZOOM_WHEN_PICKED : INITIAL_ZOOM}
           minZoom={UAE_MIN_ZOOM}
           maxBounds={UAE_BOUNDS}
           maxBoundsViscosity={1.0}
@@ -277,10 +301,24 @@ export default function DeliveryMapPicker({
         </button>
       </div>
       {geoError && <p className="text-xs text-red-600">{geoError}</p>}
-      <p className="text-xs text-gray-400">
-        {value
-          ? "Pin set — drag it to adjust, tap the map, or search again to move it."
-          : "Search your area above, tap the map to drop a pin, or use the button above."}
+      <p className="flex items-center justify-between gap-2 text-xs text-gray-400">
+        <span>
+          {value
+            ? "Pin set — drag it to adjust, tap the map, or search again to move it."
+            : "Search your area above, tap the map to drop a pin, or use the button above."}
+        </span>
+        {value && (
+          <button
+            type="button"
+            onClick={() => {
+              onChange(null);
+              setQuery("");
+            }}
+            className="shrink-0 font-semibold text-aqua-700 hover:underline"
+          >
+            Clear pin
+          </button>
+        )}
       </p>
     </div>
   );
