@@ -28,7 +28,12 @@ export function FadeIn({
   direction?: Direction;
   className?: string;
   once?: boolean;
-  amount?: number;
+  // A fixed fraction (the default, 0.3) can fail to ever trigger for a
+  // target much taller than the viewport — a fast scroll can jump straight
+  // past the window where that fraction is visible. Pass "some" (triggers
+  // on any overlap at all) for anything that wraps a multi-row grid rather
+  // than a single card/heading-sized block.
+  amount?: number | "some" | "all";
 }) {
   const variants: Variants = {
     hidden: { opacity: 0, ...OFFSETS[direction] },
@@ -67,7 +72,11 @@ export function Stagger({
       className={className}
       initial="hidden"
       whileInView="show"
-      viewport={{ once: true, amount: 0.2 }}
+      // "some" (any overlap at all), not a fixed fraction — Stagger always
+      // wraps a multi-row grid, which can be taller than the viewport, so a
+      // fixed fraction risks never triggering on a fast scroll past it (see
+      // the matching note on FadeIn's own `amount` prop).
+      viewport={{ once: true, amount: "some" }}
       variants={{
         hidden: {},
         show: {

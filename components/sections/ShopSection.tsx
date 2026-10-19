@@ -28,7 +28,11 @@ export async function ShopSection() {
           </div>
         </FadeIn>
 
-        <FadeIn delay={0.1} className="mt-10">
+        {/* amount="some" (not the default 0.3 fraction) — this grid is
+            taller than the viewport, so a fixed fraction could fail to
+            ever trigger on a fast scroll past it, leaving the whole
+            product grid stuck invisible despite being fully loaded. */}
+        <FadeIn delay={0.1} className="mt-10" amount="some">
           <ProductGrid products={products} />
         </FadeIn>
       </Container>
