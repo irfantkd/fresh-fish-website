@@ -97,6 +97,7 @@ export const FOOTER_LINKS = {
   company: [
     { label: "About Us", href: "/about" },
     { label: "Blog", href: "/blog" },
+    { label: "Customer Reviews", href: "/customer-reviews" },
     { label: "Delivery Areas", href: "/delivery-areas" },
     { label: "FAQ", href: "/faq" },
     { label: "Contact", href: "/contact" },

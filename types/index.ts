@@ -95,7 +95,10 @@ export interface CustomerReview {
   customerName: string;
   rating: number;
   comment: string;
-  productName?: string;
+  // Both null for a general "experience with us" review not tied to any
+  // one product.
+  productId?: string | null;
+  productName?: string | null;
   createdAt: string;
 }
 

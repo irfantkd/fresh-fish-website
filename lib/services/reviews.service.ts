@@ -32,3 +32,16 @@ export async function getProductReviews(productId: string): Promise<CustomerRevi
   });
   return res.items;
 }
+
+/** Every approved review, newest first — for the public /customer-reviews
+ * page. A generous limit rather than real pagination: simplest thing that
+ * works while the catalog of reviews is this size; revisit if it ever grows
+ * past a few hundred. */
+export async function getAllReviews(limit = 200): Promise<CustomerReview[]> {
+  const res = await apiGet<ReviewsResponse>(
+    "/reviews",
+    { status: "approved", limit },
+    300
+  );
+  return res.items;
+}

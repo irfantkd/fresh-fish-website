@@ -1,7 +1,7 @@
 import { SITE_CONFIG } from "@/constants/site";
 import { getLowestSize } from "@/lib/utils/product";
 import { stripHtml } from "@/lib/utils/format";
-import type { BlogPost, Category, FaqItem, Product } from "@/types";
+import type { BlogPost, Category, CustomerReview, FaqItem, Product } from "@/types";
 
 /**
  * Admins can paste a complete custom JSON-LD object per product/category/blog
@@ -131,6 +131,37 @@ export function faqJsonLd(faqs: FaqItem[]) {
         "@type": "Answer",
         text: faq.answer,
       },
+    })),
+  };
+}
+
+// Organization + AggregateRating + individual Review entries — this is
+// what lets Google show star ratings for the business itself in search
+// results, not just for a single product. Capped at 50 individual reviews
+// (Google doesn't need every single one to award rich results; keeps the
+// payload reasonable).
+export function customerReviewsJsonLd(reviews: CustomerReview[]) {
+  const count = reviews.length;
+  const average = count > 0 ? reviews.reduce((sum, r) => sum + r.rating, 0) / count : 0;
+
+  return {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    name: SITE_CONFIG.name,
+    url: SITE_CONFIG.url,
+    ...(count > 0 && {
+      aggregateRating: {
+        "@type": "AggregateRating",
+        ratingValue: Number(average.toFixed(1)),
+        reviewCount: count,
+      },
+    }),
+    review: reviews.slice(0, 50).map((r) => ({
+      "@type": "Review",
+      author: { "@type": "Person", name: r.customerName },
+      datePublished: r.createdAt,
+      reviewBody: r.comment,
+      reviewRating: { "@type": "Rating", ratingValue: r.rating, bestRating: 5, worstRating: 1 },
     })),
   };
 }

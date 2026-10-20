@@ -1,5 +1,7 @@
+import { ArrowRight } from "lucide-react";
 import { Container } from "@/components/ui/Container";
 import { SectionHeading } from "@/components/ui/SectionHeading";
+import { Button } from "@/components/ui/Button";
 import { FadeIn } from "@/components/animations/FadeIn";
 import { CustomerReviewCarousel } from "@/components/sections/CustomerReviewCarousel";
 import { getFeaturedReviews } from "@/lib/services/reviews.service";
@@ -17,13 +19,18 @@ export async function CustomerReviews() {
         <FadeIn>
           <SectionHeading
             eyebrow="Customer Reviews"
-            title="Loved by Homes Across Dubai"
+            title="What Our Customers Say"
             align="center"
             className="mx-auto"
           />
         </FadeIn>
         <div className="mt-12">
           <CustomerReviewCarousel reviews={reviews} />
+        </div>
+        <div className="mt-10 text-center">
+          <Button href="/customer-reviews" variant="outline">
+            View All Reviews <ArrowRight className="h-4 w-4" />
+          </Button>
         </div>
       </Container>
     </section>
