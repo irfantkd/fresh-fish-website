@@ -26,21 +26,24 @@ export function ProductPurchasePanel({ product }: { product: Product }) {
     new Set(product.sizes.map((s) => s.type).filter((t): t is string => Boolean(t)))
   );
   const hasTypes = types.length > 0;
-  const [selectedType, setSelectedType] = useState<string | null>(types[0] ?? null);
+  // Nothing pre-selected — the customer must actively choose a type (when
+  // there is one) and a size/weight before a price, quantity stepper, or
+  // enabled Add to Cart / WhatsApp button appears.
+  const [selectedType, setSelectedType] = useState<string | null>(null);
   const variations = hasTypes
     ? product.sizes.filter((s) => s.type === selectedType)
     : product.sizes;
 
-  const [sizeIndex, setSizeIndex] = useState(0);
+  const [sizeIndex, setSizeIndex] = useState<number | null>(null);
   const [quantity, setQuantity] = useState(1);
   const [isDescriptionExpanded, setIsDescriptionExpanded] = useState(false);
   const { addItem, openDrawer } = useCart();
-  const size = variations[sizeIndex] ?? variations[0];
+  const size = sizeIndex !== null ? variations[sizeIndex] : undefined;
   const plainDescription = stripHtml(product.description);
 
   function handleSelectType(type: string) {
     setSelectedType(type);
-    setSizeIndex(0);
+    setSizeIndex(null);
   }
 
   function handleAddToCart() {
@@ -128,7 +131,10 @@ export function ProductPurchasePanel({ product }: { product: Product }) {
         </div>
       )}
 
-      {size && (
+      {hasTypes && !selectedType ? (
+        <p className="text-sm text-gray-400">Select a type above to see available sizes.</p>
+      ) : (
+        variations.length > 0 && (
         <div>
           <span className="mb-2 block text-sm font-semibold text-ocean-950">
             Select Size / Weight
@@ -158,6 +164,7 @@ export function ProductPurchasePanel({ product }: { product: Product }) {
             ))}
           </div>
         </div>
+        )
       )}
 
       <ul className="flex flex-wrap gap-2">
@@ -211,24 +218,20 @@ export function ProductPurchasePanel({ product }: { product: Product }) {
           <ShoppingCart className="h-4.5 w-4.5" />
           {isOutOfStock ? "Out of Stock" : "Add to Cart"}
         </Button>
-        {isOutOfStock ? (
+        {isOutOfStock || !size ? (
           <Button variant="whatsapp" size="lg" className="flex-1" disabled>
             <FaWhatsapp className="h-4.5 w-4.5" /> Order on WhatsApp
           </Button>
         ) : (
           <Button
-            href={
-              size
-                ? buildDirectOrderLink({
-                    productName: product.name,
-                    type: size.type || undefined,
-                    sizeLabel: size.label,
-                    weightGrams: size.weightGrams,
-                    price: size.price,
-                    quantity,
-                  })
-                : "#"
-            }
+            href={buildDirectOrderLink({
+              productName: product.name,
+              type: size.type || undefined,
+              sizeLabel: size.label,
+              weightGrams: size.weightGrams,
+              price: size.price,
+              quantity,
+            })}
             target="_blank"
             rel="noopener noreferrer"
             variant="whatsapp"
