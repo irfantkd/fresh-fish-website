@@ -178,7 +178,7 @@ export function ProductPurchasePanel({ product }: { product: Product }) {
         ))}
       </ul>
 
-      {size && (
+      {size ? (
         <div className="flex items-center justify-between rounded-2xl border border-gray-100 bg-gray-50/60 p-4">
           <div>
             <span className="block font-heading text-2xl font-bold text-ocean-900">
@@ -201,6 +201,14 @@ export function ProductPurchasePanel({ product }: { product: Product }) {
             </button>
           </div>
         </div>
+      ) : (
+        !isOutOfStock && (
+          <p className="text-sm font-medium text-offer-600">
+            {hasTypes && !selectedType
+              ? "Please select a type and size before ordering."
+              : "Please select a size before ordering."}
+          </p>
+        )
       )}
 
       {/* Desktop/tablet: inline buttons. On mobile these move into a sticky
